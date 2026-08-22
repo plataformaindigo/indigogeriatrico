@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Test autenticación GAS</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+        }
+
+        .panel {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        input {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 11px 18px;
+            margin: 5px 5px 5px 0;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        button:hover {
+            opacity: 0.85;
+        }
+
+        .status {
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            background: #eee;
+        }
+
+        pre {
+            background: #f4f4f4;
+            padding: 15px;
+            border-radius: 6px;
+            white-space: pre-wrap;
+            word-break: break-word;
+            min-height: 80px;
+        }
+
+        #sessionPanel {
+            display: none;
+        }
+    </style>
+</head>
+
+
+<body>
+
+    <h1>Test autenticación GAS</h1>
+
+
+    <!-- LOGIN -->
+
+    <div
+        id="loginPanel"
+        class="panel"
+    >
+
+        <h2>Iniciar sesión</h2>
+
+        <label for="usuario">
+            Usuario
+        </label>
+
+        <input
+            id="usuario"
+            type="text"
+            autocomplete="username"
+            placeholder="admin"
+        >
+
+
+        <label for="password">
+            Contraseña
+        </label>
+
+        <input
+            id="password"
+            type="password"
+            autocomplete="current-password"
+            placeholder="Contraseña"
+        >
+
+
+        <button onclick="login()">
+            Iniciar sesión
+        </button>
+
+    </div>
+
+
+    <!-- SESIÓN -->
+
+    <div
+        id="sessionPanel"
+        class="panel"
+    >
+
+        <h2>Sesión activa</h2>
+
+        <p id="userInfo"></p>
+
+        <button onclick="testProtected()">
+            Probar operación protegida
+        </button>
+
+        <button onclick="logout()">
+            Cerrar sesión
+        </button>
+
+    </div>
+
+
+    <!-- ESTADO -->
+
+    <div
+        id="status"
+        class="status"
+    >
+        Sin sesión
+    </div>
+
+
+    <!-- RESPUESTA -->
+
+    <div class="panel">
+
+        <h2>Respuesta del servidor</h2>
+
+        <pre id="response">---</pre>
+
+    </div>
+
+
+<script>
+
+/*************************************************
+ * CONFIGURACIÓN
+ *************************************************/
+
+const GAS_URL =
+    "PEGÁ_ACÁ_TU_URL_DE_GAS";
+
+
+/*************************************************
+ * UTILIDADES
+ *************************************************/
+
+function showStatus(message) {
+
+    document.getElementById("status")
+        .textContent = message;
+
+}
+
+
+function showResponse(data) {
+
+    document.getElementById("response")
+        .textContent =
+        JSON.stringify(data, null, 2);
+
+}
+
+
+function getToken() {
+
+    return sessionStorage.getItem(
+        "sessionToken"
+    );
+
+}
+
+
+/*************************************************
+ * LOGIN
+ *************************************************/
+
+async function login() {
+
+    const usuario =
+        document.getElementById("usuario")
+            .value
+            .trim();
+
+    const password =
+        document.getElementById("password")
+            .value;
+
+
+    if (!usuario || !password) {
+
+        showStatus(
+            "Ingresá usuario y contraseña."
+        );
+
+        return;
+
+    }
+
+
+    showStatus(
+        "Autenticando..."
+    );
+
+
+    try {
+
+        const response =
+            await fetch(GAS_URL, {
+
+                method: "POST",
+
+                headers: {
+
+                    "Content-Type":
+                        "text/plain;charset=utf-8"
+
+                },
+
+                body: JSON.stringify({
+
+                    action: "login",
+
+                    usuario: usuario,
+
+                    password: password
+
+                })
+
+            });
+
+
+        const data =
+            await response.json();
+
+
+        showResponse(data);
+
+
+        if (!data.ok) {
+
+            showStatus(
+                "❌ Login rechazado: " +
+                data.error
+            );
+
+            return;
+
+        }
+
+
+        /*
+         * Guardamos el token únicamente
+         * en sessionStorage.
+         */
+
+        sessionStorage.setItem(
+            "sessionToken",
+            data.token
+        );
+
+
+        sessionStorage.setItem(
+            "user",
+            JSON.stringify(data.user)
+        );
+
+
+        document.getElementById(
+            "loginPanel"
+        ).style.display = "none";
+
+
+        document.getElementById(
+            "sessionPanel"
+        ).style.display = "block";
+
+
+        document.getElementById(
+            "userInfo"
+        ).textContent =
+            "Usuario conectado: " +
+            data.user.usuario;
+
+
+        showStatus(
+            "✅ Login correcto"
+        );
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        showStatus(
+            "❌ Error de conexión: " +
+            error.message
+        );
+
+        showResponse({
+            error: error.message
+        });
+
+    }
+
+}
+
+
+/*************************************************
+ * OPERACIÓN PROTEGIDA
+ *************************************************/
+
+async function testProtected() {
+
+    const token =
+        getToken();
+
+
+    if (!token) {
+
+        showStatus(
+            "❌ No existe token de sesión."
+        );
+
+        return;
+
+    }
+
+
+    showStatus(
+        "Consultando servidor..."
+    );
+
+
+    try {
+
+        const response =
+            await fetch(GAS_URL, {
+
+                method: "POST",
+
+                headers: {
+
+                    "Content-Type":
+                        "text/plain;charset=utf-8"
+
+                },
+
+                body: JSON.stringify({
+
+                    action:
+                        "testProtected",
+
+                    token:
+                        token
+
+                })
+
+            });
+
+
+        const data =
+            await response.json();
+
+
+        showResponse(data);
+
+
+        if (!data.ok) {
+
+            if (
+                data.error ===
+                "SESSION_EXPIRED"
+            ) {
+
+                sessionExpired();
+
+                return;
+
+            }
+
+
+            showStatus(
+                "❌ Operación rechazada: " +
+                data.error
+            );
+
+            return;
+
+        }
+
+
+        showStatus(
+            "✅ Operación autorizada"
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+        showStatus(
+            "❌ Error de conexión: " +
+            error.message
+        );
+
+        showResponse({
+            error: error.message
+        });
+
+    }
+
+}
+
+
+/*************************************************
+ * LOGOUT
+ *************************************************/
+
+async function logout() {
+
+    const token =
+        getToken();
+
+
+    if (!token) {
+
+        clearSession();
+
+        return;
+
+    }
+
+
+    showStatus(
+        "Cerrando sesión..."
+    );
+
+
+    try {
+
+        const response =
+            await fetch(GAS_URL, {
+
+                method: "POST",
+
+                headers: {
+
+                    "Content-Type":
+                        "text/plain;charset=utf-8"
+
+                },
+
+                body: JSON.stringify({
+
+                    action: "logout",
+
+                    token: token
+
+                })
+
+            });
+
+
+        const data =
+            await response.json();
+
+
+        showResponse(data);
+
+
+    } catch (error) {
+
+        console.error(error);
+
+    }
+
+
+    clearSession();
+
+}
+
+
+/*************************************************
+ * SESIÓN EXPIRADA
+ *************************************************/
+
+function sessionExpired() {
+
+    clearSession();
+
+    showStatus(
+        "⚠️ La sesión expiró. "
+        + "Iniciá sesión nuevamente."
+    );
+
+}
+
+
+/*************************************************
+ * LIMPIAR SESIÓN
+ *************************************************/
+
+function clearSession() {
+
+    sessionStorage.removeItem(
+        "sessionToken"
+    );
+
+    sessionStorage.removeItem(
+        "user"
+    );
+
+
+    document.getElementById(
+        "loginPanel"
+    ).style.display = "block";
+
+
+    document.getElementById(
+        "sessionPanel"
+    ).style.display = "none";
+
+}
+
+
+/*************************************************
+ * RECUPERAR SESIÓN DE ESTA PESTAÑA
+ *************************************************/
+
+window.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        const token =
+            getToken();
+
+        const user =
+            sessionStorage.getItem(
+                "user"
+            );
+
+
+        if (!token || !user) {
+
+            return;
+
+        }
+
+
+        try {
+
+            const parsedUser =
+                JSON.parse(user);
+
+
+            document.getElementById(
+                "loginPanel"
+            ).style.display = "none";
+
+
+            document.getElementById(
+                "sessionPanel"
+            ).style.display = "block";
+
+
+            document.getElementById(
+                "userInfo"
+            ).textContent =
+                "Usuario conectado: " +
+                parsedUser.usuario;
+
+
+            showStatus(
+                "Sesión almacenada en esta pestaña"
+            );
+
+        } catch (error) {
+
+            clearSession();
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+
+</html>
