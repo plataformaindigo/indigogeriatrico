@@ -1,388 +1,938 @@
 <!DOCTYPE html>
-
 <html lang="es">
-
 <head>
-
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0"
->
-
-<title>Prueba autenticación</title>
-
+<title>Prueba de Autenticación</title>
 
 <style>
 
-/* =========================
-   GENERAL
-========================= */
+:root {
+  --bg: #f4f7fb;
+  --card: #ffffff;
+  --text: #172033;
+  --muted: #687386;
+  --primary: #2563eb;
+  --primary-dark: #1d4ed8;
+  --success: #16a34a;
+  --danger: #dc2626;
+  --warning: #d97706;
+  --border: #e2e8f0;
+  --shadow: 0 18px 50px rgba(15, 23, 42, .10);
+  --radius: 18px;
+}
 
 * {
-
   box-sizing: border-box;
-
 }
-
 
 body {
-
   margin: 0;
-
+  min-height: 100vh;
   font-family:
-    Arial,
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
     sans-serif;
-
   background:
-    #f2f4f7;
+    radial-gradient(
+      circle at top right,
+      #dbeafe,
+      transparent 35%
+    ),
+    var(--bg);
+  color: var(--text);
+}
 
+.container {
+  width: min(920px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 50px 0;
 }
 
 
-/* =========================
-   APP
-========================= */
+/* =========================================
+   HEADER
+========================================= */
 
-#app {
+.header {
+  margin-bottom: 28px;
+}
 
-  padding: 40px;
+.header small {
+  display: block;
+  color: var(--primary);
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
 
+.header h1 {
+  margin: 0;
+  font-size: clamp(28px, 5vw, 42px);
+  letter-spacing: -.03em;
+}
+
+.header p {
+  margin: 10px 0 0;
+  color: var(--muted);
 }
 
 
-/* =========================
-   MODAL BLOQUEO
-========================= */
+/* =========================================
+   CARD
+========================================= */
 
-#lockScreen {
-
-  position: fixed;
-
-  inset: 0;
-
-  background:
-    rgba(0, 0, 0, 0.78);
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  z-index: 9999;
-
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 28px;
+  margin-bottom: 20px;
 }
 
-
-/* =========================
-   LOGIN
-========================= */
-
-#loginBox {
-
-  width: 320px;
-
-  max-width: calc(100% - 30px);
-
-  background:
-    white;
-
-  padding: 30px;
-
-  border-radius: 12px;
-
-  box-shadow:
-    0 10px 40px
-    rgba(0, 0, 0, 0.3);
-
-}
-
-
-#loginBox h2 {
-
+.card h2 {
   margin-top: 0;
-
+  margin-bottom: 20px;
+  font-size: 20px;
 }
 
+
+/* =========================================
+   LOGIN
+========================================= */
+
+.login-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.field.full {
+  grid-column: 1 / -1;
+}
+
+label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #475569;
+}
 
 input {
-
   width: 100%;
-
-  padding: 12px;
-
-  margin-bottom: 12px;
-
-  font-size: 16px;
-
-  border:
-    1px solid #ccc;
-
-  border-radius: 6px;
-
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  padding: 13px 14px;
+  font-size: 15px;
+  outline: none;
+  transition: .2s;
 }
 
+input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, .12);
+}
+
+
+/* =========================================
+   BUTTONS
+========================================= */
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
 
 button {
-
-  width: 100%;
-
-  padding: 12px;
-
-  font-size: 16px;
-
+  border: 0;
+  border-radius: 11px;
+  padding: 12px 17px;
+  font-size: 14px;
+  font-weight: 700;
   cursor: pointer;
+  transition: .2s;
+}
 
-  border: none;
+button:hover {
+  transform: translateY(-1px);
+}
 
-  border-radius: 6px;
+button:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+  transform: none;
+}
 
+.btn-primary {
+  background: var(--primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--primary-dark);
+}
+
+.btn-secondary {
+  background: #eef2f7;
+  color: #334155;
+}
+
+.btn-danger {
+  background: #fee2e2;
+  color: #991b1b;
 }
 
 
-button + button {
+/* =========================================
+   SESSION
+========================================= */
 
-  margin-top: 10px;
-
-}
-
-
-#message {
-
-  margin-top: 15px;
-
-  min-height: 20px;
-
-}
-
-
-/* =========================
-   INFORMACIÓN SESIÓN
-========================= */
-
-#sessionInfo {
-
+.session-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
   margin-bottom: 20px;
+}
 
-  padding: 15px;
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 11px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.status::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.status.offline {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.status.offline::before {
+  background: #94a3b8;
+}
+
+.status.online {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status.online::before {
+  background: var(--success);
+}
+
+.status.expired {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.status.expired::before {
+  background: var(--danger);
+}
+
+
+.session-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.info {
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  background: #f8fafc;
+}
+
+.info-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--muted);
+  font-weight: 800;
+  margin-bottom: 7px;
+}
+
+.info-value {
+  font-size: 15px;
+  font-weight: 700;
+  word-break: break-word;
+}
+
+.timer {
+  font-size: 26px;
+  letter-spacing: -.03em;
+}
+
+
+/* =========================================
+   LOG
+========================================= */
+
+.log {
+  background: #0f172a;
+  color: #dbeafe;
+  border-radius: 13px;
+  padding: 16px;
+  min-height: 180px;
+  max-height: 300px;
+  overflow: auto;
+  font-family: Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.log-line {
+  margin-bottom: 4px;
+}
+
+.log-success {
+  color: #86efac;
+}
+
+.log-error {
+  color: #fca5a5;
+}
+
+.log-info {
+  color: #93c5fd;
+}
+
+
+/* =========================================
+   MODAL DE BLOQUEO
+========================================= */
+
+.lock-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
 
   background:
-    white;
+    rgba(15, 23, 42, .72);
 
-  border-radius: 8px;
+  backdrop-filter: blur(12px);
+}
+
+.lock-card {
+  width: min(430px, 100%);
+  background: white;
+  border-radius: 22px;
+  padding: 32px;
+  box-shadow:
+    0 30px 80px rgba(0, 0, 0, .25);
+}
+
+.lock-icon {
+  width: 54px;
+  height: 54px;
+  border-radius: 15px;
+  display: grid;
+  place-items: center;
+  background: #dbeafe;
+  color: var(--primary);
+  font-size: 25px;
+  margin-bottom: 20px;
+}
+
+.lock-card h2 {
+  margin: 0 0 8px;
+}
+
+.lock-card p {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 24px;
+}
+
+.error {
+  display: none;
+  margin-top: 12px;
+  padding: 11px;
+  border-radius: 10px;
+  background: #fee2e2;
+  color: #991b1b;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 700px) {
+
+  .container {
+    width: min(100% - 20px, 920px);
+    padding: 25px 0;
+  }
+
+  .card {
+    padding: 20px;
+  }
+
+  .login-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .field.full {
+    grid-column: auto;
+  }
+
+  .session-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .session-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
 
 }
 
 </style>
-
 </head>
 
 
 <body>
 
 
-<!-- =========================
-     PANTALLA BLOQUEADA
-========================= -->
+<!-- ========================================
+     PANTALLA DE BLOQUEO
+========================================= -->
 
-<div id="lockScreen">
+<div
+  id="lockScreen"
+  class="lock-screen"
+>
 
-  <div id="loginBox">
+  <div class="lock-card">
 
-    <h2>Acceso</h2>
+    <div class="lock-icon">
+      🔐
+    </div>
+
+    <h2>
+      Acceso restringido
+    </h2>
 
     <p>
-      Ingrese sus credenciales.
+      Ingresá tus credenciales para iniciar
+      una sesión segura.
     </p>
 
 
-    <input
-      id="usuario"
-      type="text"
-      placeholder="Usuario"
-      autocomplete="username"
-    >
+    <div class="field">
+
+      <label for="loginUsuario">
+        Usuario
+      </label>
+
+      <input
+        id="loginUsuario"
+        type="text"
+        autocomplete="username"
+        placeholder="Usuario"
+      >
+
+    </div>
 
 
-    <input
-      id="password"
-      type="password"
-      placeholder="Contraseña"
-      autocomplete="current-password"
+    <div
+      class="field"
+      style="margin-top:14px;"
     >
+
+      <label for="loginPassword">
+        Contraseña
+      </label>
+
+      <input
+        id="loginPassword"
+        type="password"
+        autocomplete="current-password"
+        placeholder="Contraseña"
+      >
+
+    </div>
 
 
     <button
+      id="btnLogin"
+      class="btn-primary"
+      style="width:100%; margin-top:20px;"
       onclick="login()"
     >
-      Ingresar
+      Iniciar sesión
     </button>
 
 
-    <div id="message"></div>
+    <div
+      id="loginError"
+      class="error"
+    ></div>
 
   </div>
 
 </div>
 
 
-<!-- =========================
-     APLICACIÓN
-========================= -->
 
-<div id="app">
+<!-- ========================================
+     CONTENIDO PRINCIPAL
+========================================= -->
 
-  <h1>
-    Sistema geriátrico
-  </h1>
+<main class="container">
 
 
-  <div id="sessionInfo">
+  <header class="header">
 
-    Sesión no iniciada.
+    <small>
+      Prueba de autenticación
+    </small>
 
-  </div>
+    <h1>
+      Sistema Geriátrico
+    </h1>
+
+    <p>
+      Panel de prueba de sesiones, tokens
+      y validación de acceso.
+    </p>
+
+  </header>
 
 
-  <button
-    onclick="probarAccion()"
-  >
-    Probar acción protegida
-  </button>
+
+  <!-- ======================================
+       INFORMACIÓN DE SESIÓN
+  ======================================= -->
+
+  <section class="card">
+
+    <div class="session-header">
+
+      <h2>
+        Sesión actual
+      </h2>
+
+      <span
+        id="status"
+        class="status offline"
+      >
+        Sin sesión
+      </span>
+
+    </div>
 
 
-  <br><br>
+    <div class="session-grid">
 
 
-  <button
-    onclick="logout()"
-  >
-    Cerrar sesión
-  </button>
+      <div class="info">
 
-</div>
+        <div class="info-label">
+          Usuario
+        </div>
+
+        <div
+          id="infoUsuario"
+          class="info-value"
+        >
+          —
+        </div>
+
+      </div>
+
+
+      <div class="info">
+
+        <div class="info-label">
+          Rol
+        </div>
+
+        <div
+          id="infoRol"
+          class="info-value"
+        >
+          —
+        </div>
+
+      </div>
+
+
+      <div class="info">
+
+        <div class="info-label">
+          Tiempo restante
+        </div>
+
+        <div
+          id="infoTimer"
+          class="info-value timer"
+        >
+          —
+        </div>
+
+      </div>
+
+
+      <div class="info">
+
+        <div class="info-label">
+          Token
+        </div>
+
+        <div
+          id="infoToken"
+          class="info-value"
+        >
+          —
+        </div>
+
+      </div>
+
+
+      <div class="info">
+
+        <div class="info-label">
+          Expira
+        </div>
+
+        <div
+          id="infoExpires"
+          class="info-value"
+        >
+          —
+        </div>
+
+      </div>
+
+
+      <div class="info">
+
+        <div class="info-label">
+          Última validación
+        </div>
+
+        <div
+          id="infoValidation"
+          class="info-value"
+        >
+          —
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="actions">
+
+      <button
+        id="btnValidate"
+        class="btn-secondary"
+        onclick="validateCurrentSession()"
+        disabled
+      >
+        Validar sesión
+      </button>
+
+
+      <button
+        id="btnAction"
+        class="btn-primary"
+        onclick="testProtectedAction()"
+        disabled
+      >
+        Probar acción protegida
+      </button>
+
+
+      <button
+        id="btnLogout"
+        class="btn-danger"
+        onclick="logout()"
+        disabled
+      >
+        Cerrar sesión
+      </button>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- ======================================
+       LOG
+  ======================================= -->
+
+  <section class="card">
+
+    <h2>
+      Registro de actividad
+    </h2>
+
+    <div
+      id="log"
+      class="log"
+    ></div>
+
+  </section>
+
+
+</main>
+
 
 
 <script>
 
-/* =========================
+/* =========================================
    CONFIGURACIÓN
-========================= */
-
-const GAS_URL =
-  'https://script.google.com/macros/s/AKfycbxifPJ4Q8x-_-IlJgFL0tIQXFbaFQePPQPBrlLpy0UqrGKSGGehrW-GBNofdffH7uUS/exec';
+========================================= */
 
 
-/* =========================
+/*
+ * IMPORTANTE:
+ *
+ * Reemplazar esta URL por la URL /exec
+ * de tu Web App de Google Apps Script.
+ */
+
+const API_URL =
+  'PEGAR_AQUI_URL_DEL_WEB_APP_EXEC';
+
+
+
+/*
+ * Intervalo de validación automática.
+ *
+ * Cada 30 segundos se consulta al backend
+ * para comprobar que el token siga vigente.
+ */
+
+const VALIDATION_INTERVAL =
+  30 * 1000;
+
+
+
+/* =========================================
    SESIÓN
-========================= */
-
-window.user_sessionToken =
-  null;
+========================================= */
 
 
-window.user_session =
-  null;
+/*
+ * La sesión vive solamente en memoria.
+ *
+ * No usamos localStorage para esta prueba.
+ */
+
+window.session = null;
 
 
-/* =========================
+let validationTimer = null;
+let countdownTimer = null;
+
+
+
+/* =========================================
+   LOG
+========================================= */
+
+function log(
+  message,
+  type = 'info'
+) {
+
+  const container =
+    document.getElementById('log');
+
+
+  const line =
+    document.createElement('div');
+
+
+  line.className =
+    'log-line log-' + type;
+
+
+  const time =
+    new Date()
+      .toLocaleTimeString();
+
+
+  line.textContent =
+    `[${time}] ${message}`;
+
+
+  container.appendChild(line);
+
+
+  container.scrollTop =
+    container.scrollHeight;
+
+}
+
+
+
+/* =========================================
+   POST API
+========================================= */
+
+async function api(
+  payload
+) {
+
+  const response =
+    await fetch(
+      API_URL,
+      {
+        method: 'POST',
+
+        headers: {
+          'Content-Type':
+            'text/plain;charset=utf-8'
+        },
+
+        body:
+          JSON.stringify(payload)
+      }
+    );
+
+
+  if (!response.ok) {
+
+    throw new Error(
+      `HTTP ${response.status}`
+    );
+
+  }
+
+
+  return response.json();
+
+}
+
+
+
+/* =========================================
    LOGIN
-========================= */
+========================================= */
 
 async function login() {
 
   const usuario =
     document
-      .getElementById('usuario')
+      .getElementById('loginUsuario')
       .value
       .trim();
 
 
-  const passwordInput =
-    document
-      .getElementById('password');
-
-
   const password =
-    passwordInput.value;
-
-
-  const message =
     document
-      .getElementById('message');
+      .getElementById('loginPassword')
+      .value;
+
+
+  const errorBox =
+    document
+      .getElementById('loginError');
+
+
+  const button =
+    document
+      .getElementById('btnLogin');
+
+
+  errorBox.style.display =
+    'none';
 
 
   if (!usuario || !password) {
 
-    message.textContent =
-      'Ingrese usuario y contraseña.';
+    showLoginError(
+      'Ingresá usuario y contraseña.'
+    );
 
     return;
 
   }
 
 
-  message.textContent =
+  button.disabled =
+    true;
+
+  button.textContent =
     'Verificando...';
 
 
   try {
 
-    const response =
-      await fetch(
-
-        GAS_URL,
-
-        {
-
-          method: 'POST',
-
-          redirect: 'follow',
-
-          headers: {
-
-            'Content-Type':
-              'text/plain;charset=utf-8'
-
-          },
-
-          body:
-            JSON.stringify({
-
-              action:
-                'login',
-
-              usuario:
-                usuario,
-
-              password:
-                password
-
-            })
-
-        }
-
-      );
+    log(
+      `Intentando iniciar sesión como "${usuario}"...`
+    );
 
 
     const result =
-      await response.json();
+      await api({
 
+        action:
+          'login',
 
-    /*
-      Eliminamos inmediatamente
-      la contraseña del input.
-    */
+        usuario:
+          usuario,
 
-    passwordInput.value = '';
+        password:
+          password
+
+      });
 
 
     if (!result.ok) {
 
-      message.textContent =
-        'Acceso rechazado.';
+      showLoginError(
+        translateError(
+          result.error
+        )
+      );
+
+
+      log(
+        `Login rechazado: ${result.error}`,
+        'error'
+      );
+
 
       return;
 
@@ -390,24 +940,21 @@ async function login() {
 
 
     /*
-      GUARDAMOS SOLAMENTE
-      EL TOKEN DE SESIÓN.
-    */
+     * IMPORTANTE:
+     *
+     * El password NO se guarda.
+     *
+     * Solamente conservamos el token
+     * recibido del backend.
+     */
 
-    window.user_sessionToken =
-      result.token;
+    window.session = {
 
+      token:
+        result.token,
 
-    window.user_session = {
-
-      id:
-        result.user.id,
-
-      usuario:
-        result.user.usuario,
-
-      rol:
-        result.user.rol,
+      user:
+        result.user,
 
       expiresAt:
         result.expiresAt
@@ -415,85 +962,244 @@ async function login() {
     };
 
 
-    /*
-      Desbloquear aplicación.
-    */
-
-    document
-      .getElementById('lockScreen')
-      .style.display = 'none';
+    log(
+      `Login correcto. Usuario: ${result.user.usuario}`,
+      'success'
+    );
 
 
-    /*
-      Mostrar información.
-    */
-
-    document
-      .getElementById('sessionInfo')
-      .innerHTML = `
-
-        <strong>
-          Sesión activa
-        </strong>
-
-        <br><br>
-
-        Usuario:
-        ${escapeHtml(
-          result.user.usuario
-        )}
-
-        <br>
-
-        Rol:
-        ${escapeHtml(
-          result.user.rol
-        )}
-
-        <br>
-
-        Expira:
-        ${escapeHtml(
-          result.expiresAt
-        )}
-
-      `;
+    log(
+      'Nuevo token de sesión recibido.',
+      'success'
+    );
 
 
-    message.textContent =
-      '';
+    hideLockScreen();
+
+
+    updateSessionUI();
+
+
+    startSessionTimers();
+
 
   }
-
 
   catch (error) {
 
     console.error(error);
 
-    passwordInput.value = '';
 
-    message.textContent =
-      'Error de conexión.';
+    showLoginError(
+      'No se pudo conectar con el servidor.'
+    );
+
+
+    log(
+      `Error de conexión: ${error.message}`,
+      'error'
+    );
+
+  }
+
+  finally {
+
+    button.disabled =
+      false;
+
+    button.textContent =
+      'Iniciar sesión';
 
   }
 
 }
 
 
-/* =========================
-   ACCIÓN PROTEGIDA
-========================= */
 
-async function probarAccion() {
+/* =========================================
+   VALIDAR SESIÓN
+========================================= */
 
-  if (
-    !window.user_sessionToken ||
-    !window.user_session
-  ) {
+async function validateCurrentSession(
+  silent = false
+) {
 
-    bloquearSesion(
-      'No existe una sesión válida.'
+  if (!window.session) {
+
+    return false;
+
+  }
+
+
+  try {
+
+    const result =
+      await api({
+
+        action:
+          'validate',
+
+        usuario:
+          window.session.user.usuario,
+
+        token:
+          window.session.token
+
+      });
+
+
+    document
+      .getElementById('infoValidation')
+      .textContent =
+      new Date()
+        .toLocaleTimeString();
+
+
+    if (!result.ok) {
+
+      if (!silent) {
+
+        log(
+          'Sesión rechazada por el servidor.',
+          'error'
+        );
+
+      }
+
+
+      sessionExpired(
+        'La sesión ya no es válida.'
+      );
+
+
+      return false;
+
+    }
+
+
+    /*
+     * Actualizamos los datos devueltos
+     * por el backend.
+     */
+
+    window.session.user =
+      {
+        ...window.session.user,
+        ...result.session
+      };
+
+
+    if (
+      result.session.expiresAt
+    ) {
+
+      window.session.expiresAt =
+        result.session.expiresAt;
+
+    }
+
+
+    updateSessionUI();
+
+
+    if (!silent) {
+
+      log(
+        'Sesión validada correctamente.',
+        'success'
+      );
+
+    }
+
+
+    return true;
+
+  }
+
+  catch (error) {
+
+    log(
+      `Error validando sesión: ${error.message}`,
+      'error'
     );
+
+
+    return false;
+
+  }
+
+}
+
+
+
+/* =========================================
+   ACCIÓN PROTEGIDA DE PRUEBA
+========================================= */
+
+async function testProtectedAction() {
+
+  if (!window.session) {
+
+    log(
+      'No existe una sesión activa.',
+      'error'
+    );
+
+    return;
+
+  }
+
+
+  /*
+   * En el sistema real, prácticamente cada
+   * acción protegida seguirá este patrón:
+   *
+   * usuario + token
+   *       ↓
+   * backend
+   *       ↓
+   * validateSession()
+   *       ↓
+   * acción
+   */
+
+  const valid =
+    await validateCurrentSession();
+
+
+  if (!valid) {
+
+    return;
+
+  }
+
+
+  log(
+    '✓ Acción protegida ejecutada correctamente.',
+    'success'
+  );
+
+
+  log(
+    `Usuario autorizado: ${window.session.user.usuario}`
+  );
+
+
+  log(
+    `Rol autorizado: ${window.session.user.rol}`
+  );
+
+}
+
+
+
+/* =========================================
+   LOGOUT
+========================================= */
+
+async function logout() {
+
+  if (!window.session) {
 
     return;
 
@@ -502,227 +1208,539 @@ async function probarAccion() {
 
   try {
 
-    const response =
-      await fetch(
-
-        GAS_URL,
-
-        {
-
-          method: 'POST',
-
-          redirect: 'follow',
-
-          headers: {
-
-            'Content-Type':
-              'text/plain;charset=utf-8'
-
-          },
-
-          body:
-            JSON.stringify({
-
-              action:
-                'test',
-
-              usuario:
-                window.user_session.usuario,
-
-              token:
-                window.user_sessionToken
-
-            })
-
-        }
-
-      );
-
-
     const result =
-      await response.json();
+      await api({
+
+        action:
+          'logout',
+
+        usuario:
+          window.session.user.usuario,
+
+        token:
+          window.session.token
+
+      });
 
 
-    if (!result.ok) {
+    if (result.ok) {
 
-      bloquearSesion(
-        'Sesión inválida o expirada.'
+      log(
+        'Sesión cerrada correctamente.',
+        'success'
       );
-
-      return;
 
     }
 
 
-    alert(
-
-      result.message +
-
-      '\n\nUsuario: ' +
-      result.user +
-
-      '\nRol: ' +
-      result.rol +
-
-      '\n\n' +
-      result.timestamp
-
-    );
-
   }
-
 
   catch (error) {
 
-    console.error(error);
-
-    alert(
-      'Error de conexión.'
+    log(
+      `Error durante logout: ${error.message}`,
+      'error'
     );
 
   }
 
+  finally {
+
+    clearSession();
+
+  }
+
 }
 
 
-/* =========================
-   LOGOUT
-========================= */
 
-async function logout() {
+/* =========================================
+   SESIÓN EXPIRADA / INVALIDADA
+========================================= */
 
-  if (
-    window.user_sessionToken &&
-    window.user_session
-  ) {
+function sessionExpired(
+  reason
+) {
 
-    try {
+  log(
+    reason,
+    'error'
+  );
 
-      await fetch(
 
-        GAS_URL,
+  clearSession();
 
-        {
 
-          method: 'POST',
+  showLockScreen(
+    reason
+  );
 
-          redirect: 'follow',
+}
 
-          headers: {
 
-            'Content-Type':
-              'text/plain;charset=utf-8'
 
-          },
+/* =========================================
+   LIMPIAR SESIÓN
+========================================= */
 
-          body:
-            JSON.stringify({
+function clearSession() {
 
-              action:
-                'logout',
+  window.session =
+    null;
 
-              usuario:
-                window.user_session.usuario,
 
-              token:
-                window.user_sessionToken
+  stopSessionTimers();
 
-            })
 
-          }
+  updateSessionUI();
 
-        );
 
-    }
+  document
+    .getElementById('infoUsuario')
+    .textContent =
+    '—';
 
-    catch (error) {
 
-      console.error(error);
+  document
+    .getElementById('infoRol')
+    .textContent =
+    '—';
 
-    }
+
+  document
+    .getElementById('infoToken')
+    .textContent =
+    '—';
+
+
+  document
+    .getElementById('infoExpires')
+    .textContent =
+    '—';
+
+
+  document
+    .getElementById('infoTimer')
+    .textContent =
+    '—';
+
+
+  document
+    .getElementById('infoValidation')
+    .textContent =
+    '—';
+
+}
+
+
+
+/* =========================================
+   TEMPORIZADORES
+========================================= */
+
+function startSessionTimers() {
+
+  stopSessionTimers();
+
+
+  countdownTimer =
+    setInterval(
+      updateCountdown,
+      1000
+    );
+
+
+  validationTimer =
+    setInterval(
+      () => {
+        validateCurrentSession(true);
+      },
+      VALIDATION_INTERVAL
+    );
+
+
+  updateCountdown();
+
+}
+
+
+
+function stopSessionTimers() {
+
+  if (countdownTimer) {
+
+    clearInterval(
+      countdownTimer
+    );
+
+    countdownTimer =
+      null;
 
   }
 
 
-  bloquearSesion();
+  if (validationTimer) {
+
+    clearInterval(
+      validationTimer
+    );
+
+    validationTimer =
+      null;
+
+  }
 
 }
 
 
-/* =========================
-   BLOQUEAR
-========================= */
 
-function bloquearSesion(mensaje) {
+/* =========================================
+   CUENTA REGRESIVA
+========================================= */
 
-  window.user_sessionToken =
-    null;
+function updateCountdown() {
+
+  if (!window.session) {
+
+    return;
+
+  }
 
 
-  window.user_session =
-    null;
+  const expires =
+    new Date(
+      window.session.expiresAt
+    ).getTime();
 
+
+  const remaining =
+    expires -
+    Date.now();
+
+
+  if (remaining <= 0) {
+
+    document
+      .getElementById('infoTimer')
+      .textContent =
+      '00:00';
+
+
+    sessionExpired(
+      'La sesión expiró.'
+    );
+
+
+    return;
+
+  }
+
+
+  const totalSeconds =
+    Math.floor(
+      remaining / 1000
+    );
+
+
+  const minutes =
+    Math.floor(
+      totalSeconds / 60
+    );
+
+
+  const seconds =
+    totalSeconds % 60;
+
+
+  document
+    .getElementById('infoTimer')
+    .textContent =
+
+    String(minutes)
+      .padStart(2, '0')
+
+    + ':' +
+
+    String(seconds)
+      .padStart(2, '0');
+
+}
+
+
+
+/* =========================================
+   ACTUALIZAR UI
+========================================= */
+
+function updateSessionUI() {
+
+  const active =
+    !!window.session;
+
+
+  const status =
+    document
+      .getElementById('status');
+
+
+  const validateButton =
+    document
+      .getElementById('btnValidate');
+
+
+  const actionButton =
+    document
+      .getElementById('btnAction');
+
+
+  const logoutButton =
+    document
+      .getElementById('btnLogout');
+
+
+  if (!active) {
+
+    status.className =
+      'status offline';
+
+    status.textContent =
+      'Sin sesión';
+
+
+    validateButton.disabled =
+      true;
+
+    actionButton.disabled =
+      true;
+
+    logoutButton.disabled =
+      true;
+
+
+    return;
+
+  }
+
+
+  status.className =
+    'status online';
+
+  status.textContent =
+    'Sesión activa';
+
+
+  validateButton.disabled =
+    false;
+
+  actionButton.disabled =
+    false;
+
+  logoutButton.disabled =
+    false;
+
+
+  document
+    .getElementById('infoUsuario')
+    .textContent =
+    window.session.user.usuario;
+
+
+  document
+    .getElementById('infoRol')
+    .textContent =
+    window.session.user.rol;
+
+
+  document
+    .getElementById('infoToken')
+    .textContent =
+    maskToken(
+      window.session.token
+    );
+
+
+  document
+    .getElementById('infoExpires')
+    .textContent =
+    new Date(
+      window.session.expiresAt
+    ).toLocaleString();
+
+}
+
+
+
+/* =========================================
+   MÁSCARA TOKEN
+========================================= */
+
+function maskToken(
+  token
+) {
+
+  if (!token) {
+
+    return '—';
+
+  }
+
+
+  if (token.length <= 12) {
+
+    return '••••••••';
+
+  }
+
+
+  return (
+
+    token.substring(0, 6) +
+
+    '••••••••••' +
+
+    token.substring(
+      token.length - 6
+    )
+
+  );
+
+}
+
+
+
+/* =========================================
+   LOCK SCREEN
+========================================= */
+
+function hideLockScreen() {
 
   document
     .getElementById('lockScreen')
-    .style.display = 'flex';
+    .style.display =
+    'none';
 
+}
+
+
+
+function showLockScreen(
+  message = ''
+) {
 
   document
-    .getElementById('sessionInfo')
-    .textContent =
-      'Sesión no iniciada.';
+    .getElementById('lockScreen')
+    .style.display =
+    'flex';
 
 
-  if (mensaje) {
+  if (message) {
 
-    document
-      .getElementById('message')
-      .textContent =
-        mensaje;
+    showLoginError(
+      message
+    );
 
   }
 
 }
 
 
-/* =========================
-   ESCAPAR HTML
-========================= */
 
-function escapeHtml(value) {
+/* =========================================
+   ERROR LOGIN
+========================================= */
 
-  return String(value)
+function showLoginError(
+  message
+) {
 
-    .replaceAll(
-      '&',
-      '&amp;'
-    )
+  const box =
+    document
+      .getElementById('loginError');
 
-    .replaceAll(
-      '<',
-      '&lt;'
-    )
 
-    .replaceAll(
-      '>',
-      '&gt;'
-    )
+  box.textContent =
+    message;
 
-    .replaceAll(
-      '"',
-      '&quot;'
-    )
 
-    .replaceAll(
-      "'",
-      '&#039;'
-    );
+  box.style.display =
+    'block';
 
 }
+
+
+
+/* =========================================
+   TRADUCCIÓN DE ERRORES
+========================================= */
+
+function translateError(
+  error
+) {
+
+  const errors = {
+
+    MISSING_CREDENTIALS:
+      'Ingresá usuario y contraseña.',
+
+    INVALID_CREDENTIALS:
+      'Usuario o contraseña incorrectos.',
+
+    USER_INACTIVE:
+      'Este usuario está desactivado.',
+
+    NO_USERS:
+      'No hay usuarios configurados.',
+
+    SESSION_INVALID:
+      'La sesión ya no es válida.'
+
+  };
+
+
+  return (
+    errors[error] ||
+    'No se pudo completar la operación.'
+  );
+
+}
+
+
+
+/* =========================================
+   ENTER EN LOGIN
+========================================= */
+
+document
+  .getElementById('loginPassword')
+  .addEventListener(
+    'keydown',
+    event => {
+
+      if (
+        event.key === 'Enter'
+      ) {
+
+        login();
+
+      }
+
+    }
+  );
+
+
+/* =========================================
+   INICIO
+========================================= */
+
+log(
+  'Aplicación iniciada.'
+);
+
+log(
+  'Esperando autenticación.'
+);
 
 </script>
 
 </body>
-
 </html>
