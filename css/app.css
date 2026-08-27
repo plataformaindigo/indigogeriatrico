@@ -7,17 +7,6 @@
   --muted: #64748b;
 
   --primary: #2563eb;
-  --primary-hover: #1d4ed8;
-
-  --success: #16a34a;
-  --success-bg: #dcfce7;
-
-  --danger: #dc2626;
-  --danger-hover: #b91c1c;
-  --danger-bg: #fee2e2;
-
-  --warning: #d97706;
-  --warning-bg: #fef3c7;
 
   --border: #e2e8f0;
 
@@ -31,6 +20,13 @@
 * {
 
   box-sizing: border-box;
+
+}
+
+
+html {
+
+  min-height: 100%;
 
 }
 
@@ -59,26 +55,30 @@ body {
 
 
 /* =========================================
-   NAVBAR
+   NAVBAR LATERAL - PC
 ========================================= */
 
 .navbar {
 
-  position: sticky;
+  position: fixed;
 
   top: 0;
+  left: 0;
+
+  width: 230px;
+  height: 100vh;
 
   z-index: 1000;
 
-  min-height: 68px;
-
   display: flex;
 
-  align-items: center;
+  flex-direction: column;
 
-  gap: 18px;
+  align-items: stretch;
 
-  padding: 8px 18px;
+  gap: 20px;
+
+  padding: 20px 12px;
 
   background:
     rgba(255,255,255,.96);
@@ -86,15 +86,19 @@ body {
   backdrop-filter:
     blur(14px);
 
-  border-bottom:
+  border-right:
     1px solid var(--border);
 
   box-shadow:
-    0 4px 20px
+    4px 0 20px
     rgba(15,23,42,.06);
 
 }
 
+
+/* =========================================
+   MARCA
+========================================= */
 
 .brand {
 
@@ -104,12 +108,28 @@ body {
 
   gap: 9px;
 
-  white-space: nowrap;
+  padding:
+    4px 8px 15px;
 
   font-size: 18px;
 
+  white-space: nowrap;
+
+  border-bottom:
+    1px solid var(--border);
+
 }
 
+
+  .brand img {
+
+    width:
+      60px;
+
+    height:
+      60px;
+
+  }
 
 .brand span {
 
@@ -118,15 +138,23 @@ body {
 }
 
 
+/* =========================================
+   NAVEGACIÓN
+========================================= */
+
 .nav {
 
   display: flex;
 
-  align-items: center;
+  flex-direction: column;
+
+  align-items: stretch;
 
   gap: 5px;
 
-  overflow-x: auto;
+  overflow-y: auto;
+
+  overflow-x: hidden;
 
   scrollbar-width: none;
 
@@ -140,384 +168,27 @@ body {
 }
 
 
-.nav-button {
-
-  border: 0;
-
-  background: transparent;
-
-  color: #475569;
-
-  padding: 10px 13px;
-
-  border-radius: 11px;
-
-  font-size: 13px;
-
-  font-weight: 750;
-
-  cursor: pointer;
-
-  white-space: nowrap;
-
-}
-
-
-.nav-button:hover {
-
-  background: #f1f5f9;
-
-  color: var(--text);
-
-}
-
-
-.nav-button.active {
-
-  background: #dbeafe;
-
-  color: #1d4ed8;
-
-}
-
-
-/* =========================================
-   APP
-========================================= */
-
-#app {
-
-  width:
-    min(
-      1150px,
-      calc(100% - 32px)
-    );
-
-  margin: auto;
-
-  padding:
-    30px 0 50px;
-
-}
-
-
-/* =========================================
-   PLACEHOLDERS
-========================================= */
-
-.loading,
-.module-placeholder {
-
-  min-height: 400px;
-
-  display: flex;
-
-  flex-direction: column;
-
-  align-items: center;
-
-  justify-content: center;
-
-}
-
-
-.module-placeholder {
-
-  gap: 12px;
-
-  background:
-    white;
-
-  border:
-    1px solid var(--border);
-
-  border-radius: 20px;
-
-  box-shadow:
-    0 15px 40px
-    rgba(15,23,42,.06);
-
-}
-
-
-.module-placeholder .emoji {
-
-  font-size: 52px;
-
-}
-
-
-.module-placeholder h2,
-.module-placeholder p {
-
-  margin: 0;
-
-}
-
-
-.module-placeholder p {
-
-  color:
-    var(--muted);
-
-}
-
-
-/* =========================================
-   MÓDULO SESIÓN
-========================================= */
-
-.session-module {
-
-  display: flex;
-
-  flex-direction: column;
-
-  gap: 20px;
-
-}
-
-
-/* =========================================
-   CARDS
-========================================= */
-
-.session-module .card {
-
-  background:
-    var(--card);
-
-  border:
-    1px solid var(--border);
-
-  border-radius:
-    20px;
-
-  padding:
-    24px;
-
-  box-shadow:
-    0 15px 40px
-    rgba(15,23,42,.06);
-
-}
-
-
-.session-module .card h1 {
-
-  color:
-    var(--text);
-
-  font-size:
-    26px;
-
-}
-
-
-.session-module .card h2 {
-
-  margin-top:
-    0;
-
-  margin-bottom:
-    20px;
-
-  font-size:
-    20px;
-
-}
-
-
-/* =========================================
-   ESTADO DE SESIÓN
-========================================= */
-
-.status {
-
-  display:
-    inline-flex;
-
-  align-items:
-    center;
-
-  justify-content:
-    center;
-
-  padding:
-    6px 11px;
-
-  border-radius:
-    999px;
-
-  font-size:
-    12px;
-
-  font-weight:
-    750;
-
-  white-space:
-    nowrap;
-
-}
-
-
-.status.offline {
-
-  background:
-    #f1f5f9;
-
-  color:
-    #64748b;
-
-}
-
-
-.status.online {
-
-  background:
-    var(--success-bg);
-
-  color:
-    #15803d;
-
-}
-
-
-/* =========================================
-   INFORMACIÓN DE SESIÓN
-========================================= */
-
-.session-module .grid {
-
-  display:
-    grid;
-
-  grid-template-columns:
-    repeat(2, minmax(0, 1fr));
-
-  gap:
-    14px;
-
-}
-
-
-.session-module .info {
-
-  min-width:
-    0;
-
-  padding:
-    16px;
-
-  background:
-    #f8fafc;
-
-  border:
-    1px solid var(--border);
-
-  border-radius:
-    14px;
-
-}
-
-
-.session-module .label {
-
-  margin-bottom:
-    6px;
-
-  color:
-    var(--muted);
-
-  font-size:
-    12px;
-
-  font-weight:
-    700;
-
-  text-transform:
-    uppercase;
-
-  letter-spacing:
-    .04em;
-
-}
-
-
-.session-module .value {
-
-  min-height:
-    22px;
-
-  color:
-    var(--text);
-
-  font-size:
-    15px;
-
-  font-weight:
-    600;
-
-  overflow:
-    hidden;
-
-  text-overflow:
-    ellipsis;
-
-  white-space:
-    nowrap;
-
-}
-
-
-.session-module .timer {
-
-  color:
-    var(--primary);
-
-  font-variant-numeric:
-    tabular-nums;
-
-}
-
-
 /* =========================================
    BOTONES
 ========================================= */
 
-.session-module .actions {
+.nav-button {
 
-  display:
-    flex;
+  width: 100%;
 
-  flex-wrap:
-    wrap;
+  border: 0;
 
-  gap:
-    10px;
+  background:
+    transparent;
 
-  margin-top:
-    22px;
-
-}
-
-
-.session-module button {
-
-  min-height:
-    42px;
+  color:
+    #475569;
 
   padding:
-    10px 16px;
-
-  border:
-    0;
+    11px 13px;
 
   border-radius:
     11px;
-
-  font-family:
-    inherit;
 
   font-size:
     13px;
@@ -528,154 +199,116 @@ body {
   cursor:
     pointer;
 
-  transition:
-    background .15s ease,
-    transform .1s ease,
-    box-shadow .15s ease;
-
-}
-
-
-.session-module button:hover {
-
-  transform:
-    translateY(-1px);
-
-}
-
-
-.session-module button:active {
-
-  transform:
-    translateY(0);
-
-}
-
-
-.session-module button.primary {
-
-  background:
-    var(--primary);
-
-  color:
-    white;
-
-}
-
-
-.session-module button.primary:hover {
-
-  background:
-    var(--primary-hover);
-
-}
-
-
-.session-module button.secondary {
-
-  background:
-    #e2e8f0;
-
-  color:
-    #334155;
-
-}
-
-
-.session-module button.secondary:hover {
-
-  background:
-    #cbd5e1;
-
-}
-
-
-.session-module button.danger {
-
-  background:
-    var(--danger);
-
-  color:
-    white;
-
-}
-
-
-.session-module button.danger:hover {
-
-  background:
-    var(--danger-hover);
-
-}
-
-
-/* =========================================
-   REGISTRO / LOG
-========================================= */
-
-.session-module .log {
-
-  min-height:
-    120px;
-
-  max-height:
-    300px;
-
-  overflow-y:
-    auto;
-
-  padding:
-    14px;
-
-  background:
-    #0f172a;
-
-  border-radius:
-    12px;
-
-  color:
-    #e2e8f0;
-
-  font-family:
-    ui-monospace,
-    SFMono-Regular,
-    Menlo,
-    Monaco,
-    Consolas,
-    monospace;
-
-  font-size:
-    12px;
-
-  line-height:
-    1.6;
+  text-align:
+    left;
 
   white-space:
-    pre-wrap;
+    nowrap;
 
-  word-break:
-    break-word;
+  transition:
+    background .15s ease,
+    color .15s ease;
 
 }
 
 
-/* =========================================
-   LOGIN MODAL
-========================================= */
+.nav-button:hover {
 
-.modal {
+  background:
+    #f1f5f9;
 
-  position:
+  color:
+    var(--text);
+
+}
+
+
+.nav-button.active {
+
+  background:
+    #dbeafe;
+
+  color:
+    #1d4ed8;
+
+}
+
+
+#app {
+
+  width:
+    calc(100% - 230px);
+
+  min-height:
+    100vh;
+
+  margin-left:
+    230px;
+
+  padding:
+    30px 30px 50px;
+
+  background-image:
+    url("../img/fondo2.jpg");
+
+  background-size:
+    50% auto;
+
+  background-position:
+    center top;
+
+  background-repeat:
+    no-repeat;
+
+  background-attachment:
     fixed;
 
-  inset:
-    0;
+}
 
-  z-index:
-    2000;
+
+@media(max-width:850px) {
+
+  .brand {
+
+    padding:
+      0 4px 5px;
+
+    border-bottom:
+      0;
+
+    font-size:
+      16px;
+
+  }
+
+
+  .brand img {
+
+    width:
+      26px;
+
+    height:
+      26px;
+
+  }
+
+}
+
+/* =========================================
+   PLACEHOLDERS
+========================================= */
+
+.loading,
+.module-placeholder {
+
+  min-height:
+    400px;
 
   display:
     flex;
+
+  flex-direction:
+    column;
 
   align-items:
     center;
@@ -683,36 +316,16 @@ body {
   justify-content:
     center;
 
-  padding:
-    20px;
-
-  background:
-    rgba(15,23,42,.55);
-
-  backdrop-filter:
-    blur(5px);
-
 }
 
 
-.modal[hidden] {
+.module-placeholder {
 
-  display:
-    none;
-
-}
-
-
-.modal .login {
-
-  width:
-    min(100%, 420px);
-
-  padding:
-    28px;
+  gap:
+    12px;
 
   background:
-    var(--card);
+    rgba(255,255,255,.94);
 
   border:
     1px solid var(--border);
@@ -721,207 +334,47 @@ body {
     20px;
 
   box-shadow:
-    0 25px 70px
-    rgba(15,23,42,.25);
+    0 15px 40px
+    rgba(15,23,42,.06);
 
 }
 
 
-.modal .login h2 {
-
-  margin:
-    0 0 8px;
+.module-placeholder .emoji {
 
   font-size:
-    24px;
+    52px;
 
 }
 
 
-.modal .login p {
+.module-placeholder h2,
+.module-placeholder p {
 
   margin:
-    0 0 24px;
+    0;
+
+}
+
+
+.module-placeholder p {
 
   color:
     var(--muted);
 
-  font-size:
-    14px;
-
-  line-height:
-    1.5;
-
 }
 
 
 /* =========================================
-   CAMPOS DE LOGIN
+   TABLET
 ========================================= */
 
-.modal .field {
-
-  display:
-    flex;
-
-  flex-direction:
-    column;
-
-  gap:
-    7px;
-
-  margin-bottom:
-    16px;
-
-}
-
-
-.modal .field label {
-
-  color:
-    #334155;
-
-  font-size:
-    13px;
-
-  font-weight:
-    700;
-
-}
-
-
-.modal .field input {
-
-  width:
-    100%;
-
-  height:
-    44px;
-
-  padding:
-    10px 12px;
-
-  border:
-    1px solid #cbd5e1;
-
-  border-radius:
-    10px;
-
-  outline:
-    none;
-
-  background:
-    white;
-
-  color:
-    var(--text);
-
-  font-family:
-    inherit;
-
-  font-size:
-    14px;
-
-  transition:
-    border-color .15s ease,
-    box-shadow .15s ease;
-
-}
-
-
-.modal .field input:focus {
-
-  border-color:
-    var(--primary);
-
-  box-shadow:
-    0 0 0 3px
-    rgba(37,99,235,.12);
-
-}
-
-
-.modal .login > .primary {
-
-  width:
-    100%;
-
-  margin-top:
-    4px;
-
-}
-
-
-/* =========================================
-   ERROR DE LOGIN
-========================================= */
-
-.modal .error {
-
-  min-height:
-    20px;
-
-  margin-top:
-    12px;
-
-  color:
-    var(--danger);
-
-  font-size:
-    13px;
-
-  font-weight:
-    600;
-
-}
-
-
-/* =========================================
-   MOBILE
-========================================= */
-
-@media(max-width:850px) {
+@media(max-width:1100px) and (min-width:851px) {
 
   .navbar {
 
-    align-items:
-      flex-start;
-
-    flex-direction:
-      column;
-
-    gap:
-      5px;
-
-    padding:
-      9px 12px 8px;
-
-  }
-
-
-  .brand {
-
-    font-size:
-      16px;
-
-  }
-
-
-  .nav {
-
     width:
-      100%;
-
-  }
-
-
-  .nav-button {
-
-    padding:
-      8px 11px;
-
-    font-size:
-      12px;
+      200px;
 
   }
 
@@ -929,76 +382,228 @@ body {
   #app {
 
     width:
-      calc(100% - 20px);
+      calc(100% - 200px);
 
-    padding:
-      20px 0 40px;
-
-  }
-
-
-  /* -----------------------------
-     SESIÓN MOBILE
-  ----------------------------- */
-
-  .session-module .card {
-
-    padding:
-      18px;
-
-    border-radius:
-      16px;
+    margin-left:
+      200px;
 
   }
 
 
-  .session-module .card h1 {
+  .nav-button {
 
     font-size:
-      22px;
+      12px;
+
+    padding:
+      10px 11px;
 
   }
 
-
-  .session-module .grid {
-
-    grid-template-columns:
-      1fr;
-
-  }
+}
 
 
-  .session-module .actions {
+/* =========================================
+   CELULAR
+========================================= */
 
-    flex-direction:
-      column;
+@media(max-width:850px) {
 
-  }
+  .navbar {
 
+    position:
+      sticky;
 
-  .session-module .actions button {
+    top:
+      0;
+
+    left:
+      auto;
 
     width:
       100%;
 
+    height:
+      auto;
+
+    min-height:
+      auto;
+
+    flex-direction:
+      column;
+
+    align-items:
+      stretch;
+
+    gap:
+      5px;
+
+    padding:
+      9px 12px 8px;
+
+    border-right:
+      0;
+
+    border-bottom:
+      1px solid var(--border);
+
+    box-shadow:
+      0 4px 20px
+      rgba(15,23,42,.06);
+
   }
 
 
-  .modal {
+  /* =====================================
+     MARCA EN CELULAR
+  ===================================== */
+
+  .brand {
 
     padding:
+      0 4px 5px;
+
+    border-bottom:
+      0;
+
+    font-size:
+      16px;
+
+  }
+
+
+  .brand span {
+
+    font-size:
+      21px;
+
+  }
+
+
+  /* =====================================
+     MENÚ HORIZONTAL
+  ===================================== */
+
+  .nav {
+
+    width:
+      100%;
+
+    flex-direction:
+      row;
+
+    align-items:
+      center;
+
+    gap:
+      5px;
+
+    overflow-x:
+      auto;
+
+    overflow-y:
+      hidden;
+
+    padding-bottom:
+      2px;
+
+  }
+
+
+  .nav-button {
+
+    width:
+      auto;
+
+    flex:
+      0 0 auto;
+
+    padding:
+      8px 11px;
+
+    font-size:
       12px;
 
+    text-align:
+      center;
+
   }
 
 
-  .modal .login {
+  /* =====================================
+     APP EN CELULAR
+  ===================================== */
+
+  #app {
+
+    width:
+      100%;
+
+    margin-left:
+      0;
+
+    min-height:
+      calc(100vh - 90px);
 
     padding:
-      22px;
+      20px 10px 40px;
+
+    background-attachment:
+      scroll;
+
+  }
+
+
+  .module-placeholder {
+
+    min-height:
+      350px;
 
     border-radius:
       16px;
+
+  }
+
+}
+
+
+/* =========================================
+   CELULARES MUY PEQUEÑOS
+========================================= */
+
+@media(max-width:480px) {
+
+  .navbar {
+
+    padding:
+      8px 8px 7px;
+
+  }
+
+
+  .brand {
+
+    font-size:
+      15px;
+
+  }
+
+
+  .nav-button {
+
+    padding:
+      7px 9px;
+
+    font-size:
+      11px;
+
+  }
+
+
+  #app {
+
+    padding:
+      15px 8px 30px;
 
   }
 
