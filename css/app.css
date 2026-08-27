@@ -608,3 +608,750 @@ body {
   }
 
 }
+
+
+/* =========================================
+   MÓDULO SESIÓN
+========================================= */
+
+.session-module {
+
+  display:
+    flex;
+
+  flex-direction:
+    column;
+
+  gap:
+    20px;
+
+}
+
+
+/* =========================================
+   CARDS
+========================================= */
+
+.session-module .card {
+
+  background:
+    rgba(255,255,255,.94);
+
+  border:
+    1px solid var(--border);
+
+  border-radius:
+    20px;
+
+  padding:
+    24px;
+
+  box-shadow:
+    0 15px 40px
+    rgba(15,23,42,.08);
+
+}
+
+
+.session-module .card h1 {
+
+  color:
+    var(--text);
+
+  font-size:
+    26px;
+
+}
+
+
+.session-module .card h2 {
+
+  margin-top:
+    0;
+
+  margin-bottom:
+    20px;
+
+  font-size:
+    20px;
+
+}
+
+
+/* =========================================
+   ESTADO
+========================================= */
+
+.session-module .status {
+
+  display:
+    inline-flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  padding:
+    6px 11px;
+
+  border-radius:
+    999px;
+
+  font-size:
+    12px;
+
+  font-weight:
+    750;
+
+  white-space:
+    nowrap;
+
+}
+
+
+.session-module .status.offline {
+
+  background:
+    #f1f5f9;
+
+  color:
+    #64748b;
+
+}
+
+
+.session-module .status.online {
+
+  background:
+    #dcfce7;
+
+  color:
+    #15803d;
+
+}
+
+
+/* =========================================
+   DATOS DE SESIÓN
+========================================= */
+
+.session-module .grid {
+
+  display:
+    grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap:
+    14px;
+
+}
+
+
+.session-module .info {
+
+  min-width:
+    0;
+
+  padding:
+    16px;
+
+  background:
+    rgba(248,250,252,.95);
+
+  border:
+    1px solid var(--border);
+
+  border-radius:
+    14px;
+
+}
+
+
+.session-module .label {
+
+  margin-bottom:
+    6px;
+
+  color:
+    var(--muted);
+
+  font-size:
+    12px;
+
+  font-weight:
+    700;
+
+  text-transform:
+    uppercase;
+
+  letter-spacing:
+    .04em;
+
+}
+
+
+.session-module .value {
+
+  min-height:
+    22px;
+
+  color:
+    var(--text);
+
+  font-size:
+    15px;
+
+  font-weight:
+    600;
+
+  overflow:
+    hidden;
+
+  text-overflow:
+    ellipsis;
+
+  white-space:
+    nowrap;
+
+}
+
+
+.session-module .timer {
+
+  color:
+    var(--primary);
+
+  font-variant-numeric:
+    tabular-nums;
+
+}
+
+
+/* =========================================
+   ACCIONES
+========================================= */
+
+.session-module .actions {
+
+  display:
+    flex;
+
+  flex-wrap:
+    wrap;
+
+  gap:
+    10px;
+
+  margin-top:
+    22px;
+
+}
+
+
+.session-module button {
+
+  min-height:
+    42px;
+
+  padding:
+    10px 16px;
+
+  border:
+    0;
+
+  border-radius:
+    11px;
+
+  font-family:
+    inherit;
+
+  font-size:
+    13px;
+
+  font-weight:
+    750;
+
+  cursor:
+    pointer;
+
+  transition:
+    background .15s ease,
+    transform .1s ease;
+
+}
+
+
+.session-module button:hover {
+
+  transform:
+    translateY(-1px);
+
+}
+
+
+.session-module button:active {
+
+  transform:
+    translateY(0);
+
+}
+
+
+/* =========================================
+   BOTÓN PRIMARIO
+========================================= */
+
+.session-module button.primary {
+
+  background:
+    #2563eb;
+
+  color:
+    white;
+
+}
+
+
+.session-module button.primary:hover {
+
+  background:
+    #1d4ed8;
+
+}
+
+
+/* =========================================
+   BOTÓN SECUNDARIO
+========================================= */
+
+.session-module button.secondary {
+
+  background:
+    #e2e8f0;
+
+  color:
+    #334155;
+
+}
+
+
+.session-module button.secondary:hover {
+
+  background:
+    #cbd5e1;
+
+}
+
+
+/* =========================================
+   BOTÓN PELIGRO
+========================================= */
+
+.session-module button.danger {
+
+  background:
+    #dc2626;
+
+  color:
+    white;
+
+}
+
+
+.session-module button.danger:hover {
+
+  background:
+    #b91c1c;
+
+}
+
+
+/* =========================================
+   REGISTRO
+========================================= */
+
+.session-module .log {
+
+  min-height:
+    120px;
+
+  max-height:
+    300px;
+
+  overflow-y:
+    auto;
+
+  padding:
+    14px;
+
+  background:
+    #0f172a;
+
+  border-radius:
+    12px;
+
+  color:
+    #e2e8f0;
+
+  font-family:
+    ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    Monaco,
+    Consolas,
+    monospace;
+
+  font-size:
+    12px;
+
+  line-height:
+    1.6;
+
+  white-space:
+    pre-wrap;
+
+  word-break:
+    break-word;
+
+}
+
+
+/* =========================================
+   MODAL LOGIN
+========================================= */
+
+.modal {
+
+  position:
+    fixed;
+
+  inset:
+    0;
+
+  z-index:
+    2000;
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  padding:
+    20px;
+
+  background:
+    rgba(15,23,42,.55);
+
+  backdrop-filter:
+    blur(5px);
+
+}
+
+
+/*
+   Importante:
+   si sesion.js utiliza hidden,
+   esto evita que el modal aparezca.
+*/
+
+.modal[hidden] {
+
+  display:
+    none;
+
+}
+
+
+/* =========================================
+   LOGIN
+========================================= */
+
+.modal .login {
+
+  width:
+    min(100%, 420px);
+
+  padding:
+    28px;
+
+  background:
+    white;
+
+  border:
+    1px solid var(--border);
+
+  border-radius:
+    20px;
+
+  box-shadow:
+    0 25px 70px
+    rgba(15,23,42,.25);
+
+}
+
+
+.modal .login h2 {
+
+  margin:
+    0 0 8px;
+
+  font-size:
+    24px;
+
+}
+
+
+.modal .login p {
+
+  margin:
+    0 0 24px;
+
+  color:
+    var(--muted);
+
+  font-size:
+    14px;
+
+  line-height:
+    1.5;
+
+}
+
+
+/* =========================================
+   CAMPOS
+========================================= */
+
+.modal .field {
+
+  display:
+    flex;
+
+  flex-direction:
+    column;
+
+  gap:
+    7px;
+
+  margin-bottom:
+    16px;
+
+}
+
+
+.modal .field label {
+
+  color:
+    #334155;
+
+  font-size:
+    13px;
+
+  font-weight:
+    700;
+
+}
+
+
+.modal .field input {
+
+  width:
+    100%;
+
+  height:
+    44px;
+
+  padding:
+    10px 12px;
+
+  border:
+    1px solid #cbd5e1;
+
+  border-radius:
+    10px;
+
+  outline:
+    none;
+
+  background:
+    white;
+
+  color:
+    var(--text);
+
+  font-family:
+    inherit;
+
+  font-size:
+    14px;
+
+}
+
+
+.modal .field input:focus {
+
+  border-color:
+    var(--primary);
+
+  box-shadow:
+    0 0 0 3px
+    rgba(37,99,235,.12);
+
+}
+
+
+/* =========================================
+   LOGIN - BOTÓN
+========================================= */
+
+.modal .login > .primary {
+
+  width:
+    100%;
+
+  margin-top:
+    4px;
+
+}
+
+
+/* =========================================
+   ERROR
+========================================= */
+
+.modal .error {
+
+  min-height:
+    20px;
+
+  margin-top:
+    12px;
+
+  color:
+    #dc2626;
+
+  font-size:
+    13px;
+
+  font-weight:
+    600;
+
+}
+
+
+/* =========================================
+   SESIÓN - CELULAR
+========================================= */
+
+@media(max-width:850px) {
+
+  .session-module {
+
+    gap:
+      15px;
+
+  }
+
+
+  .session-module .card {
+
+    padding:
+      18px;
+
+    border-radius:
+      16px;
+
+  }
+
+
+  .session-module .card h1 {
+
+    font-size:
+      22px;
+
+  }
+
+
+  .session-module .grid {
+
+    grid-template-columns:
+      1fr;
+
+  }
+
+
+  .session-module .actions {
+
+    flex-direction:
+      column;
+
+  }
+
+
+  .session-module .actions button {
+
+    width:
+      100%;
+
+  }
+
+
+  .modal {
+
+    padding:
+      12px;
+
+  }
+
+
+  .modal .login {
+
+    padding:
+      22px;
+
+    border-radius:
+      16px;
+
+  }
+
+}
+
+
+/* =========================================
+   CELULARES MUY PEQUEÑOS
+========================================= */
+
+@media(max-width:480px) {
+
+  .session-module .card {
+
+    padding:
+      15px;
+
+  }
+
+
+  .session-module .card h1 {
+
+    font-size:
+      20px;
+
+  }
+
+
+  .session-module .info {
+
+    padding:
+      13px;
+
+  }
+
+}
