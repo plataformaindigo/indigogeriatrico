@@ -14,7 +14,7 @@
 
 
 /* =========================================
-   RESET -
+   RESET
 ========================================= */
 
 * {
@@ -121,19 +121,24 @@ body {
 }
 
 
-  .brand img {
+.brand img {
 
-    width:
-      60px;
+  width:
+    60px;
 
-    height:
-      60px;
+  height:
+    60px;
 
-  }
+  object-fit:
+    contain;
+
+}
+
 
 .brand span {
 
-  font-size: 24px;
+  font-size:
+    24px;
 
 }
 
@@ -169,7 +174,7 @@ body {
 
 
 /* =========================================
-   BOTONES
+   BOTONES DE NAVEGACIÓN
 ========================================= */
 
 .nav-button {
@@ -207,7 +212,8 @@ body {
 
   transition:
     background .15s ease,
-    color .15s ease;
+    color .15s ease,
+    transform .15s ease;
 
 }
 
@@ -219,6 +225,9 @@ body {
 
   color:
     var(--text);
+
+  transform:
+    translateX(2px);
 
 }
 
@@ -233,6 +242,10 @@ body {
 
 }
 
+
+/* =========================================
+   APP
+========================================= */
 
 #app {
 
@@ -262,105 +275,6 @@ body {
 
   background-attachment:
     fixed;
-
-}
-
-
-@media(max-width:850px) {
-
-  .brand {
-
-    padding:
-      0 4px 5px;
-
-    border-bottom:
-      0;
-
-    font-size:
-      16px;
-
-  }
-
-
-  .brand img {
-
-    width:
-      26px;
-
-    height:
-      26px;
-
-  }
-
-}
-
-/* =========================================
-   PLACEHOLDERS
-========================================= */
-
-.loading,
-.module-placeholder {
-
-  min-height:
-    400px;
-
-  display:
-    flex;
-
-  flex-direction:
-    column;
-
-  align-items:
-    center;
-
-  justify-content:
-    center;
-
-}
-
-
-.module-placeholder {
-
-  gap:
-    12px;
-
-  background:
-    rgba(255,255,255,.94);
-
-  border:
-    1px solid var(--border);
-
-  border-radius:
-    20px;
-
-  box-shadow:
-    0 15px 40px
-    rgba(15,23,42,.06);
-
-}
-
-
-.module-placeholder .emoji {
-
-  font-size:
-    52px;
-
-}
-
-
-.module-placeholder h2,
-.module-placeholder p {
-
-  margin:
-    0;
-
-}
-
-
-.module-placeholder p {
-
-  color:
-    var(--muted);
 
 }
 
@@ -455,7 +369,7 @@ body {
 
 
   /* =====================================
-     MARCA EN CELULAR
+     MARCA
   ===================================== */
 
   .brand {
@@ -468,6 +382,17 @@ body {
 
     font-size:
       16px;
+
+  }
+
+
+  .brand img {
+
+    width:
+      26px;
+
+    height:
+      26px;
 
   }
 
@@ -531,7 +456,7 @@ body {
 
 
   /* =====================================
-     APP EN CELULAR
+     APP
   ===================================== */
 
   #app {
@@ -551,16 +476,8 @@ body {
     background-attachment:
       scroll;
 
-  }
-
-
-  .module-placeholder {
-
-    min-height:
-      350px;
-
-    border-radius:
-      16px;
+    background-size:
+      auto 100%;
 
   }
 
@@ -611,6 +528,77 @@ body {
 
 
 /* =========================================
+   PLACEHOLDERS
+========================================= */
+
+.loading,
+.module-placeholder {
+
+  min-height:
+    400px;
+
+  display:
+    flex;
+
+  flex-direction:
+    column;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+}
+
+
+.module-placeholder {
+
+  gap:
+    12px;
+
+  background:
+    rgba(255,255,255,.94);
+
+  border:
+    1px solid var(--border);
+
+  border-radius:
+    20px;
+
+  box-shadow:
+    0 15px 40px
+    rgba(15,23,42,.06);
+
+}
+
+
+.module-placeholder .emoji {
+
+  font-size:
+    52px;
+
+}
+
+
+.module-placeholder h2,
+.module-placeholder p {
+
+  margin:
+    0;
+
+}
+
+
+.module-placeholder p {
+
+  color:
+    var(--muted);
+
+}
+
+
+/* =========================================
    MÓDULO SESIÓN
 ========================================= */
 
@@ -638,7 +626,7 @@ body {
     rgba(255,255,255,.94);
 
   border:
-    1px solid var(--border);
+    1px solid rgba(226,232,240,.9);
 
   border-radius:
     20px;
@@ -650,8 +638,15 @@ body {
     0 15px 40px
     rgba(15,23,42,.08);
 
+  backdrop-filter:
+    blur(8px);
+
 }
 
+
+/* =========================================
+   TÍTULOS
+========================================= */
 
 .session-module .card h1 {
 
@@ -660,6 +655,12 @@ body {
 
   font-size:
     26px;
+
+  font-weight:
+    800;
+
+  letter-spacing:
+    -.02em;
 
 }
 
@@ -672,8 +673,14 @@ body {
   margin-bottom:
     20px;
 
+  color:
+    var(--text);
+
   font-size:
     20px;
+
+  font-weight:
+    800;
 
 }
 
@@ -693,8 +700,11 @@ body {
   justify-content:
     center;
 
+  min-height:
+    30px;
+
   padding:
-    6px 11px;
+    6px 12px;
 
   border-radius:
     999px;
@@ -708,16 +718,22 @@ body {
   white-space:
     nowrap;
 
+  border:
+    1px solid transparent;
+
 }
 
 
 .session-module .status.offline {
 
   background:
-    #f1f5f9;
+    #f8fafc;
 
   color:
     #64748b;
+
+  border-color:
+    #e2e8f0;
 
 }
 
@@ -729,6 +745,9 @@ body {
 
   color:
     #15803d;
+
+  border-color:
+    #bbf7d0;
 
 }
 
@@ -753,60 +772,95 @@ body {
 
 .session-module .info {
 
+  position:
+    relative;
+
   min-width:
     0;
 
   padding:
-    16px;
+    17px;
 
   background:
-    rgba(248,250,252,.95);
+    linear-gradient(
+      145deg,
+      rgba(248,250,252,.98),
+      rgba(241,245,249,.92)
+    );
 
   border:
-    1px solid var(--border);
+    1px solid #e2e8f0;
 
   border-radius:
-    14px;
+    15px;
+
+  transition:
+    transform .18s ease,
+    box-shadow .18s ease,
+    border-color .18s ease;
 
 }
 
 
+.session-module .info:hover {
+
+  transform:
+    translateY(-2px);
+
+  border-color:
+    #cbd5e1;
+
+  box-shadow:
+    0 8px 22px
+    rgba(15,23,42,.07);
+
+}
+
+
+/* =========================================
+   LABEL
+========================================= */
+
 .session-module .label {
 
   margin-bottom:
-    6px;
+    7px;
 
   color:
-    var(--muted);
+    #64748b;
 
   font-size:
-    12px;
+    11px;
 
   font-weight:
-    700;
+    800;
 
   text-transform:
     uppercase;
 
   letter-spacing:
-    .04em;
+    .06em;
 
 }
 
 
+/* =========================================
+   VALOR
+========================================= */
+
 .session-module .value {
 
   min-height:
-    22px;
+    23px;
 
   color:
-    var(--text);
+    #172033;
 
   font-size:
     15px;
 
   font-weight:
-    600;
+    650;
 
   overflow:
     hidden;
@@ -823,7 +877,10 @@ body {
 .session-module .timer {
 
   color:
-    var(--primary);
+    #2563eb;
+
+  font-weight:
+    800;
 
   font-variant-numeric:
     tabular-nums;
@@ -855,13 +912,13 @@ body {
 .session-module button {
 
   min-height:
-    42px;
+    43px;
 
   padding:
-    10px 16px;
+    10px 17px;
 
   border:
-    0;
+    1px solid transparent;
 
   border-radius:
     11px;
@@ -879,8 +936,10 @@ body {
     pointer;
 
   transition:
+    transform .15s ease,
+    box-shadow .15s ease,
     background .15s ease,
-    transform .1s ease;
+    border-color .15s ease;
 
 }
 
@@ -908,10 +967,18 @@ body {
 .session-module button.primary {
 
   background:
-    #2563eb;
+    linear-gradient(
+      135deg,
+      #2563eb,
+      #1d4ed8
+    );
 
   color:
     white;
+
+  box-shadow:
+    0 5px 14px
+    rgba(37,99,235,.22);
 
 }
 
@@ -919,7 +986,15 @@ body {
 .session-module button.primary:hover {
 
   background:
-    #1d4ed8;
+    linear-gradient(
+      135deg,
+      #1d4ed8,
+      #1e40af
+    );
+
+  box-shadow:
+    0 7px 18px
+    rgba(37,99,235,.28);
 
 }
 
@@ -931,10 +1006,13 @@ body {
 .session-module button.secondary {
 
   background:
-    #e2e8f0;
+    #f8fafc;
 
   color:
     #334155;
+
+  border-color:
+    #cbd5e1;
 
 }
 
@@ -942,7 +1020,14 @@ body {
 .session-module button.secondary:hover {
 
   background:
-    #cbd5e1;
+    #f1f5f9;
+
+  border-color:
+    #94a3b8;
+
+  box-shadow:
+    0 5px 14px
+    rgba(15,23,42,.08);
 
 }
 
@@ -954,10 +1039,13 @@ body {
 .session-module button.danger {
 
   background:
-    #dc2626;
+    #fff1f2;
 
   color:
-    white;
+    #dc2626;
+
+  border-color:
+    #fecdd3;
 
 }
 
@@ -965,7 +1053,14 @@ body {
 .session-module button.danger:hover {
 
   background:
-    #b91c1c;
+    #fee2e2;
+
+  border-color:
+    #fca5a5;
+
+  box-shadow:
+    0 5px 14px
+    rgba(220,38,38,.12);
 
 }
 
@@ -986,13 +1081,16 @@ body {
     auto;
 
   padding:
-    14px;
+    15px;
 
   background:
     #0f172a;
 
+  border:
+    1px solid #1e293b;
+
   border-radius:
-    12px;
+    13px;
 
   color:
     #e2e8f0;
@@ -1048,19 +1146,54 @@ body {
     20px;
 
   background:
-    rgba(15,23,42,.55);
+    rgba(15,23,42,.62);
 
   backdrop-filter:
-    blur(5px);
+    blur(6px);
 
 }
 
 
-/*
-   Importante:
-   si sesion.js utiliza hidden,
-   esto evita que el modal aparezca.
-*/
+/* =========================================
+   FONDO DEL MODAL
+========================================= */
+
+.modal::before {
+
+  content:
+    "";
+
+  position:
+    absolute;
+
+  inset:
+    0;
+
+  z-index:
+    -1;
+
+  background-image:
+    linear-gradient(
+      rgba(15,23,42,.42),
+      rgba(15,23,42,.42)
+    ),
+    url("../img/fondo2.jpg");
+
+  background-size:
+    cover;
+
+  background-position:
+    center;
+
+  background-repeat:
+    no-repeat;
+
+}
+
+
+/* =========================================
+   OCULTAR MODAL
+========================================= */
 
 .modal[hidden] {
 
@@ -1080,31 +1213,77 @@ body {
     min(100%, 420px);
 
   padding:
-    28px;
+    30px;
 
   background:
-    white;
+    rgba(255,255,255,.96);
 
   border:
-    1px solid var(--border);
+    1px solid rgba(255,255,255,.75);
 
   border-radius:
-    20px;
+    22px;
 
   box-shadow:
-    0 25px 70px
-    rgba(15,23,42,.25);
+    0 30px 80px
+    rgba(15,23,42,.32);
+
+  backdrop-filter:
+    blur(15px);
+
+  animation:
+    loginAppear .22s ease-out;
 
 }
 
+
+@keyframes loginAppear {
+
+  from {
+
+    opacity:
+      0;
+
+    transform:
+      translateY(10px)
+      scale(.98);
+
+  }
+
+  to {
+
+    opacity:
+      1;
+
+    transform:
+      translateY(0)
+      scale(1);
+
+  }
+
+}
+
+
+/* =========================================
+   LOGIN - TÍTULO
+========================================= */
 
 .modal .login h2 {
 
   margin:
     0 0 8px;
 
+  color:
+    #172033;
+
   font-size:
-    24px;
+    25px;
+
+  font-weight:
+    800;
+
+  letter-spacing:
+    -.02em;
 
 }
 
@@ -1112,10 +1291,10 @@ body {
 .modal .login p {
 
   margin:
-    0 0 24px;
+    0 0 25px;
 
   color:
-    var(--muted);
+    #64748b;
 
   font-size:
     14px;
@@ -1127,7 +1306,7 @@ body {
 
 
 /* =========================================
-   CAMPOS
+   CAMPOS DEL LOGIN
 ========================================= */
 
 .modal .field {
@@ -1142,7 +1321,7 @@ body {
     7px;
 
   margin-bottom:
-    16px;
+    17px;
 
 }
 
@@ -1153,10 +1332,13 @@ body {
     #334155;
 
   font-size:
-    13px;
+    12px;
 
   font-weight:
-    700;
+    800;
+
+  letter-spacing:
+    .02em;
 
 }
 
@@ -1167,25 +1349,25 @@ body {
     100%;
 
   height:
-    44px;
+    46px;
 
   padding:
-    10px 12px;
+    10px 13px;
 
   border:
     1px solid #cbd5e1;
 
   border-radius:
-    10px;
+    11px;
 
   outline:
     none;
 
   background:
-    white;
+    #f8fafc;
 
   color:
-    var(--text);
+    #172033;
 
   font-family:
     inherit;
@@ -1193,13 +1375,29 @@ body {
   font-size:
     14px;
 
+  transition:
+    background .15s ease,
+    border-color .15s ease,
+    box-shadow .15s ease;
+
+}
+
+
+.modal .field input:hover {
+
+  border-color:
+    #94a3b8;
+
 }
 
 
 .modal .field input:focus {
 
+  background:
+    white;
+
   border-color:
-    var(--primary);
+    #2563eb;
 
   box-shadow:
     0 0 0 3px
@@ -1217,8 +1415,75 @@ body {
   width:
     100%;
 
+  min-height:
+    46px;
+
   margin-top:
-    4px;
+    5px;
+
+  border:
+    0;
+
+  border-radius:
+    11px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #2563eb,
+      #1d4ed8
+    );
+
+  color:
+    white;
+
+  font-family:
+    inherit;
+
+  font-size:
+    14px;
+
+  font-weight:
+    800;
+
+  cursor:
+    pointer;
+
+  box-shadow:
+    0 7px 18px
+    rgba(37,99,235,.24);
+
+  transition:
+    transform .15s ease,
+    box-shadow .15s ease,
+    background .15s ease;
+
+}
+
+
+.modal .login > .primary:hover {
+
+  transform:
+    translateY(-1px);
+
+  background:
+    linear-gradient(
+      135deg,
+      #1d4ed8,
+      #1e40af
+    );
+
+  box-shadow:
+    0 10px 24px
+    rgba(37,99,235,.30);
+
+}
+
+
+.modal .login > .primary:active {
+
+  transform:
+    translateY(0);
 
 }
 
@@ -1242,7 +1507,7 @@ body {
     13px;
 
   font-weight:
-    600;
+    650;
 
 }
 
@@ -1314,11 +1579,14 @@ body {
 
   .modal .login {
 
+    width:
+      100%;
+
     padding:
       22px;
 
     border-radius:
-      16px;
+      17px;
 
   }
 
@@ -1351,6 +1619,22 @@ body {
 
     padding:
       13px;
+
+  }
+
+
+  .modal .login {
+
+    padding:
+      20px;
+
+  }
+
+
+  .modal .login h2 {
+
+    font-size:
+      22px;
 
   }
 
