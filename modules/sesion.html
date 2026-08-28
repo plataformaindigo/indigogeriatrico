@@ -1,70 +1,238 @@
 <section class="session-module">
 
-  <!-- Tarjeta de Login (Estática) -->
-  <div class="card login-card">
-    <h2>Iniciar sesión</h2>
-    <p>Ingresá tus credenciales para acceder al sistema.</p>
-
-    <div class="field">
-      <label for="usuario">Usuario</label>
-      <input id="usuario" type="text" autocomplete="username">
-    </div>
-
-    <div class="field">
-      <label for="password">Contraseña</label>
-      <input id="password" type="password" autocomplete="current-password">
-    </div>
-
-    <button id="loginButton" class="primary">Iniciar sesión</button>
-
-    <div id="loginError" class="error"></div>
-  </div>
-
-  <!-- Información de Sesión -->
   <div class="card">
-    <div style="display:flex; justify-space-between; align-items:center; gap:15px; margin-bottom:20px;">
-      <h1 style="margin:0">🔐 Sesión</h1>
-      <span id="status" class="status offline">Sin sesión</span>
+
+    <div
+      style="
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        gap:15px;
+        margin-bottom:20px;
+      "
+    >
+
+      <h1 style="margin:0">
+        🔐 Sesión
+      </h1>
+
+      <span
+        id="status"
+        class="status offline"
+      >
+        Sin sesión
+      </span>
+
     </div>
+
 
     <div class="grid">
+
       <div class="info">
-        <div class="label">Usuario</div>
-        <div id="userInfo" class="value">—</div>
+
+        <div class="label">
+          Usuario
+        </div>
+
+        <div
+          id="userInfo"
+          class="value"
+        >
+          —
+        </div>
+
       </div>
+
+
       <div class="info">
-        <div class="label">Rol</div>
-        <div id="roleInfo" class="value">—</div>
+
+        <div class="label">
+          Rol
+        </div>
+
+        <div
+          id="roleInfo"
+          class="value"
+        >
+          —
+        </div>
+
       </div>
+
+
       <div class="info">
-        <div class="label">Tiempo restante</div>
-        <div id="timer" class="value timer">—</div>
+
+        <div class="label">
+          Tiempo restante
+        </div>
+
+        <div
+          id="timer"
+          class="value timer"
+        >
+          —
+        </div>
+
       </div>
+
+
       <div class="info">
-        <div class="label">Token</div>
-        <div id="tokenInfo" class="value">—</div>
+
+        <div class="label">
+          Token
+        </div>
+
+        <div
+          id="tokenInfo"
+          class="value"
+        >
+          —
+        </div>
+
       </div>
+
+
       <div class="info">
-        <div class="label">Expira</div>
-        <div id="expiresInfo" class="value">—</div>
+
+        <div class="label">
+          Expira
+        </div>
+
+        <div
+          id="expiresInfo"
+          class="value"
+        >
+          —
+        </div>
+
       </div>
+
+
       <div class="info">
-        <div class="label">Última validación</div>
-        <div id="validationInfo" class="value">—</div>
+
+        <div class="label">
+          Última validación
+        </div>
+
+        <div
+          id="validationInfo"
+          class="value"
+        >
+          —
+        </div>
+
       </div>
+
     </div>
+
 
     <div class="actions">
-      <button id="validateButton" class="secondary">Validar sesión</button>
-      <button id="actionButton" class="primary">Acción protegida</button>
-      <button id="logoutButton" class="danger">Cerrar sesión</button>
+
+      <button
+        id="validateButton"
+        class="secondary"
+      >
+        Validar sesión
+      </button>
+
+
+      <button
+        id="actionButton"
+        class="primary"
+      >
+        Acción protegida
+      </button>
+
+
+      <button
+        id="logoutButton"
+        class="danger"
+      >
+        Cerrar sesión
+      </button>
+
     </div>
+
   </div>
 
-  <!-- Registro / Log -->
+
   <div class="card">
-    <h2>Registro</h2>
-    <div id="log" class="log"></div>
+
+    <h2>
+      Registro
+    </h2>
+
+    <div
+      id="log"
+      class="log"
+    ></div>
+
   </div>
 
 </section>
+
+
+<!-- LOGIN -->
+
+<div
+  id="loginModal"
+  class="modal"
+>
+
+  <div class="login">
+
+    <h2>
+      Iniciar sesión
+    </h2>
+
+    <p>
+      Ingresá tus credenciales para acceder al sistema.
+    </p>
+
+
+    <div class="field">
+
+      <label>
+        Usuario
+      </label>
+
+      <input
+        id="usuario"
+        type="text"
+        autocomplete="username"
+      >
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        Contraseña
+      </label>
+
+      <input
+        id="password"
+        type="password"
+        autocomplete="current-password"
+      >
+
+    </div>
+
+
+    <button
+      id="loginButton"
+      class="primary"
+    >
+      Iniciar sesión
+    </button>
+
+
+    <div
+      id="loginError"
+      class="error"
+    ></div>
+
+  </div>
+
+</div>
