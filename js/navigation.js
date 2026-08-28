@@ -1,123 +1,115 @@
-```javascript
 const MODULES = {
+
+  sesion: {
+
+    title: 'Sesión',
+
+    emoji: '🔐',
+
+    file:
+      './modules/sesion.html',
+
+    script:
+      './modules/sesion.js'
+
+  },
+
 
   ocupacion: {
 
-    title:
-      'Ocupación',
+    title: 'Ocupación',
 
-    emoji:
-      '🛏️'
+    emoji: '🛏️'
 
   },
 
 
   pacientes: {
 
-    title:
-      'Pacientes',
+    title: 'Pacientes',
 
-    emoji:
-      '👥'
+    emoji: '👥'
 
   },
 
 
   enfermeria: {
 
-    title:
-      'Enfermería',
+    title: 'Enfermería',
 
-    emoji:
-      '🩺'
+    emoji: '🩺'
 
   },
 
 
   farmacia: {
 
-    title:
-      'Farmacia',
+    title: 'Farmacia',
 
-    emoji:
-      '💊'
+    emoji: '💊'
 
   },
 
 
   cocina: {
 
-    title:
-      'Cocina',
+    title: 'Cocina',
 
-    emoji:
-      '🍽️'
+    emoji: '🍽️'
 
   },
 
 
   nutricion: {
 
-    title:
-      'Nutrición',
+    title: 'Nutrición',
 
-    emoji:
-      '🥗'
+    emoji: '🥗'
 
   },
 
 
   profesionales: {
 
-    title:
-      'Profesionales',
+    title: 'Profesionales',
 
-    emoji:
-      '👨‍⚕️'
+    emoji: '👨‍⚕️'
 
   },
 
 
   rrhh: {
 
-    title:
-      'RRHH',
+    title: 'RRHH',
 
-    emoji:
-      '👔'
+    emoji: '👔'
 
   },
 
 
   compras: {
 
-    title:
-      'Compras',
+    title: 'Compras',
 
-    emoji:
-      '🛒'
+    emoji: '🛒'
 
   },
 
 
   facturacion: {
 
-    title:
-      'Facturación',
+    title: 'Facturación',
 
-    emoji:
-      '🧾'
+    emoji: '🧾'
 
   },
 
 
   administracion: {
 
-    title:
-      'Administración',
+    title: 'Administración',
 
-    emoji:
-      '📊'
+    emoji: '📊'
 
   }
 
@@ -187,8 +179,8 @@ async function navigateTo(
 
 
   /*
-   * Módulos todavía
-   * en desarrollo.
+   * Los módulos que todavía no
+   * tienen HTML propio.
    */
 
   app.innerHTML = `
@@ -212,4 +204,3 @@ async function navigateTo(
   `;
 
 }
-```
