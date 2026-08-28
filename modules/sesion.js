@@ -1,4 +1,3 @@
-```javascript
 window.session =
   null;
 
@@ -20,25 +19,23 @@ async function() {
     );
 
 
-  const logoutButton =
+  if (loginButton) {
+
+    loginButton.onclick =
+      login;
+
+  }
+
+
+  const password =
     document.getElementById(
-      'logoutButton'
+      'password'
     );
 
 
-  loginButton.onclick =
-    login;
+  if (password) {
 
-
-  logoutButton.onclick =
-    logout;
-
-
-  document
-    .getElementById(
-      'password'
-    )
-    .addEventListener(
+    password.addEventListener(
       'keydown',
       event => {
 
@@ -53,6 +50,12 @@ async function() {
       }
     );
 
+  }
+
+
+  /*
+   * Estado inicial.
+   */
 
   updateUI();
 
@@ -123,6 +126,13 @@ async function login() {
 
     }
 
+
+    /*
+     * LA SESIÓN SE GUARDA IGUAL.
+     *
+     * El token sigue existiendo internamente.
+     * Simplemente ya no se muestra.
+     */
 
     window.session = {
 
@@ -290,7 +300,23 @@ function startTimer() {
 
 function updateTimer() {
 
+  const timer =
+    document.getElementById(
+      'sessionTimer'
+    );
+
+
+  if (!timer) {
+
+    return;
+
+  }
+
+
   if (!window.session) {
+
+    timer.textContent =
+      '—';
 
     return;
 
@@ -332,109 +358,62 @@ function updateTimer() {
     seconds % 60;
 
 
-  const timer =
-    document.getElementById(
-      'timer'
-    );
-
-
-  if (!timer) {
-
-    return;
-
-  }
-
-
   timer.textContent =
 
     String(minutes)
-      .padStart(
-        2,
-        '0'
-      )
+      .padStart(2, '0')
 
     + ':'
 
     +
 
     String(secs)
-      .padStart(
-        2,
-        '0'
-      );
+      .padStart(2, '0');
 
 }
 
 
 /* =========================================
-   UI
+   ACTUALIZAR UI
 ========================================= */
 
 function updateUI() {
 
-  const active =
-    !!window.session;
-
-
-  const status =
+  const user =
     document.getElementById(
-      'status'
+      'sessionUser'
     );
 
 
-  const statusDot =
+  const role =
     document.getElementById(
-      'statusDot'
-    );
-
-
-  const userInfo =
-    document.getElementById(
-      'userInfo'
-    );
-
-
-  const roleInfo =
-    document.getElementById(
-      'roleInfo'
+      'sessionRole'
     );
 
 
   const logoutButton =
     document.getElementById(
-      'logoutButton'
+      'sessionLogout'
     );
 
 
-  if (status) {
-
-    status.textContent =
-      active
-        ? 'Sesión activa'
-        : 'Sin sesión';
-
-  }
-
-
-  if (statusDot) {
-
-    statusDot.classList.toggle(
-      'online',
-      active
+  const timer =
+    document.getElementById(
+      'sessionTimer'
     );
 
 
-    statusDot.classList.toggle(
-      'offline',
-      !active
-    );
-
-  }
+  const active =
+    !!window.session;
 
 
-  if (userInfo) {
+  /*
+   * USUARIO
+   */
 
-    userInfo.textContent =
+  if (user) {
+
+    user.textContent =
       active
         ? window.session.user.usuario
         : '—';
@@ -442,15 +421,35 @@ function updateUI() {
   }
 
 
-  if (roleInfo) {
+  /*
+   * ROL
+   */
 
-    roleInfo.textContent =
+  if (role) {
+
+    role.textContent =
       active
         ? window.session.user.rol
         : '—';
 
   }
 
+
+  /*
+   * TIMER
+   */
+
+  if (!active && timer) {
+
+    timer.textContent =
+      '—';
+
+  }
+
+
+  /*
+   * BOTÓN LOGOUT
+   */
 
   if (logoutButton) {
 
@@ -460,20 +459,22 @@ function updateUI() {
   }
 
 
-  if (!active) {
+  /*
+   * BARRA
+   */
 
-    const timer =
-      document.getElementById(
-        'timer'
-      );
+  const bar =
+    document.getElementById(
+      'sessionBar'
+    );
 
 
-    if (timer) {
+  if (bar) {
 
-      timer.textContent =
-        '—';
-
-    }
+    bar.classList.toggle(
+      'inactive',
+      !active
+    );
 
   }
 
@@ -504,7 +505,7 @@ function clearSession() {
 
   const timer =
     document.getElementById(
-      'timer'
+      'sessionTimer'
     );
 
 
@@ -516,29 +517,16 @@ function clearSession() {
   }
 
 
-  const loginModal =
+  const modal =
     document.getElementById(
       'loginModal'
     );
 
 
-  if (loginModal) {
+  if (modal) {
 
-    loginModal.style.display =
+    modal.style.display =
       'flex';
-
-  }
-
-
-  const usuario =
-    document.getElementById(
-      'usuario'
-    );
-
-
-  if (usuario) {
-
-    usuario.focus();
 
   }
 
@@ -574,4 +562,3 @@ function showError(
     'block';
 
 }
-```
