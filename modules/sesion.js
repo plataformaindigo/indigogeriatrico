@@ -1,3 +1,4 @@
+```javascript
 window.session =
   null;
 
@@ -19,18 +20,6 @@ async function() {
     );
 
 
-  const validateButton =
-    document.getElementById(
-      'validateButton'
-    );
-
-
-  const actionButton =
-    document.getElementById(
-      'actionButton'
-    );
-
-
   const logoutButton =
     document.getElementById(
       'logoutButton'
@@ -39,14 +28,6 @@ async function() {
 
   loginButton.onclick =
     login;
-
-
-  validateButton.onclick =
-    validateSession;
-
-
-  actionButton.onclick =
-    protectedAction;
 
 
   logoutButton.onclick =
@@ -74,11 +55,6 @@ async function() {
 
 
   updateUI();
-
-
-  writeLog(
-    'Módulo de sesión iniciado.'
-  );
 
 };
 
@@ -178,12 +154,6 @@ async function login() {
       'none';
 
 
-    writeLog(
-      'Login correcto.',
-      'success'
-    );
-
-
     updateUI();
 
 
@@ -251,38 +221,7 @@ async function validateSession() {
   updateUI();
 
 
-  writeLog(
-    'Sesión renovada por 10 minutos.',
-    'success'
-  );
-
-
   return true;
-
-}
-
-
-/* =========================================
-   ACCIÓN PROTEGIDA
-========================================= */
-
-async function protectedAction() {
-
-  const valid =
-    await validateSession();
-
-
-  if (!valid) {
-
-    return;
-
-  }
-
-
-  writeLog(
-    '✓ Acción protegida autorizada.',
-    'success'
-  );
 
 }
 
@@ -393,21 +332,36 @@ function updateTimer() {
     seconds % 60;
 
 
-  document
-    .getElementById(
+  const timer =
+    document.getElementById(
       'timer'
-    )
-    .textContent =
+    );
+
+
+  if (!timer) {
+
+    return;
+
+  }
+
+
+  timer.textContent =
 
     String(minutes)
-      .padStart(2,'0')
+      .padStart(
+        2,
+        '0'
+      )
 
     + ':'
 
     +
 
     String(secs)
-      .padStart(2,'0');
+      .padStart(
+        2,
+        '0'
+      );
 
 }
 
@@ -422,88 +376,112 @@ function updateUI() {
     !!window.session;
 
 
-  document
-    .getElementById(
+  const status =
+    document.getElementById(
       'status'
-    )
-    .textContent =
-    active
-      ? 'Sesión activa'
-      : 'Sin sesión';
+    );
 
 
-  document
-    .getElementById(
+  const statusDot =
+    document.getElementById(
+      'statusDot'
+    );
+
+
+  const userInfo =
+    document.getElementById(
       'userInfo'
-    )
-    .textContent =
-    active
-      ? window.session.user.usuario
-      : '—';
+    );
 
 
-  document
-    .getElementById(
+  const roleInfo =
+    document.getElementById(
       'roleInfo'
-    )
-    .textContent =
-    active
-      ? window.session.user.rol
-      : '—';
+    );
 
 
-  document
-    .getElementById(
-      'tokenInfo'
-    )
-    .textContent =
-    active
-      ? maskToken(
-          window.session.token
-        )
-      : '—';
-
-
-  document
-    .getElementById(
-      'expiresInfo'
-    )
-    .textContent =
-    active
-      ? new Date(
-          window.session.expiresAt
-        ).toLocaleString()
-      : '—';
-
-
-  document
-    .getElementById(
-      'validateButton'
-    )
-    .disabled =
-    !active;
-
-
-  document
-    .getElementById(
-      'actionButton'
-    )
-    .disabled =
-    !active;
-
-
-  document
-    .getElementById(
+  const logoutButton =
+    document.getElementById(
       'logoutButton'
-    )
-    .disabled =
-    !active;
+    );
+
+
+  if (status) {
+
+    status.textContent =
+      active
+        ? 'Sesión activa'
+        : 'Sin sesión';
+
+  }
+
+
+  if (statusDot) {
+
+    statusDot.classList.toggle(
+      'online',
+      active
+    );
+
+
+    statusDot.classList.toggle(
+      'offline',
+      !active
+    );
+
+  }
+
+
+  if (userInfo) {
+
+    userInfo.textContent =
+      active
+        ? window.session.user.usuario
+        : '—';
+
+  }
+
+
+  if (roleInfo) {
+
+    roleInfo.textContent =
+      active
+        ? window.session.user.rol
+        : '—';
+
+  }
+
+
+  if (logoutButton) {
+
+    logoutButton.disabled =
+      !active;
+
+  }
+
+
+  if (!active) {
+
+    const timer =
+      document.getElementById(
+        'timer'
+      );
+
+
+    if (timer) {
+
+      timer.textContent =
+        '—';
+
+    }
+
+  }
 
 }
 
 
 /* =========================================
-   LIMPIAR
+   LIMPIAR SESIÓN
 ========================================= */
 
 function clearSession() {
@@ -524,111 +502,45 @@ function clearSession() {
   updateUI();
 
 
-  document
-    .getElementById(
-      'timer'
-    )
-    .textContent =
-    '—';
-
-
-  document
-    .getElementById(
-      'loginModal'
-    )
-    .style.display =
-    'flex';
-
-
-  writeLog(
-    'Sesión finalizada.'
-  );
-
-}
-
-
-/* =========================================
-   LOG
-========================================= */
-
-function writeLog(
-  message,
-  type = ''
-) {
-
-  const log =
+  const timer =
     document.getElementById(
-      'log'
+      'timer'
     );
 
 
-  const line =
-    document.createElement(
-      'div'
+  if (timer) {
+
+    timer.textContent =
+      '—';
+
+  }
+
+
+  const loginModal =
+    document.getElementById(
+      'loginModal'
     );
 
 
-  line.textContent =
-    `[${new Date().toLocaleTimeString()}] ${message}`;
+  if (loginModal) {
 
-
-  if (type === 'error') {
-
-    line.style.color =
-      '#fca5a5';
+    loginModal.style.display =
+      'flex';
 
   }
 
 
-  if (type === 'success') {
-
-    line.style.color =
-      '#86efac';
-
-  }
+  const usuario =
+    document.getElementById(
+      'usuario'
+    );
 
 
-  log.appendChild(
-    line
-  );
+  if (usuario) {
 
-
-  log.scrollTop =
-    log.scrollHeight;
-
-}
-
-
-/* =========================================
-   TOKEN
-========================================= */
-
-function maskToken(
-  token
-) {
-
-  if (!token) {
-
-    return '—';
+    usuario.focus();
 
   }
-
-
-  return (
-
-    token.substring(0,6)
-
-    +
-
-    '••••••••••'
-
-    +
-
-    token.substring(
-      token.length - 6
-    )
-
-  );
 
 }
 
@@ -647,6 +559,13 @@ function showError(
     );
 
 
+  if (!error) {
+
+    return;
+
+  }
+
+
   error.textContent =
     message;
 
@@ -655,3 +574,4 @@ function showError(
     'block';
 
 }
+```
