@@ -1,178 +1,156 @@
-<section class="session-module">
+<!-- =========================================
+     BARRA DE SESIÓN
+========================================= -->
 
-  <div class="card">
+<div class="session-bar-content">
 
-    <div
-      style="
-        display:flex;
-        justify-content:space-between;
-        align-items:center;
-        gap:15px;
-        margin-bottom:20px;
-      "
-    >
 
-      <h1 style="margin:0">
-        🔐 Sesión
-      </h1>
+  <!-- USUARIO -->
+
+  <div class="session-item">
+
+    <span class="session-icon">
+      👤
+    </span>
+
+    <div class="session-data">
+
+      <span class="session-label">
+        Usuario
+      </span>
 
       <span
-        id="status"
-        class="status offline"
+        id="userInfo"
+        class="session-value"
       >
-        Sin sesión
+        —
       </span>
 
     </div>
 
-
-    <div class="grid">
-
-      <div class="info">
-
-        <div class="label">
-          Usuario
-        </div>
-
-        <div
-          id="userInfo"
-          class="value"
-        >
-          —
-        </div>
-
-      </div>
+  </div>
 
 
-      <div class="info">
+  <!-- ROL -->
 
-        <div class="label">
-          Rol
-        </div>
+  <div class="session-item">
 
-        <div
-          id="roleInfo"
-          class="value"
-        >
-          —
-        </div>
+    <span class="session-icon">
+      🛡️
+    </span>
 
-      </div>
+    <div class="session-data">
 
+      <span class="session-label">
+        Rol
+      </span>
 
-      <div class="info">
-
-        <div class="label">
-          Tiempo restante
-        </div>
-
-        <div
-          id="timer"
-          class="value timer"
-        >
-          —
-        </div>
-
-      </div>
-
-
-      <div class="info">
-
-        <div class="label">
-          Token
-        </div>
-
-        <div
-          id="tokenInfo"
-          class="value"
-        >
-          —
-        </div>
-
-      </div>
-
-
-      <div class="info">
-
-        <div class="label">
-          Expira
-        </div>
-
-        <div
-          id="expiresInfo"
-          class="value"
-        >
-          —
-        </div>
-
-      </div>
-
-
-      <div class="info">
-
-        <div class="label">
-          Última validación
-        </div>
-
-        <div
-          id="validationInfo"
-          class="value"
-        >
-          —
-        </div>
-
-      </div>
-
-    </div>
-
-
-    <div class="actions">
-
-      <button
-        id="validateButton"
-        class="secondary"
+      <span
+        id="roleInfo"
+        class="session-value"
       >
-        Validar sesión
-      </button>
-
-
-      <button
-        id="actionButton"
-        class="primary"
-      >
-        Acción protegida
-      </button>
-
-
-      <button
-        id="logoutButton"
-        class="danger"
-      >
-        Cerrar sesión
-      </button>
+        —
+      </span>
 
     </div>
 
   </div>
 
 
-  <div class="card">
+  <!-- TIEMPO -->
 
-    <h2>
-      Registro
-    </h2>
+  <div class="session-item session-time">
 
-    <div
-      id="log"
-      class="log"
-    ></div>
+    <span class="session-icon">
+      ⏱️
+    </span>
+
+    <div class="session-data">
+
+      <span class="session-label">
+        Sesión
+      </span>
+
+      <span
+        id="timer"
+        class="session-value timer"
+      >
+        —
+      </span>
+
+    </div>
 
   </div>
 
-</section>
+
+  <!-- ESTADO -->
+
+  <span
+    id="status"
+    class="status offline"
+  >
+    Sin sesión
+  </span>
 
 
-<!-- LOGIN -->
+  <!-- CERRAR SESIÓN -->
+
+  <button
+    id="logoutButton"
+    class="session-logout"
+    disabled
+  >
+    Cerrar sesión
+  </button>
+
+</div>
+
+
+<!-- =========================================
+     ELEMENTOS INTERNOS
+     No visibles para el usuario
+========================================= -->
+
+<div
+  id="sessionInternal"
+  hidden
+>
+
+  <button
+    id="loginButton"
+    type="button"
+  >
+    Iniciar sesión
+  </button>
+
+  <button
+    id="validateButton"
+    type="button"
+  >
+    Validar sesión
+  </button>
+
+  <button
+    id="actionButton"
+    type="button"
+  >
+    Acción protegida
+  </button>
+
+  <span id="tokenInfo">—</span>
+
+  <span id="expiresInfo">—</span>
+
+  <span id="validationInfo">—</span>
+
+  <div id="log"></div>
+
+</div>
+
+
+<!-- =========================================
+     LOGIN
+========================================= -->
 
 <div
   id="loginModal"
@@ -221,8 +199,9 @@
 
 
     <button
-      id="loginButton"
+      id="loginButtonVisible"
       class="primary"
+      type="button"
     >
       Iniciar sesión
     </button>
