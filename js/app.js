@@ -2,6 +2,11 @@
    APLICACIÓN
 ========================================= */
 
+
+/*
+ * Navegación principal
+ */
+
 document
   .querySelectorAll(
     '.nav-button'
@@ -25,9 +30,18 @@ document
 
 
 /*
- * Arrancar mostrando Sesión.
+ * Inicializar barra de sesión.
+ */
+
+loadSessionModule();
+
+
+/*
+ * Mostrar módulo inicial.
+ *
+ * La sesión ya no ocupa #app.
  */
 
 navigateTo(
-  'sesion'
+  'ocupacion'
 );
