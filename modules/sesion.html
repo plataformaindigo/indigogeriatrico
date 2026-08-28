@@ -1,156 +1,4 @@
 <!-- =========================================
-     BARRA DE SESIÓN
-========================================= -->
-
-<div class="session-bar-content">
-
-
-  <!-- USUARIO -->
-
-  <div class="session-item">
-
-    <span class="session-icon">
-      👤
-    </span>
-
-    <div class="session-data">
-
-      <span class="session-label">
-        Usuario
-      </span>
-
-      <span
-        id="userInfo"
-        class="session-value"
-      >
-        —
-      </span>
-
-    </div>
-
-  </div>
-
-
-  <!-- ROL -->
-
-  <div class="session-item">
-
-    <span class="session-icon">
-      🛡️
-    </span>
-
-    <div class="session-data">
-
-      <span class="session-label">
-        Rol
-      </span>
-
-      <span
-        id="roleInfo"
-        class="session-value"
-      >
-        —
-      </span>
-
-    </div>
-
-  </div>
-
-
-  <!-- TIEMPO -->
-
-  <div class="session-item session-time">
-
-    <span class="session-icon">
-      ⏱️
-    </span>
-
-    <div class="session-data">
-
-      <span class="session-label">
-        Sesión
-      </span>
-
-      <span
-        id="timer"
-        class="session-value timer"
-      >
-        —
-      </span>
-
-    </div>
-
-  </div>
-
-
-  <!-- ESTADO -->
-
-  <span
-    id="status"
-    class="status offline"
-  >
-    Sin sesión
-  </span>
-
-
-  <!-- CERRAR SESIÓN -->
-
-  <button
-    id="logoutButton"
-    class="session-logout"
-    disabled
-  >
-    Cerrar sesión
-  </button>
-
-</div>
-
-
-<!-- =========================================
-     ELEMENTOS INTERNOS
-     No visibles para el usuario
-========================================= -->
-
-<div
-  id="sessionInternal"
-  hidden
->
-
-<button
-  id="loginButtonVisible"
-    type="button"
-  >
-    Iniciar sesión
-  </button>
-
-     
-
-  <button
-    id="validateButton"
-    type="button"
-  >
-    Validar sesión
-  </button>
-
-  <button
-    id="actionButton"
-    type="button"
-  >
-    Acción protegida
-  </button>
-
-  <span id="tokenInfo">—</span>
-
-  <span id="expiresInfo">—</span>
-
-  <span id="validationInfo">—</span>
-
-  <div id="log"></div>
-
-</div>
-
-
-<!-- =========================================
      LOGIN
 ========================================= -->
 
@@ -199,6 +47,13 @@
 
     </div>
 
+
+    <button
+      id="loginButton"
+      class="primary"
+    >
+      Iniciar sesión
+    </button>
 
 
     <div
