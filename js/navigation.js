@@ -1,766 +1,215 @@
-window.session =
-  null;
+```javascript
+const MODULES = {
+
+  ocupacion: {
+
+    title:
+      'Ocupación',
+
+    emoji:
+      '🛏️'
+
+  },
 
 
-let sessionTimer =
-  null;
+  pacientes: {
+
+    title:
+      'Pacientes',
+
+    emoji:
+      '👥'
+
+  },
 
 
-/* =========================================
-   MONTAJE
-========================================= */
+  enfermeria: {
 
-window.mount_sesion =
-async function() {
+    title:
+      'Enfermería',
 
-  const loginButton =
-    document.getElementById(
-      'loginButton'
-    );
+    emoji:
+      '🩺'
+
+  },
 
 
-  const validateButton =
-    document.getElementById(
-      'validateButton'
-    );
+  farmacia: {
+
+    title:
+      'Farmacia',
+
+    emoji:
+      '💊'
+
+  },
 
 
-  const actionButton =
-    document.getElementById(
-      'actionButton'
-    );
+  cocina: {
+
+    title:
+      'Cocina',
+
+    emoji:
+      '🍽️'
+
+  },
 
 
-  const logoutButton =
-    document.getElementById(
-      'logoutButton'
-    );
+  nutricion: {
+
+    title:
+      'Nutrición',
+
+    emoji:
+      '🥗'
+
+  },
 
 
-  /*
-   * Eventos
-   */
+  profesionales: {
 
-  if (loginButton) {
+    title:
+      'Profesionales',
 
-    loginButton.onclick =
-      login;
+    emoji:
+      '👨‍⚕️'
+
+  },
+
+
+  rrhh: {
+
+    title:
+      'RRHH',
+
+    emoji:
+      '👔'
+
+  },
+
+
+  compras: {
+
+    title:
+      'Compras',
+
+    emoji:
+      '🛒'
+
+  },
+
+
+  facturacion: {
+
+    title:
+      'Facturación',
+
+    emoji:
+      '🧾'
+
+  },
+
+
+  administracion: {
+
+    title:
+      'Administración',
+
+    emoji:
+      '📊'
 
   }
-
-
-  if (validateButton) {
-
-    validateButton.onclick =
-      validateSession;
-
-  }
-
-
-  if (actionButton) {
-
-    actionButton.onclick =
-      protectedAction;
-
-  }
-
-
-  if (logoutButton) {
-
-    logoutButton.onclick =
-      logout;
-
-  }
-
-
-  const password =
-    document.getElementById(
-      'password'
-    );
-
-
-  if (password) {
-
-    password.addEventListener(
-      'keydown',
-      event => {
-
-        if (
-          event.key === 'Enter'
-        ) {
-
-          login();
-
-        }
-
-      }
-    );
-
-  }
-
-
-  updateUI();
 
 };
 
 
-/* =========================================
-   LOGIN
-========================================= */
-
-async function login() {
-
-  const usuario =
-    document
-      .getElementById(
-        'usuario'
-      )
-      .value
-      .trim();
-
-
-  const password =
-    document
-      .getElementById(
-        'password'
-      )
-      .value;
-
-
-  if (
-    !usuario ||
-    !password
-  ) {
-
-    showError(
-      'Ingresá usuario y contraseña.'
-    );
-
-    return;
-
-  }
-
-
-  try {
-
-    const result =
-      await api({
-
-        action:
-          'login',
-
-        usuario:
-          usuario,
-
-        password:
-          password
-
-      });
-
-
-    if (!result.ok) {
-
-      showError(
-        result.error
-      );
-
-      return;
-
-    }
-
-
-    window.session = {
-
-      token:
-        result.token,
-
-      user:
-        result.user,
-
-      expiresAt:
-        result.expiresAt
-
-    };
-
-
-    document
-      .getElementById(
-        'password'
-      )
-      .value =
-      '';
-
-
-    document
-      .getElementById(
-        'loginModal'
-      )
-      .style.display =
-      'none';
-
-
-    updateUI();
-
-
-    startTimer();
-
-  }
-
-  catch (error) {
-
-    console.error(
-      error
-    );
-
-
-    showError(
-      'No se pudo completar la operación.'
-    );
-
-  }
-
-}
+let ACTIVE_MODULE =
+  null;
 
 
 /* =========================================
-   VALIDAR
+   NAVEGAR
 ========================================= */
 
-async function validateSession() {
-
-  if (!window.session) {
-
-    return false;
-
-  }
-
-
-  const result =
-    await api({
-
-      action:
-        'validate',
-
-      usuario:
-        window.session.user.usuario,
-
-      token:
-        window.session.token
-
-    });
-
-
-  if (!result.ok) {
-
-    clearSession();
-
-    return false;
-
-  }
-
-
-  window.session.expiresAt =
-    result.session.expiresAt;
-
-
-  updateUI();
-
-
-  return true;
-
-}
-
-
-/* =========================================
-   ACCIÓN PROTEGIDA
-========================================= */
-
-async function protectedAction() {
-
-  const valid =
-    await validateSession();
-
-
-  if (!valid) {
-
-    return;
-
-  }
-
-}
-
-
-/* =========================================
-   LOGOUT
-========================================= */
-
-async function logout() {
-
-  if (!window.session) {
-
-    return;
-
-  }
-
-
-  try {
-
-    await api({
-
-      action:
-        'logout',
-
-      usuario:
-        window.session.user.usuario,
-
-      token:
-        window.session.token
-
-    });
-
-  }
-
-  finally {
-
-    clearSession();
-
-  }
-
-}
-
-
-/* =========================================
-   TIMER
-========================================= */
-
-function startTimer() {
-
-  clearInterval(
-    sessionTimer
-  );
-
-
-  sessionTimer =
-    setInterval(
-      updateTimer,
-      1000
-    );
-
-
-  updateTimer();
-
-}
-
-
-function updateTimer() {
-
-  const timer =
-    document.getElementById(
-      'timer'
-    );
-
-
-  if (!timer) {
-
-    return;
-
-  }
-
-
-  if (!window.session) {
-
-    timer.textContent =
-      '—';
-
-    return;
-
-  }
-
-
-  const remaining =
-    new Date(
-      window.session.expiresAt
-    ).getTime()
-    -
-    Date.now();
-
-
-  if (
-    remaining <= 0
-  ) {
-
-    clearSession();
-
-    return;
-
-  }
-
-
-  const seconds =
-    Math.floor(
-      remaining / 1000
-    );
-
-
-  const minutes =
-    Math.floor(
-      seconds / 60
-    );
-
-
-  const secs =
-    seconds % 60;
-
-
-  timer.textContent =
-
-    String(minutes)
-      .padStart(2,'0')
-
-    + ':'
-
-    +
-
-    String(secs)
-      .padStart(2,'0');
-
-}
-
-
-/* =========================================
-   UI
-========================================= */
-
-function updateUI() {
-
-  const active =
-    !!window.session;
-
-
-  const status =
-    document.getElementById(
-      'status'
-    );
-
-
-  const userInfo =
-    document.getElementById(
-      'userInfo'
-    );
-
-
-  const roleInfo =
-    document.getElementById(
-      'roleInfo'
-    );
-
-
-  const logoutButton =
-    document.getElementById(
-      'logoutButton'
-    );
-
-
-  if (status) {
-
-    status.textContent =
-      active
-        ? 'Sesión activa'
-        : 'Sin sesión';
-
-
-    status.classList.toggle(
-      'online',
-      active
-    );
-
-
-    status.classList.toggle(
-      'offline',
-      !active
-    );
-
-  }
-
-
-  if (userInfo) {
-
-    userInfo.textContent =
-      active
-        ? window.session.user.usuario
-        : '—';
-
-  }
-
-
-  if (roleInfo) {
-
-    roleInfo.textContent =
-      active
-        ? window.session.user.rol
-        : '—';
-
-  }
-
-
-  if (logoutButton) {
-
-    logoutButton.disabled =
-      !active;
-
-  }
-
-
-  /*
-   * Estos datos continúan existiendo
-   * internamente pero no se muestran.
-   */
-
-  const tokenInfo =
-    document.getElementById(
-      'tokenInfo'
-    );
-
-
-  if (tokenInfo) {
-
-    tokenInfo.textContent =
-      active
-        ? maskToken(
-            window.session.token
-          )
-        : '—';
-
-  }
-
-
-  const expiresInfo =
-    document.getElementById(
-      'expiresInfo'
-    );
-
-
-  if (expiresInfo) {
-
-    expiresInfo.textContent =
-      active
-        ? new Date(
-            window.session.expiresAt
-          ).toLocaleString()
-        : '—';
-
-  }
-
-
-  const validateButton =
-    document.getElementById(
-      'validateButton'
-    );
-
-
-  if (validateButton) {
-
-    validateButton.disabled =
-      !active;
-
-  }
-
-
-  const actionButton =
-    document.getElementById(
-      'actionButton'
-    );
-
-
-  if (actionButton) {
-
-    actionButton.disabled =
-      !active;
-
-  }
-
-
-  updateTimer();
-
-}
-
-
-/* =========================================
-   LIMPIAR
-========================================= */
-
-function clearSession() {
-
-  window.session =
-    null;
-
-
-  clearInterval(
-    sessionTimer
-  );
-
-
-  sessionTimer =
-    null;
-
-
-  updateUI();
-
-
-  const timer =
-    document.getElementById(
-      'timer'
-    );
-
-
-  if (timer) {
-
-    timer.textContent =
-      '—';
-
-  }
-
-
-  const loginModal =
-    document.getElementById(
-      'loginModal'
-    );
-
-
-  if (loginModal) {
-
-    loginModal.style.display =
-      'flex';
-
-  }
-
-}
-
-
-/* =========================================
-   LOG
-========================================= */
-
-function writeLog(
-  message,
-  type = ''
+async function navigateTo(
+  name
 ) {
 
-  const log =
-    document.getElementById(
-      'log'
-    );
-
-
-  /*
-   * El registro ya no forma parte
-   * de la interfaz visible.
-   */
-
-  if (!log) {
+  if (
+    ACTIVE_MODULE === name
+  ) {
 
     return;
 
   }
 
 
-  const line =
-    document.createElement(
-      'div'
-    );
+  ACTIVE_MODULE =
+    name;
 
 
-  line.textContent =
-    `[${new Date().toLocaleTimeString()}] ${message}`;
-
-
-  if (type === 'error') {
-
-    line.style.color =
-      '#fca5a5';
-
-  }
-
-
-  if (type === 'success') {
-
-    line.style.color =
-      '#86efac';
-
-  }
-
-
-  log.appendChild(
-    line
-  );
-
-
-  log.scrollTop =
-    log.scrollHeight;
-
-}
-
-
-/* =========================================
-   TOKEN
-========================================= */
-
-function maskToken(
-  token
-) {
-
-  if (!token) {
-
-    return '—';
-
-  }
-
-
-  return (
-
-    token.substring(0,6)
-
-    +
-
-    '••••••••••'
-
-    +
-
-    token.substring(
-      token.length - 6
+  document
+    .querySelectorAll(
+      '.nav-button'
     )
+    .forEach(
+      button => {
 
-  );
+        button.classList.toggle(
 
-}
+          'active',
 
+          button.dataset.module ===
+          name
 
-/* =========================================
-   ERROR
-========================================= */
+        );
 
-function showError(
-  message
-) {
-
-  const error =
-    document.getElementById(
-      'loginError'
+      }
     );
 
 
-  if (!error) {
+  const app =
+    document.getElementById(
+      'app'
+    );
+
+
+  const module =
+    MODULES[name];
+
+
+  if (!module) {
 
     return;
 
   }
 
 
-  error.textContent =
-    message;
+  /*
+   * Módulos todavía
+   * en desarrollo.
+   */
 
+  app.innerHTML = `
 
-  error.style.display =
-    'block';
+    <div class="module-placeholder">
+
+      <div class="emoji">
+        ${module.emoji}
+      </div>
+
+      <h2>
+        ${module.title}
+      </h2>
+
+      <p>
+        Módulo en desarrollo
+      </p>
+
+    </div>
+
+  `;
 
 }
+```
