@@ -30,7 +30,7 @@ document
 
 
 /* =========================================
-   CERRAR SESIÓN DESDE LA BARRA SUPERIOR
+   CERRAR SESIÓN
 ========================================= */
 
 document
@@ -42,11 +42,11 @@ document
     () => {
 
       if (
-        typeof logout ===
+        typeof window.logout ===
         'function'
       ) {
 
-        logout();
+        window.logout();
 
       }
 
@@ -55,53 +55,40 @@ document
 
 
 /* =========================================
-   INICIALIZACIÓN
+   INICIALIZAR APLICACIÓN
 ========================================= */
 
-/*
- * El módulo Sesión ya no es una pantalla.
- *
- * Se monta directamente desde navigation.js
- * para mantener la lógica de sesión activa.
- */
-
-loadSession();
+initializeApp();
 
 
 /* =========================================
-   CARGAR SESIÓN
+   INICIALIZACIÓN
 ========================================= */
 
-async function loadSession() {
+async function initializeApp() {
 
   try {
 
-    const module =
-      MODULES.sesion;
+    /*
+     * Primero cargamos el HTML del modal
+     * de inicio de sesión.
+     */
 
-
-    if (!module) {
-
-      console.error(
-        'No existe el módulo de sesión.'
-      );
-
-      return;
-
-    }
+    await loadSessionHTML();
 
 
     /*
-     * Cargar el JS del módulo de sesión.
+     * Después cargamos la lógica
+     * del módulo de sesión.
      */
 
     await loadScript(
-      module.script
+      MODULES.sesion.script
     );
 
 
     /*
-     * Montar la sesión.
+     * Finalmente montamos la sesión.
      */
 
     if (
@@ -113,15 +100,156 @@ async function loadSession() {
 
     }
 
+
+    /*
+     * Y mostramos el primer módulo
+     * de la aplicación.
+     */
+
+    navigateTo(
+      'ocupacion'
+    );
+
   }
 
   catch (error) {
 
     console.error(
-      'Error cargando sesión:',
+      'Error inicializando aplicación:',
       error
     );
 
   }
+
+}
+
+
+/* =========================================
+   CARGAR HTML DE SESIÓN
+========================================= */
+
+async function loadSessionHTML() {
+
+  const module =
+    MODULES.sesion;
+
+
+  if (!module) {
+
+    throw new Error(
+      'No existe la configuración del módulo de sesión.'
+    );
+
+  }
+
+
+  const response =
+    await fetch(
+      module.file
+    );
+
+
+  if (!response.ok) {
+
+    throw new Error(
+      `No se pudo cargar ${module.file} — HTTP ${response.status}`
+    );
+
+  }
+
+
+  const html =
+    await response.text();
+
+
+  /*
+   * El modal se agrega directamente
+   * al body.
+   *
+   * NO entra dentro de #app.
+   */
+
+  document
+    .body
+    .insertAdjacentHTML(
+      'beforeend',
+      html
+    );
+
+}
+
+
+/* =========================================
+   CARGAR JAVASCRIPT
+========================================= */
+
+function loadScript(
+  src
+) {
+
+  return new Promise(
+    (
+      resolve,
+      reject
+    ) => {
+
+      /*
+       * Evitar cargar el mismo script
+       * más de una vez.
+       */
+
+      const existing =
+        document.querySelector(
+          `script[src="${src}"]`
+        );
+
+
+      if (existing) {
+
+        resolve();
+
+        return;
+
+      }
+
+
+      const script =
+        document.createElement(
+          'script'
+        );
+
+
+      script.src =
+        src;
+
+
+      script.onload =
+        () => {
+
+          resolve();
+
+        };
+
+
+      script.onerror =
+        () => {
+
+          reject(
+
+            new Error(
+              `No se pudo cargar ${src}`
+            )
+
+          );
+
+        };
+
+
+      document.body.appendChild(
+        script
+      );
+
+    }
+  );
 
 }
