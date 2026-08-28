@@ -240,7 +240,8 @@ async function validateSession() {
    LOGOUT
 ========================================= */
 
-async function logout() {
+window.logout =
+async function() {
 
   if (!window.session) {
 
@@ -272,7 +273,7 @@ async function logout() {
 
   }
 
-}
+};
 
 
 /* =========================================
