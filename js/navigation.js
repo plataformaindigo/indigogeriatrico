@@ -1,5 +1,12 @@
 const MODULES = {
 
+  /*
+   * Sesión
+   *
+   * No es un módulo de navegación.
+   * Se monta permanentemente en sessionBar.
+   */
+
   sesion: {
 
     title: 'Sesión',
@@ -128,6 +135,19 @@ async function navigateTo(
   name
 ) {
 
+  /*
+   * Sesión no es un módulo navegable.
+   */
+
+  if (
+    name === 'sesion'
+  ) {
+
+    return;
+
+  }
+
+
   if (
     ACTIVE_MODULE === name
   ) {
@@ -179,23 +199,6 @@ async function navigateTo(
 
 
   /*
-   * Módulo Sesión
-   */
-
-  if (
-    name === 'sesion'
-  ) {
-
-    await loadHtmlModule(
-      module
-    );
-
-    return;
-
-  }
-
-
-  /*
    * Módulos todavía
    * en desarrollo.
    */
@@ -224,26 +227,29 @@ async function navigateTo(
 
 
 /* =========================================
-   CARGAR HTML
+   CARGAR SESIÓN
 ========================================= */
 
-async function loadHtmlModule(
-  module
-) {
+async function loadSessionModule() {
 
-  const app =
+  const container =
     document.getElementById(
-      'app'
+      'sessionBar'
     );
 
 
-  app.innerHTML = `
+  const module =
+    MODULES.sesion;
 
-    <div class="loading">
-      Cargando módulo...
-    </div>
 
-  `;
+  if (
+    !container ||
+    !module
+  ) {
+
+    return;
+
+  }
 
 
   try {
@@ -263,7 +269,7 @@ async function loadHtmlModule(
     }
 
 
-    app.innerHTML =
+    container.innerHTML =
       await response.text();
 
 
@@ -283,7 +289,7 @@ async function loadHtmlModule(
 
 
     /*
-     * Inicializar módulo
+     * Inicializar sesión
      */
 
     if (
@@ -300,25 +306,16 @@ async function loadHtmlModule(
   catch (error) {
 
     console.error(
+      'Error cargando módulo de sesión:',
       error
     );
 
 
-    app.innerHTML = `
+    container.innerHTML = `
 
-      <div class="module-placeholder">
+      <div class="session-bar-error">
 
-        <div class="emoji">
-          ⚠️
-        </div>
-
-        <h2>
-          Error cargando ${module.title}
-        </h2>
-
-        <p>
-          ${error.message}
-        </p>
+        ⚠️ No se pudo cargar la sesión.
 
       </div>
 
@@ -342,6 +339,26 @@ function loadScript(
       resolve,
       reject
     ) => {
+
+      /*
+       * Evitar cargar el mismo script
+       * más de una vez.
+       */
+
+      const existing =
+        document.querySelector(
+          `script[src="${src}"]`
+        );
+
+
+      if (existing) {
+
+        resolve();
+
+        return;
+
+      }
+
 
       const script =
         document.createElement(
