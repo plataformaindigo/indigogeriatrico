@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="es">
 
@@ -141,95 +140,61 @@
        BARRA DE SESIÓN
   ======================================== -->
 
-  <section
+  <div
     id="sessionBar"
     class="session-bar"
   >
 
-    <div class="session-status">
+    <div class="session-user">
 
-      <span
-        id="statusDot"
-        class="session-dot offline"
-      ></span>
-
-      <span
-        id="status"
-        class="session-status-text"
-      >
-        Sin sesión
+      <span class="session-label">
+        Usuario
       </span>
+
+      <strong id="sessionUser">
+        —
+      </strong>
 
     </div>
 
 
-    <div class="session-data">
+    <div class="session-user">
 
-      <div class="session-item">
+      <span class="session-label">
+        Rol
+      </span>
 
-        <span class="session-label">
-          Usuario
-        </span>
+      <strong id="sessionRole">
+        —
+      </strong>
 
-        <span
-          id="userInfo"
-          class="session-value"
-        >
-          —
-        </span>
-
-      </div>
+    </div>
 
 
-      <div class="session-divider"></div>
+    <div class="session-time">
 
+      <span class="session-label">
+        Tiempo
+      </span>
 
-      <div class="session-item">
-
-        <span class="session-label">
-          Rol
-        </span>
-
-        <span
-          id="roleInfo"
-          class="session-value"
-        >
-          —
-        </span>
-
-      </div>
-
-
-      <div class="session-divider"></div>
-
-
-      <div class="session-item">
-
-        <span class="session-label">
-          Tiempo
-        </span>
-
-        <span
-          id="timer"
-          class="session-value session-timer"
-        >
-          —
-        </span>
-
-      </div>
+      <strong
+        id="sessionTimer"
+        class="session-timer"
+      >
+        —
+      </strong>
 
     </div>
 
 
     <button
-      id="logoutButton"
+      id="sessionLogout"
       class="session-logout"
-      disabled
     >
       Cerrar sesión
     </button>
 
-  </section>
+  </div>
 
 
   <!-- =======================================
@@ -237,75 +202,6 @@
   ======================================== -->
 
   <main id="app"></main>
-
-
-</div>
-
-
-<!-- =========================================
-     LOGIN MODAL
-========================================= -->
-
-<div
-  id="loginModal"
-  class="modal"
->
-
-  <div class="login">
-
-    <h2>
-      Iniciar sesión
-    </h2>
-
-    <p>
-      Ingresá tus credenciales para acceder al sistema.
-    </p>
-
-
-    <div class="field">
-
-      <label for="usuario">
-        Usuario
-      </label>
-
-      <input
-        id="usuario"
-        type="text"
-        autocomplete="username"
-      >
-
-    </div>
-
-
-    <div class="field">
-
-      <label for="password">
-        Contraseña
-      </label>
-
-      <input
-        id="password"
-        type="password"
-        autocomplete="current-password"
-      >
-
-    </div>
-
-
-    <button
-      id="loginButton"
-      class="primary"
-    >
-      Iniciar sesión
-    </button>
-
-
-    <div
-      id="loginError"
-      class="error"
-    ></div>
-
-  </div>
 
 </div>
 
@@ -326,4 +222,3 @@
 </body>
 
 </html>
-```
