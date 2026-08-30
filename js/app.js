@@ -1,43 +1,173 @@
-/* =========================================
-   APLICACIÓN
-========================================= */
+const NAV_MODULES = [
+
+  {
+    id: 'ocupacion',
+    label: '🛏️ Ocupación',
+    permission: 'ocupacion'
+  },
+
+  {
+    id: 'pacientes',
+    label: '👥 Pacientes',
+    permission: 'pacientes'
+  },
+
+  {
+    id: 'enfermeria',
+    label: '🩺 Enfermería',
+    permission: 'enfermeria'
+  },
+
+  {
+    id: 'farmacia',
+    label: '💊 Farmacia',
+    permission: 'farmacia'
+  },
+
+  {
+    id: 'cocina',
+    label: '🍽️ Cocina',
+    permission: 'cocina'
+  },
+
+  {
+    id: 'nutricion',
+    label: '🥗 Nutrición',
+    permission: 'nutricion'
+  },
+
+  {
+    id: 'profesionales',
+    label: '👨‍⚕️ Profesionales',
+    permission: 'profesionales'
+  },
+
+  {
+    id: 'rrhh',
+    label: '👔 RRHH',
+    permission: 'rrhh'
+  },
+
+  {
+    id: 'compras',
+    label: '🛒 Compras',
+    permission: 'compras'
+  },
+
+  {
+    id: 'facturacion',
+    label: '🧾 Facturación',
+    permission: 'facturacion'
+  },
+
+  {
+    id: 'administracion',
+    label: '📊 Administración',
+    permission: 'administracion'
+  }
+
+];
 
 
-/* =========================================
-   NAVEGACIÓN
-========================================= */
+window.buildNavigation =
+function() {
 
-document
-  .querySelectorAll(
-    '.nav-button'
-  )
-  .forEach(
-    button => {
+  const navigation =
+    document.getElementById(
+      'navigation'
+    );
+
+
+  if (!navigation) {
+
+    return;
+
+  }
+
+
+  navigation.innerHTML =
+    '';
+
+
+  if (!window.session) {
+
+    return;
+
+  }
+
+
+  const permisos =
+    window.session.permisos || {};
+
+
+  NAV_MODULES.forEach(
+    module => {
+
+      const permission =
+        permisos[
+          module.permission
+        ];
+
+
+      if (
+        !permission ||
+        permission.read !== true
+      ) {
+
+        return;
+
+      }
+
+
+      const button =
+        document.createElement(
+          'button'
+        );
+
+
+      button.className =
+        'nav-button';
+
+
+      button.dataset.module =
+        module.id;
+
+
+      button.textContent =
+        module.label;
+
 
       button.addEventListener(
         'click',
         () => {
 
           navigateTo(
-            button.dataset.module
+            module.id
           );
 
         }
       );
 
+
+      navigation.appendChild(
+        button
+      );
+
     }
   );
 
+};
 
-/* =========================================
-   CERRAR SESIÓN
-========================================= */
 
-document
-  .getElementById(
+const sessionLogout =
+  document.getElementById(
     'sessionLogout'
-  )
-  .addEventListener(
+  );
+
+
+if (sessionLogout) {
+
+  sessionLogout.addEventListener(
     'click',
     () => {
 
@@ -53,43 +183,23 @@ document
     }
   );
 
+}
 
-/* =========================================
-   INICIALIZAR APLICACIÓN
-========================================= */
 
 initializeApp();
 
-
-/* =========================================
-   INICIALIZACIÓN
-========================================= */
 
 async function initializeApp() {
 
   try {
 
-    /*
-     * Primero cargamos el HTML del modal
-     * de inicio de sesión.
-     */
-
     await loadSessionHTML();
 
-
-    /*
-     * Después cargamos la lógica
-     * del módulo de sesión.
-     */
 
     await loadScript(
       MODULES.sesion.script
     );
 
-
-    /*
-     * Finalmente montamos la sesión.
-     */
 
     if (
       typeof window.mount_sesion ===
@@ -101,14 +211,14 @@ async function initializeApp() {
     }
 
 
-    /*
-     * Y mostramos el primer módulo
-     * de la aplicación.
-     */
+    if (
+      typeof window.buildNavigation ===
+      'function'
+    ) {
 
-    navigateTo(
-      'ocupacion'
-    );
+      window.buildNavigation();
+
+    }
 
   }
 
@@ -123,10 +233,6 @@ async function initializeApp() {
 
 }
 
-
-/* =========================================
-   CARGAR HTML DE SESIÓN
-========================================= */
 
 async function loadSessionHTML() {
 
@@ -162,13 +268,6 @@ async function loadSessionHTML() {
     await response.text();
 
 
-  /*
-   * El modal se agrega directamente
-   * al body.
-   *
-   * NO entra dentro de #app.
-   */
-
   document
     .body
     .insertAdjacentHTML(
@@ -179,10 +278,6 @@ async function loadSessionHTML() {
 }
 
 
-/* =========================================
-   CARGAR JAVASCRIPT
-========================================= */
-
 function loadScript(
   src
 ) {
@@ -192,11 +287,6 @@ function loadScript(
       resolve,
       reject
     ) => {
-
-      /*
-       * Evitar cargar el mismo script
-       * más de una vez.
-       */
 
       const existing =
         document.querySelector(
@@ -253,3 +343,4 @@ function loadScript(
   );
 
 }
+

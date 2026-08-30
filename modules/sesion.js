@@ -1,3 +1,4 @@
+
 window.session =
   null;
 
@@ -52,10 +53,6 @@ async function() {
 
   }
 
-
-  /*
-   * Estado inicial.
-   */
 
   updateUI();
 
@@ -127,13 +124,6 @@ async function login() {
     }
 
 
-    /*
-     * LA SESIÓN SE GUARDA IGUAL.
-     *
-     * El token sigue existiendo internamente.
-     * Simplemente ya no se muestra.
-     */
-
     window.session = {
 
       token:
@@ -141,6 +131,9 @@ async function login() {
 
       user:
         result.user,
+
+      permisos:
+        result.permisos || {},
 
       expiresAt:
         result.expiresAt
@@ -158,6 +151,14 @@ async function login() {
 
     document
       .getElementById(
+        'loginError'
+      )
+      .style.display =
+      'none';
+
+
+    document
+      .getElementById(
         'loginModal'
       )
       .style.display =
@@ -165,6 +166,16 @@ async function login() {
 
 
     updateUI();
+
+
+    if (
+      typeof window.buildNavigation ===
+      'function'
+    ) {
+
+      window.buildNavigation();
+
+    }
 
 
     startTimer();
@@ -224,11 +235,39 @@ async function validateSession() {
   }
 
 
+  window.session.user = {
+
+    id:
+      result.session.id,
+
+    usuario:
+      result.session.usuario,
+
+    rol:
+      result.session.rol
+
+  };
+
+
+  window.session.permisos =
+    result.session.permisos || {};
+
+
   window.session.expiresAt =
     result.session.expiresAt;
 
 
   updateUI();
+
+
+  if (
+    typeof window.buildNavigation ===
+    'function'
+  ) {
+
+    window.buildNavigation();
+
+  }
 
 
   return true;
@@ -408,10 +447,6 @@ function updateUI() {
     !!window.session;
 
 
-  /*
-   * USUARIO
-   */
-
   if (user) {
 
     user.textContent =
@@ -421,10 +456,6 @@ function updateUI() {
 
   }
 
-
-  /*
-   * ROL
-   */
 
   if (role) {
 
@@ -436,10 +467,6 @@ function updateUI() {
   }
 
 
-  /*
-   * TIMER
-   */
-
   if (!active && timer) {
 
     timer.textContent =
@@ -448,10 +475,6 @@ function updateUI() {
   }
 
 
-  /*
-   * BOTÓN LOGOUT
-   */
-
   if (logoutButton) {
 
     logoutButton.disabled =
@@ -459,10 +482,6 @@ function updateUI() {
 
   }
 
-
-  /*
-   * BARRA
-   */
 
   const bar =
     document.getElementById(
@@ -502,6 +521,16 @@ function clearSession() {
 
 
   updateUI();
+
+
+  if (
+    typeof window.buildNavigation ===
+    'function'
+  ) {
+
+    window.buildNavigation();
+
+  }
 
 
   const timer =
@@ -563,3 +592,4 @@ function showError(
     'block';
 
 }
+

@@ -19,7 +19,10 @@ const MODULES = {
 
     title: 'Ocupación',
 
-    emoji: '🛏️'
+    emoji: '🛏️',
+
+        file:
+      './modules/ocupacion.html'
 
   },
 
