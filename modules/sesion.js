@@ -1,4 +1,3 @@
-
 window.session =
   null;
 
@@ -98,6 +97,11 @@ async function login() {
 
   try {
 
+    loadingModalON(
+      'Iniciando sesión...'
+    );
+
+
     const result =
       await api({
 
@@ -111,6 +115,9 @@ async function login() {
           password
 
       });
+
+
+    loadingModalOFF();
 
 
     if (!result.ok) {
@@ -183,6 +190,9 @@ async function login() {
   }
 
   catch (error) {
+
+    loadingModalOFF();
+
 
     console.error(
       error
@@ -592,4 +602,3 @@ function showError(
     'block';
 
 }
-

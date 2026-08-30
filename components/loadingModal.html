@@ -1,0 +1,235 @@
+<!-- =========================================
+     LOADING MODAL
+     
+     Uso:
+       loadingModalON("Procesando...");
+       loadingModalOFF();
+========================================= -->
+
+<div id="loadingModal" class="loading-modal">
+
+  <div class="loading-modal-box">
+
+    <div class="loading-spinner"></div>
+
+    <div
+      id="loadingModalText"
+      class="loading-modal-text"
+    >
+      Procesando...
+    </div>
+
+  </div>
+
+</div>
+
+
+<style>
+
+  /* =========================================
+     LOADING MODAL
+  ========================================= */
+
+  .loading-modal {
+
+    position: fixed;
+
+    inset: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: rgba(0, 0, 0, 0.35);
+
+    z-index: 999999;
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    pointer-events: none;
+
+    transition:
+      opacity 0.2s ease,
+      visibility 0.2s ease;
+
+  }
+
+
+  .loading-modal.active {
+
+    opacity: 1;
+
+    visibility: visible;
+
+    pointer-events: all;
+
+  }
+
+
+  /* =========================================
+     CAJA
+  ========================================= */
+
+  .loading-modal-box {
+
+    min-width: 220px;
+
+    max-width: 90vw;
+
+    padding: 28px 32px;
+
+    background: #ffffff;
+
+    border-radius: 12px;
+
+    box-shadow:
+      0 10px 40px rgba(0, 0, 0, 0.20);
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 18px;
+
+  }
+
+
+  /* =========================================
+     SPINNER
+  ========================================= */
+
+  .loading-spinner {
+
+    width: 38px;
+
+    height: 38px;
+
+    border: 4px solid #e5e7eb;
+
+    border-top-color: #2563eb;
+
+    border-radius: 50%;
+
+    animation:
+      loadingModalSpin 0.8s linear infinite;
+
+  }
+
+
+  @keyframes loadingModalSpin {
+
+    from {
+      transform: rotate(0deg);
+    }
+
+    to {
+      transform: rotate(360deg);
+    }
+
+  }
+
+
+  /* =========================================
+     TEXTO
+  ========================================= */
+
+  .loading-modal-text {
+
+    font-family:
+      Arial,
+      Helvetica,
+      sans-serif;
+
+    font-size: 14px;
+
+    line-height: 1.4;
+
+    color: #374151;
+
+    text-align: center;
+
+  }
+
+</style>
+
+
+<script>
+
+  /* =========================================
+     ACTIVAR
+  ========================================= */
+
+  window.loadingModalON = function(
+    texto = 'Procesando...'
+  ) {
+
+    const modal =
+      document.getElementById(
+        'loadingModal'
+      );
+
+    const text =
+      document.getElementById(
+        'loadingModalText'
+      );
+
+
+    if (!modal) {
+
+      console.warn(
+        'LoadingModal: elemento no encontrado.'
+      );
+
+      return;
+
+    }
+
+
+    if (text) {
+
+      text.textContent = texto;
+
+    }
+
+
+    modal.classList.add(
+      'active'
+    );
+
+  };
+
+
+  /* =========================================
+     DESACTIVAR
+  ========================================= */
+
+  window.loadingModalOFF = function() {
+
+    const modal =
+      document.getElementById(
+        'loadingModal'
+      );
+
+
+    if (!modal) {
+
+      return;
+
+    }
+
+
+    modal.classList.remove(
+      'active'
+    );
+
+  };
+
+</script>

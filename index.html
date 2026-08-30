@@ -1,4 +1,4 @@
-```html
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -145,8 +145,89 @@
 
 <script src="./js/app.js"></script>
 
+<div id="loadingModalContainer"></div>
+
+<script>
+async function loadLoadingModal() {
+
+  try {
+
+    const response = await fetch(
+      './components/loadingModal.html'
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        'No se pudo cargar loadingModal.html'
+      );
+    }
+
+    const html =
+      await response.text();
+
+    const container =
+      document.getElementById(
+        'loadingModalContainer'
+      );
+
+    container.innerHTML = html;
+
+
+    /*
+     * Ejecutar los <script>
+     * que vienen dentro del HTML
+     */
+
+    const scripts =
+      container.querySelectorAll(
+        'script'
+      );
+
+    scripts.forEach(oldScript => {
+
+      const newScript =
+        document.createElement(
+          'script'
+        );
+
+      if (oldScript.src) {
+
+        newScript.src =
+          oldScript.src;
+
+      }
+      else {
+
+        newScript.textContent =
+          oldScript.textContent;
+
+      }
+
+      document.body.appendChild(
+        newScript
+      );
+
+    });
+
+  }
+
+  catch (error) {
+
+    console.error(
+      'LoadingModal:',
+      error
+    );
+
+  }
+
+}
+
+
+loadLoadingModal();
+</script>
+
 
 </body>
 
 </html>
-```
+
