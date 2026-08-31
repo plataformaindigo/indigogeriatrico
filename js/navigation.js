@@ -7,10 +7,10 @@ const MODULES = {
     emoji: '🔐',
 
     file:
-      './modules/sesion.html',
+      './modules/sesion/sesion.html',
 
     script:
-      './modules/sesion.js'
+      './modules/sesion/sesion.js'
 
   },
 
@@ -21,8 +21,14 @@ const MODULES = {
 
     emoji: '🛏️',
 
-        file:
-      './modules/ocupacion.html'
+    file:
+      './modules/ocupacion/ocupacion.html',
+
+    script:
+      './modules/ocupacion/ocupacion.js',
+
+    style:
+      './modules/ocupacion/ocupacion.css'
 
   },
 
@@ -31,7 +37,16 @@ const MODULES = {
 
     title: 'Pacientes',
 
-    emoji: '👥'
+    emoji: '👥',
+
+    file:
+      './modules/pacientes/pacientes.html',
+
+    script:
+      './modules/pacientes/pacientes.js',
+
+    style:
+      './modules/pacientes/pacientes.css'
 
   },
 
@@ -40,7 +55,16 @@ const MODULES = {
 
     title: 'Enfermería',
 
-    emoji: '🩺'
+    emoji: '🩺',
+
+    file:
+      './modules/enfermeria/enfermeria.html',
+
+    script:
+      './modules/enfermeria/enfermeria.js',
+
+    style:
+      './modules/enfermeria/enfermeria.css'
 
   },
 
@@ -49,7 +73,16 @@ const MODULES = {
 
     title: 'Farmacia',
 
-    emoji: '💊'
+    emoji: '💊',
+
+    file:
+      './modules/farmacia/farmacia.html',
+
+    script:
+      './modules/farmacia/farmacia.js',
+
+    style:
+      './modules/farmacia/farmacia.css'
 
   },
 
@@ -58,7 +91,16 @@ const MODULES = {
 
     title: 'Cocina',
 
-    emoji: '🍽️'
+    emoji: '🍽️',
+
+    file:
+      './modules/cocina/cocina.html',
+
+    script:
+      './modules/cocina/cocina.js',
+
+    style:
+      './modules/cocina/cocina.css'
 
   },
 
@@ -67,7 +109,16 @@ const MODULES = {
 
     title: 'Nutrición',
 
-    emoji: '🥗'
+    emoji: '🥗',
+
+    file:
+      './modules/nutricion/nutricion.html',
+
+    script:
+      './modules/nutricion/nutricion.js',
+
+    style:
+      './modules/nutricion/nutricion.css'
 
   },
 
@@ -76,7 +127,16 @@ const MODULES = {
 
     title: 'Profesionales',
 
-    emoji: '👨‍⚕️'
+    emoji: '👨‍⚕️',
+
+    file:
+      './modules/profesionales/profesionales.html',
+
+    script:
+      './modules/profesionales/profesionales.js',
+
+    style:
+      './modules/profesionales/profesionales.css'
 
   },
 
@@ -85,7 +145,16 @@ const MODULES = {
 
     title: 'RRHH',
 
-    emoji: '👔'
+    emoji: '👔',
+
+    file:
+      './modules/rrhh/rrhh.html',
+
+    script:
+      './modules/rrhh/rrhh.js',
+
+    style:
+      './modules/rrhh/rrhh.css'
 
   },
 
@@ -94,7 +163,16 @@ const MODULES = {
 
     title: 'Compras',
 
-    emoji: '🛒'
+    emoji: '🛒',
+
+    file:
+      './modules/compras/compras.html',
+
+    script:
+      './modules/compras/compras.js',
+
+    style:
+      './modules/compras/compras.css'
 
   },
 
@@ -103,7 +181,16 @@ const MODULES = {
 
     title: 'Facturación',
 
-    emoji: '🧾'
+    emoji: '🧾',
+
+    file:
+      './modules/facturacion/facturacion.html',
+
+    script:
+      './modules/facturacion/facturacion.js',
+
+    style:
+      './modules/facturacion/facturacion.css'
 
   },
 
@@ -112,16 +199,46 @@ const MODULES = {
 
     title: 'Administración',
 
-    emoji: '📊'
+    emoji: '📊',
+
+    file:
+      './modules/administracion/administracion.html',
+
+    script:
+      './modules/administracion/administracion.js',
+
+    style:
+      './modules/administracion/administracion.css'
+
+  },
+
+
+  proveedores: {
+
+    title: 'Proveedores',
+
+    emoji: '🚚',
+
+    file:
+      './modules/proveedores/proveedores.html',
+
+    script:
+      './modules/proveedores/proveedores.js',
+
+    style:
+      './modules/proveedores/proveedores.css'
 
   }
 
 };
 
-
 let ACTIVE_MODULE =
   null;
 
+
+/* =========================================
+   NAVEGAR
+========================================= */
 
 /* =========================================
    NAVEGAR
@@ -133,6 +250,26 @@ async function navigateTo(
 
   if (
     ACTIVE_MODULE === name
+  ) {
+
+    return;
+
+  }
+
+
+  const app =
+    document.getElementById(
+      'app'
+    );
+
+
+  const module =
+    MODULES[name];
+
+
+  if (
+    !app ||
+    !module
   ) {
 
     return;
@@ -164,46 +301,193 @@ async function navigateTo(
     );
 
 
-  const app =
-    document.getElementById(
-      'app'
-    );
+  /*
+   * =======================================
+   * CARGAR HTML
+   * =======================================
+   */
+
+  if (module.file) {
+
+    try {
+
+      const response =
+        await fetch(
+          module.file
+        );
 
 
-  const module =
-    MODULES[name];
+      if (!response.ok) {
+
+        throw new Error(
+          `No se pudo cargar ${module.file} — HTTP ${response.status}`
+        );
+
+      }
 
 
-  if (!module) {
+      const html =
+        await response.text();
 
-    return;
+
+      app.innerHTML =
+        html;
+
+    }
+
+    catch (error) {
+
+      console.error(
+        error
+      );
+
+
+      app.innerHTML = `
+
+        <div class="module-placeholder">
+
+          <div class="emoji">
+            ❌
+          </div>
+
+          <h2>
+            ${module.title}
+          </h2>
+
+          <p>
+            No se pudo cargar el módulo.
+          </p>
+
+        </div>
+
+      `;
+
+      return;
+
+    }
+
+  }
+
+  else {
+
+    /*
+     * Módulo todavía sin HTML
+     */
+
+    app.innerHTML = `
+
+      <div class="module-placeholder">
+
+        <div class="emoji">
+          ${module.emoji}
+        </div>
+
+        <h2>
+          ${module.title}
+        </h2>
+
+        <p>
+          Módulo en desarrollo
+        </p>
+
+      </div>
+
+    `;
 
   }
 
 
   /*
-   * Los módulos que todavía no
-   * tienen HTML propio.
+   * =======================================
+   * CARGAR CSS
+   * =======================================
    */
 
-  app.innerHTML = `
+  if (module.style) {
 
-    <div class="module-placeholder">
+    const existingStyle =
+      document.querySelector(
+        `link[data-module-style="${name}"]`
+      );
 
-      <div class="emoji">
-        ${module.emoji}
-      </div>
 
-      <h2>
-        ${module.title}
-      </h2>
+    if (!existingStyle) {
 
-      <p>
-        Módulo en desarrollo
-      </p>
+      const style =
+        document.createElement(
+          'link'
+        );
 
-    </div>
 
-  `;
+      style.rel =
+        'stylesheet';
+
+
+      style.href =
+        module.style;
+
+
+      style.dataset.moduleStyle =
+        name;
+
+
+      document.head.appendChild(
+        style
+      );
+
+    }
+
+  }
+
+
+  /*
+   * =======================================
+   * CARGAR JAVASCRIPT
+   * =======================================
+   */
+
+  if (module.script) {
+
+    try {
+
+      await loadScript(
+        module.script
+      );
+
+    }
+
+    catch (error) {
+
+      console.error(
+        error
+      );
+
+      return;
+
+    }
+
+  }
+
+
+  /*
+   * =======================================
+   * MONTAR MÓDULO
+   * =======================================
+   */
+
+  const mountFunction =
+    `mount_${name}`;
+
+
+  if (
+    typeof window[mountFunction] ===
+    'function'
+  ) {
+
+    await window[
+      mountFunction
+    ]();
+
+  }
 
 }

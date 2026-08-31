@@ -1,16 +1,18 @@
-```css
-:root {
+/* =========================================
+   VARIABLES
+========================================= */
 
+:root {
   --bg: #f1f5f9;
   --card: #ffffff;
-
   --text: #172033;
   --muted: #64748b;
-
   --primary: #2563eb;
-
   --border: #e2e8f0;
 
+  --nav-bg: rgba(255,255,255,.96);
+  --session-bg: rgba(255,255,255,.94);
+  --placeholder-bg: rgba(255,255,255,.94);
 }
 
 
@@ -19,28 +21,16 @@
 ========================================= */
 
 * {
-
-  box-sizing:
-    border-box;
-
+  box-sizing: border-box;
 }
-
 
 html {
-
-  min-height:
-    100%;
-
+  min-height: 100%;
 }
 
-
 body {
-
-  margin:
-    0;
-
-  min-height:
-    100vh;
+  margin: 0;
+  min-height: 100vh;
 
   font-family:
     Inter,
@@ -50,12 +40,12 @@ body {
     "Segoe UI",
     sans-serif;
 
-  background:
-    var(--bg);
+  background: var(--bg);
+  color: var(--text);
 
-  color:
-    var(--text);
-
+  transition:
+    background-color .25s ease,
+    color .25s ease;
 }
 
 
@@ -64,45 +54,27 @@ body {
 ========================================= */
 
 .navbar {
+  position: fixed;
 
-  position:
-    fixed;
+  top: 0;
+  left: 0;
 
-  top:
-    0;
+  width: 230px;
+  height: 100vh;
 
-  left:
-    0;
+  z-index: 1000;
 
-  width:
-    230px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
 
-  height:
-    100vh;
+  gap: 20px;
 
-  z-index:
-    1000;
+  padding: 20px 12px;
 
-  display:
-    flex;
+  background: var(--nav-bg);
 
-  flex-direction:
-    column;
-
-  align-items:
-    stretch;
-
-  gap:
-    20px;
-
-  padding:
-    20px 12px;
-
-  background:
-    rgba(255,255,255,.96);
-
-  backdrop-filter:
-    blur(14px);
+  backdrop-filter: blur(14px);
 
   border-right:
     1px solid var(--border);
@@ -111,6 +83,10 @@ body {
     4px 0 20px
     rgba(15,23,42,.06);
 
+  transition:
+    background .25s ease,
+    border-color .25s ease,
+    box-shadow .25s ease;
 }
 
 
@@ -119,50 +95,123 @@ body {
 ========================================= */
 
 .brand {
+  display: flex;
+  align-items: center;
 
-  display:
-    flex;
-
-  align-items:
-    center;
-
-  gap:
-    9px;
+  gap: 9px;
 
   padding:
     4px 8px 15px;
 
-  font-size:
-    18px;
+  font-size: 18px;
 
-  white-space:
-    nowrap;
+  white-space: nowrap;
 
   border-bottom:
     1px solid var(--border);
 
+  color: var(--text);
 }
-
 
 .brand img {
+  width: 60px;
+  height: 60px;
 
-  width:
-    60px;
+  object-fit: contain;
+}
 
-  height:
-    60px;
-
-  object-fit:
-    contain;
-
+.brand strong {
+  font-size: 24px;
 }
 
 
-.brand span {
+/* =========================================
+   SWITCH DE TEMA
+========================================= */
 
-  font-size:
-    24px;
+.theme-switch {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
+  gap: 8px;
+
+  padding:
+    0 8px 12px;
+
+  border-bottom:
+    1px solid var(--border);
+}
+
+.theme-icon {
+  font-size: 14px;
+  line-height: 1;
+}
+
+
+/* =========================================
+   SWITCH
+========================================= */
+
+.switch {
+  position: relative;
+
+  display: inline-block;
+
+  width: 42px;
+  height: 22px;
+}
+
+.switch input {
+  opacity: 0;
+
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+
+  inset: 0;
+
+  cursor: pointer;
+
+  background: #cbd5e1;
+
+  border-radius: 999px;
+
+  transition: .2s;
+}
+
+.slider::before {
+  content: "";
+
+  position: absolute;
+
+  width: 16px;
+  height: 16px;
+
+  left: 3px;
+  top: 3px;
+
+  background: white;
+
+  border-radius: 50%;
+
+  box-shadow:
+    0 1px 3px
+    rgba(0,0,0,.2);
+
+  transition: .2s;
+}
+
+.switch input:checked + .slider {
+  background: #2563eb;
+}
+
+.switch input:checked + .slider::before {
+  transform:
+    translateX(20px);
 }
 
 
@@ -171,36 +220,22 @@ body {
 ========================================= */
 
 .nav {
+  display: flex;
 
-  display:
-    flex;
+  flex-direction: column;
 
-  flex-direction:
-    column;
+  align-items: stretch;
 
-  align-items:
-    stretch;
+  gap: 5px;
 
-  gap:
-    5px;
+  overflow-y: auto;
+  overflow-x: hidden;
 
-  overflow-y:
-    auto;
-
-  overflow-x:
-    hidden;
-
-  scrollbar-width:
-    none;
-
+  scrollbar-width: none;
 }
 
-
 .nav::-webkit-scrollbar {
-
-  display:
-    none;
-
+  display: none;
 }
 
 
@@ -209,70 +244,47 @@ body {
 ========================================= */
 
 .nav-button {
+  width: 100%;
 
-  width:
-    100%;
+  border: 0;
 
-  border:
-    0;
+  background: transparent;
 
-  background:
-    transparent;
-
-  color:
-    #475569;
+  color: #475569;
 
   padding:
     11px 13px;
 
-  border-radius:
-    11px;
+  border-radius: 11px;
 
-  font-size:
-    13px;
+  font-size: 13px;
+  font-weight: 750;
 
-  font-weight:
-    750;
+  cursor: pointer;
 
-  cursor:
-    pointer;
+  text-align: left;
 
-  text-align:
-    left;
-
-  white-space:
-    nowrap;
+  white-space: nowrap;
 
   transition:
     background .15s ease,
     color .15s ease,
     transform .15s ease;
-
 }
 
-
 .nav-button:hover {
+  background: #f1f5f9;
 
-  background:
-    #f1f5f9;
-
-  color:
-    var(--text);
+  color: var(--text);
 
   transform:
     translateX(2px);
-
 }
 
-
 .nav-button.active {
+  background: #dbeafe;
 
-  background:
-    #dbeafe;
-
-  color:
-    #1d4ed8;
-
+  color: #1d4ed8;
 }
 
 
@@ -281,19 +293,15 @@ body {
 ========================================= */
 
 .main-area {
-
   width:
     calc(100% - 230px);
 
-  min-height:
-    100vh;
+  min-height: 100vh;
 
-  margin-left:
-    230px;
+  margin-left: 230px;
 
   padding:
-    18px 30px 50px;
-
+    0;
 }
 
 
@@ -302,53 +310,89 @@ body {
 ========================================= */
 
 .session-bar {
+  position: sticky;
 
-  position:
-    sticky;
+  top: 0;
 
-  top:
-    0;
+  z-index: 900;
 
-  z-index:
-    900;
+  min-height: 62px;
 
-  min-height:
-    62px;
+  display: flex;
 
-  display:
-    flex;
+  align-items: center;
 
-  align-items:
-    center;
+  justify-content: flex-end;
 
-  justify-content:
-    space-between;
-
-  gap:
-    20px;
-
-  margin-bottom:
-    22px;
+  gap: 24px;
 
   padding:
-    10px 16px;
+    10px 28px;
 
   background:
-    rgba(255,255,255,.94);
-
-  border:
-    1px solid rgba(226,232,240,.95);
-
-  border-radius:
-    15px;
-
-  box-shadow:
-    0 8px 25px
-    rgba(15,23,42,.06);
+    var(--session-bg);
 
   backdrop-filter:
-    blur(12px);
+    blur(14px);
 
+  border-bottom:
+    1px solid var(--border);
+
+  box-shadow:
+    0 4px 18px
+    rgba(15,23,42,.05);
+
+  transition:
+    background .25s ease,
+    border-color .25s ease,
+    box-shadow .25s ease;
+}
+
+
+/* =========================================
+   DATOS DE USUARIO
+========================================= */
+
+.session-user,
+.session-time {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 2px;
+
+  min-width: 90px;
+}
+
+.session-label {
+  color: var(--muted);
+
+  font-size: 10px;
+
+  font-weight: 800;
+
+  text-transform: uppercase;
+
+  letter-spacing: .06em;
+}
+
+.session-user strong,
+.session-time strong {
+  color: var(--text);
+
+  font-size: 13px;
+
+  font-weight: 750;
+
+  white-space: nowrap;
+}
+
+.session-timer {
+  color:
+    var(--primary) !important;
+
+  font-variant-numeric:
+    tabular-nums;
 }
 
 
@@ -357,77 +401,48 @@ body {
 ========================================= */
 
 .session-status {
+  display: flex;
 
-  display:
-    flex;
+  align-items: center;
 
-  align-items:
-    center;
+  gap: 8px;
 
-  gap:
-    8px;
-
-  flex:
-    0 0 auto;
-
+  flex: 0 0 auto;
 }
-
 
 .session-dot {
+  width: 9px;
+  height: 9px;
 
-  width:
-    9px;
+  border-radius: 50%;
 
-  height:
-    9px;
-
-  border-radius:
-    50%;
-
-  flex:
-    0 0 auto;
-
+  flex: 0 0 auto;
 }
 
-
 .session-dot.offline {
-
-  background:
-    #94a3b8;
+  background: #94a3b8;
 
   box-shadow:
     0 0 0 4px
     rgba(148,163,184,.12);
-
 }
 
-
 .session-dot.online {
-
-  background:
-    #22c55e;
+  background: #22c55e;
 
   box-shadow:
     0 0 0 4px
     rgba(34,197,94,.12);
-
 }
 
-
 .session-status-text {
+  color: var(--muted);
 
-  color:
-    #64748b;
+  font-size: 12px;
 
-  font-size:
-    12px;
+  font-weight: 750;
 
-  font-weight:
-    750;
-
-  white-space:
-    nowrap;
-
+  white-space: nowrap;
 }
 
 
@@ -436,116 +451,52 @@ body {
 ========================================= */
 
 .session-data {
+  display: flex;
 
-  display:
-    flex;
+  align-items: center;
 
-  align-items:
-    center;
+  justify-content: center;
 
-  justify-content:
-    center;
+  gap: 18px;
 
-  gap:
-    18px;
+  flex: 1;
 
-  flex:
-    1;
-
-  min-width:
-    0;
-
+  min-width: 0;
 }
-
 
 .session-item {
+  display: flex;
 
-  display:
-    flex;
+  align-items: center;
 
-  align-items:
-    center;
+  gap: 7px;
 
-  gap:
-    7px;
-
-  min-width:
-    0;
-
+  min-width: 0;
 }
-
-
-.session-label {
-
-  color:
-    #94a3b8;
-
-  font-size:
-    10px;
-
-  font-weight:
-    800;
-
-  text-transform:
-    uppercase;
-
-  letter-spacing:
-    .06em;
-
-}
-
 
 .session-value {
+  max-width: 180px;
 
-  max-width:
-    180px;
+  overflow: hidden;
 
-  overflow:
-    hidden;
+  text-overflow: ellipsis;
 
-  text-overflow:
-    ellipsis;
+  white-space: nowrap;
 
-  white-space:
-    nowrap;
+  color: var(--text);
 
-  color:
-    #172033;
+  font-size: 13px;
 
-  font-size:
-    13px;
-
-  font-weight:
-    750;
-
+  font-weight: 750;
 }
-
-
-.session-timer {
-
-  color:
-    #2563eb;
-
-  font-variant-numeric:
-    tabular-nums;
-
-  font-weight:
-    850;
-
-}
-
 
 .session-divider {
+  width: 1px;
 
-  width:
-    1px;
-
-  height:
-    24px;
+  height: 24px;
 
   background:
     var(--border);
-
 }
 
 
@@ -554,21 +505,17 @@ body {
 ========================================= */
 
 .session-logout {
+  flex: 0 0 auto;
 
-  flex:
-    0 0 auto;
-
-  min-height:
-    38px;
+  min-height: 38px;
 
   padding:
-    8px 13px;
+    8px 15px;
 
   border:
     1px solid #fecdd3;
 
-  border-radius:
-    9px;
+  border-radius: 10px;
 
   background:
     #fff1f2;
@@ -576,28 +523,21 @@ body {
   color:
     #dc2626;
 
-  font-family:
-    inherit;
+  font-family: inherit;
 
-  font-size:
-    12px;
+  font-size: 12px;
 
-  font-weight:
-    800;
+  font-weight: 750;
 
-  cursor:
-    pointer;
+  cursor: pointer;
 
   transition:
     background .15s ease,
     border-color .15s ease,
     transform .15s ease;
-
 }
 
-
 .session-logout:hover:not(:disabled) {
-
   background:
     #fee2e2;
 
@@ -606,18 +546,23 @@ body {
 
   transform:
     translateY(-1px);
+}
 
+.session-logout:disabled {
+  opacity: .45;
+
+  cursor: not-allowed;
+
+  transform: none;
 }
 
 
-.session-logout:disabled {
+/* =========================================
+   SESIÓN INACTIVA
+========================================= */
 
-  opacity:
-    .45;
-
-  cursor:
-    not-allowed;
-
+.session-bar.inactive {
+  opacity: .75;
 }
 
 
@@ -626,15 +571,16 @@ body {
 ========================================= */
 
 #app {
-
-  width:
-    100%;
+  width: 100%;
 
   min-height:
-    calc(100vh - 105px);
+    calc(100vh - 62px);
 
   padding:
-    0;
+    30px 30px 50px;
+
+  background-color:
+    var(--bg);
 
   background-image:
     url("../img/fondo2.jpg");
@@ -651,6 +597,9 @@ body {
   background-attachment:
     fixed;
 
+  transition:
+    background-color .25s ease,
+    color .25s ease;
 }
 
 
@@ -660,68 +609,53 @@ body {
 
 .loading,
 .module-placeholder {
+  min-height: 400px;
 
-  min-height:
-    400px;
+  display: flex;
 
-  display:
-    flex;
+  flex-direction: column;
 
-  flex-direction:
-    column;
+  align-items: center;
 
-  align-items:
-    center;
-
-  justify-content:
-    center;
-
+  justify-content: center;
 }
 
-
 .module-placeholder {
-
-  gap:
-    12px;
+  gap: 12px;
 
   background:
-    rgba(255,255,255,.94);
+    var(--placeholder-bg);
 
   border:
     1px solid var(--border);
 
-  border-radius:
-    20px;
+  border-radius: 20px;
 
   box-shadow:
     0 15px 40px
     rgba(15,23,42,.06);
 
-}
+  color:
+    var(--text);
 
+  transition:
+    background .25s ease,
+    border-color .25s ease,
+    color .25s ease;
+}
 
 .module-placeholder .emoji {
-
-  font-size:
-    52px;
-
+  font-size: 52px;
 }
-
 
 .module-placeholder h2,
 .module-placeholder p {
-
-  margin:
-    0;
-
+  margin: 0;
 }
 
-
 .module-placeholder p {
-
   color:
     var(--muted);
-
 }
 
 
@@ -730,50 +664,35 @@ body {
 ========================================= */
 
 .modal {
+  position: fixed;
 
-  position:
-    fixed;
+  inset: 0;
 
-  inset:
-    0;
+  z-index: 2000;
 
-  z-index:
-    2000;
+  display: flex;
 
-  display:
-    flex;
+  align-items: center;
 
-  align-items:
-    center;
+  justify-content: center;
 
-  justify-content:
-    center;
-
-  padding:
-    20px;
+  padding: 20px;
 
   background:
     rgba(15,23,42,.62);
 
   backdrop-filter:
     blur(6px);
-
 }
 
-
 .modal::before {
+  content: "";
 
-  content:
-    "";
+  position: absolute;
 
-  position:
-    absolute;
+  inset: 0;
 
-  inset:
-    0;
-
-  z-index:
-    -1;
+  z-index: -1;
 
   background-image:
     linear-gradient(
@@ -782,42 +701,36 @@ body {
     ),
     url("../img/fondo2.jpg");
 
-  background-size:
-    cover;
+  background-size: cover;
 
-  background-position:
-    center;
+  background-position: center;
 
-  background-repeat:
-    no-repeat;
-
+  background-repeat: no-repeat;
 }
-
 
 .modal[hidden] {
-
-  display:
-    none;
-
+  display: none;
 }
 
 
-.modal .login {
+/* =========================================
+   LOGIN
+========================================= */
 
+.modal .login {
   width:
     min(100%, 420px);
 
-  padding:
-    30px;
+  padding: 30px;
 
   background:
     rgba(255,255,255,.96);
 
   border:
-    1px solid rgba(255,255,255,.75);
+    1px solid
+    rgba(255,255,255,.75);
 
-  border-radius:
-    22px;
+  border-radius: 22px;
 
   box-shadow:
     0 30px 80px
@@ -828,34 +741,24 @@ body {
 
   animation:
     loginAppear .22s ease-out;
-
 }
 
-
 @keyframes loginAppear {
-
   from {
-
-    opacity:
-      0;
+    opacity: 0;
 
     transform:
       translateY(10px)
       scale(.98);
-
   }
 
   to {
-
-    opacity:
-      1;
+    opacity: 1;
 
     transform:
       translateY(0)
       scale(1);
-
   }
-
 }
 
 
@@ -864,7 +767,6 @@ body {
 ========================================= */
 
 .modal .login h2 {
-
   margin:
     0 0 8px;
 
@@ -879,12 +781,9 @@ body {
 
   letter-spacing:
     -.02em;
-
 }
 
-
 .modal .login p {
-
   margin:
     0 0 25px;
 
@@ -896,7 +795,6 @@ body {
 
   line-height:
     1.5;
-
 }
 
 
@@ -905,24 +803,16 @@ body {
 ========================================= */
 
 .modal .field {
+  display: flex;
 
-  display:
-    flex;
+  flex-direction: column;
 
-  flex-direction:
-    column;
+  gap: 7px;
 
-  gap:
-    7px;
-
-  margin-bottom:
-    17px;
-
+  margin-bottom: 17px;
 }
 
-
 .modal .field label {
-
   color:
     #334155;
 
@@ -934,17 +824,12 @@ body {
 
   letter-spacing:
     .02em;
-
 }
 
-
 .modal .field input {
+  width: 100%;
 
-  width:
-    100%;
-
-  height:
-    46px;
+  height: 46px;
 
   padding:
     10px 13px;
@@ -955,8 +840,7 @@ body {
   border-radius:
     11px;
 
-  outline:
-    none;
+  outline: none;
 
   background:
     #f8fafc;
@@ -964,8 +848,7 @@ body {
   color:
     #172033;
 
-  font-family:
-    inherit;
+  font-family: inherit;
 
   font-size:
     14px;
@@ -973,21 +856,16 @@ body {
   transition:
     background .15s ease,
     border-color .15s ease,
-    box-shadow .15s ease;
-
+    box-shadow .15s ease,
+    color .15s ease;
 }
-
 
 .modal .field input:hover {
-
   border-color:
     #94a3b8;
-
 }
 
-
 .modal .field input:focus {
-
   background:
     white;
 
@@ -997,7 +875,6 @@ body {
   box-shadow:
     0 0 0 3px
     rgba(37,99,235,.12);
-
 }
 
 
@@ -1006,21 +883,15 @@ body {
 ========================================= */
 
 .modal .login > .primary {
+  width: 100%;
 
-  width:
-    100%;
+  min-height: 46px;
 
-  min-height:
-    46px;
+  margin-top: 5px;
 
-  margin-top:
-    5px;
+  border: 0;
 
-  border:
-    0;
-
-  border-radius:
-    11px;
+  border-radius: 11px;
 
   background:
     linear-gradient(
@@ -1029,20 +900,15 @@ body {
       #1d4ed8
     );
 
-  color:
-    white;
+  color: white;
 
-  font-family:
-    inherit;
+  font-family: inherit;
 
-  font-size:
-    14px;
+  font-size: 14px;
 
-  font-weight:
-    800;
+  font-weight: 800;
 
-  cursor:
-    pointer;
+  cursor: pointer;
 
   box-shadow:
     0 7px 18px
@@ -1052,12 +918,9 @@ body {
     transform .15s ease,
     box-shadow .15s ease,
     background .15s ease;
-
 }
 
-
 .modal .login > .primary:hover {
-
   transform:
     translateY(-1px);
 
@@ -1071,15 +934,11 @@ body {
   box-shadow:
     0 10px 24px
     rgba(37,99,235,.30);
-
 }
 
-
 .modal .login > .primary:active {
-
   transform:
     translateY(0);
-
 }
 
 
@@ -1088,22 +947,281 @@ body {
 ========================================= */
 
 .modal .error {
+  min-height: 20px;
 
-  min-height:
-    20px;
-
-  margin-top:
-    12px;
+  margin-top: 12px;
 
   color:
     #dc2626;
 
-  font-size:
-    13px;
+  font-size: 13px;
 
-  font-weight:
-    650;
+  font-weight: 650;
+}
 
+
+/* =========================================
+   =========================================
+   MODO OSCURO
+   =========================================
+   ========================================= */
+
+body.dark-mode {
+
+  --bg: #0f172a;
+
+  --card: #1e293b;
+
+  --text: #e2e8f0;
+
+  --muted: #94a3b8;
+
+  --primary: #60a5fa;
+
+  --border: #334155;
+
+  --nav-bg:
+    rgba(15,23,42,.97);
+
+  --session-bg:
+    rgba(15,23,42,.96);
+
+  --placeholder-bg:
+    rgba(30,41,59,.96);
+
+  background:
+    var(--bg);
+
+  color:
+    var(--text);
+}
+
+
+/* =========================================
+   NAVBAR OSCURA
+========================================= */
+
+body.dark-mode .navbar {
+  background:
+    var(--nav-bg);
+
+  border-color:
+    var(--border);
+
+  box-shadow:
+    4px 0 20px
+    rgba(0,0,0,.25);
+}
+
+
+/* =========================================
+   MARCA OSCURA
+========================================= */
+
+body.dark-mode .brand {
+  color:
+    var(--text);
+
+  border-color:
+    var(--border);
+}
+
+
+/* =========================================
+   SWITCH OSCURO
+========================================= */
+
+body.dark-mode .theme-switch {
+  border-color:
+    var(--border);
+}
+
+body.dark-mode .slider {
+  background:
+    #475569;
+}
+
+body.dark-mode .switch input:checked + .slider {
+  background:
+    #2563eb;
+}
+
+
+/* =========================================
+   NAVEGACIÓN OSCURA
+========================================= */
+
+body.dark-mode .nav-button {
+  color:
+    #cbd5e1;
+}
+
+body.dark-mode .nav-button:hover {
+  background:
+    #1e293b;
+
+  color:
+    #f8fafc;
+}
+
+body.dark-mode .nav-button.active {
+  background:
+    #1e3a5f;
+
+  color:
+    #bfdbfe;
+}
+
+
+/* =========================================
+   ÁREA PRINCIPAL OSCURA
+========================================= */
+
+body.dark-mode .main-area {
+  background:
+    var(--bg);
+}
+
+
+/* =========================================
+   BARRA DE SESIÓN OSCURA
+========================================= */
+
+body.dark-mode .session-bar {
+  background:
+    var(--session-bg);
+
+  border-color:
+    var(--border);
+
+  box-shadow:
+    0 8px 25px
+    rgba(0,0,0,.25);
+}
+
+body.dark-mode .session-label {
+  color:
+    #94a3b8;
+}
+
+body.dark-mode .session-user strong,
+body.dark-mode .session-time strong,
+body.dark-mode .session-value {
+  color:
+    #e2e8f0;
+}
+
+
+/* =========================================
+   APP OSCURA
+========================================= */
+
+body.dark-mode #app {
+
+  background-color:
+    #0f172a;
+
+  background-image:
+    url("../img/fondo3.jpg");
+
+  background-size:
+    50% auto;
+
+  background-position:
+    center top;
+
+  background-repeat:
+    no-repeat;
+
+  background-attachment:
+    fixed;
+}
+
+
+/* =========================================
+   PLACEHOLDER OSCURO
+========================================= */
+
+body.dark-mode .module-placeholder {
+  background:
+    rgba(30,41,59,.96);
+
+  border-color:
+    var(--border);
+
+  color:
+    var(--text);
+
+  box-shadow:
+    0 15px 40px
+    rgba(0,0,0,.25);
+}
+
+body.dark-mode .module-placeholder p {
+  color:
+    var(--muted);
+}
+
+
+/* =========================================
+   LOGIN OSCURO
+========================================= */
+
+body.dark-mode .modal .login {
+
+  background:
+    rgba(30,41,59,.97);
+
+  border-color:
+    #475569;
+
+  color:
+    var(--text);
+}
+
+body.dark-mode .modal .login h2 {
+  color:
+    #f1f5f9;
+}
+
+body.dark-mode .modal .login p {
+  color:
+    #94a3b8;
+}
+
+body.dark-mode .modal .field label {
+  color:
+    #cbd5e1;
+}
+
+body.dark-mode .modal .field input {
+
+  background:
+    #0f172a;
+
+  border-color:
+    #475569;
+
+  color:
+    #e2e8f0;
+}
+
+body.dark-mode .modal .field input::placeholder {
+  color:
+    #64748b;
+}
+
+body.dark-mode .modal .field input:focus {
+
+  background:
+    #0f172a;
+
+  border-color:
+    #60a5fa;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(96,165,250,.15);
 }
 
 
@@ -1111,93 +1229,69 @@ body {
    TABLET
 ========================================= */
 
-@media(max-width:1100px) and (min-width:851px) {
+@media (max-width:1100px) and (min-width:851px) {
 
   .navbar {
-
-    width:
-      200px;
-
+    width: 200px;
   }
 
-
   .main-area {
-
     width:
       calc(100% - 200px);
 
     margin-left:
       200px;
-
-    padding-left:
-      20px;
-
-    padding-right:
-      20px;
-
   }
-
 
   .session-bar {
+    padding:
+      10px 20px;
 
     gap:
-      12px;
-
+      16px;
   }
-
 
   .session-data {
-
     gap:
       10px;
-
   }
-
 
   .session-label {
-
     display:
       none;
-
   }
-
 
   .session-value {
-
     max-width:
       130px;
-
   }
 
-
+  #app {
+    padding:
+      25px 20px 40px;
+  }
 }
 
 
 /* =========================================
    CELULAR
+   NAVBAR LATERAL FIJA
 ========================================= */
 
-@media(max-width:850px) {
+@media (max-width:850px) {
 
   .navbar {
 
-    position:
-      sticky;
+    position: fixed;
 
-    top:
-      0;
+    top: 0;
+    left: 0;
 
-    left:
-      auto;
+    width: 180px;
 
-    width:
-      100%;
+    height: 100vh;
 
-    height:
-      auto;
-
-    min-height:
-      auto;
+    min-height: 100vh;
 
     flex-direction:
       column;
@@ -1205,118 +1299,108 @@ body {
     align-items:
       stretch;
 
-    gap:
-      5px;
+    gap: 12px;
 
     padding:
-      9px 12px 8px;
+      12px 8px;
 
     border-right:
-      0;
-
-    border-bottom:
       1px solid var(--border);
 
-    box-shadow:
-      0 4px 20px
-      rgba(15,23,42,.06);
+    border-bottom:
+      0;
 
+    box-shadow:
+      4px 0 20px
+      rgba(15,23,42,.06);
   }
 
 
   .brand {
 
     padding:
-      0 4px 5px;
+      4px 4px 10px;
 
     border-bottom:
-      0;
+      1px solid var(--border);
 
     font-size:
-      16px;
-
+      15px;
   }
 
 
   .brand img {
 
-    width:
-      26px;
-
-    height:
-      26px;
-
+    width: 32px;
+    height: 32px;
   }
 
 
-  .brand span {
+  .brand strong {
 
     font-size:
-      21px;
+      18px;
+  }
 
+
+  .theme-switch {
+
+    padding:
+      0 4px 10px;
   }
 
 
   .nav {
 
-    width:
-      100%;
+    width: 100%;
 
     flex-direction:
-      row;
+      column;
 
     align-items:
-      center;
+      stretch;
 
-    gap:
-      5px;
-
-    overflow-x:
-      auto;
+    gap: 5px;
 
     overflow-y:
+      auto;
+
+    overflow-x:
       hidden;
-
-    padding-bottom:
-      2px;
-
   }
 
 
   .nav-button {
 
-    width:
-      auto;
+    width: 100%;
 
     flex:
       0 0 auto;
 
     padding:
-      8px 11px;
+      9px 10px;
 
     font-size:
       12px;
 
     text-align:
-      center;
-
+      left;
   }
 
 
   .main-area {
 
     width:
-      100%;
+      calc(100% - 180px);
 
     margin-left:
-      0;
+      180px;
 
     min-height:
-      calc(100vh - 90px);
+      100vh;
 
     padding:
       10px 10px 40px;
-
   }
 
 
@@ -1325,11 +1409,13 @@ body {
     position:
       sticky;
 
-    top:
-      0;
+    top: 0;
 
     flex-wrap:
       wrap;
+
+    justify-content:
+      space-between;
 
     gap:
       10px;
@@ -1342,59 +1428,62 @@ body {
 
     border-radius:
       13px;
-
   }
 
 
   .session-status {
-
-    order:
-      1;
-
+    order: 1;
   }
 
 
   .session-data {
 
-    order:
-      2;
+    order: 2;
 
     justify-content:
       flex-start;
 
-    gap:
-      10px;
+    gap: 10px;
 
     flex:
       1 1 auto;
+  }
 
+
+  .session-user,
+  .session-time {
+    min-width:
+      0;
   }
 
 
   .session-divider {
-
     height:
       20px;
-
   }
 
 
   .session-label {
-
     display:
       none;
-
   }
 
 
-  .session-value {
+  .session-value,
+  .session-user strong,
+  .session-time strong {
 
     max-width:
-      110px;
+      90px;
+
+    overflow:
+      hidden;
+
+    text-overflow:
+      ellipsis;
 
     font-size:
       12px;
-
   }
 
 
@@ -1409,28 +1498,30 @@ body {
     padding:
       7px 10px;
 
+    font-size:
+      11px;
   }
 
 
   #app {
 
     min-height:
-      calc(100vh - 140px);
+      calc(100vh - 60px);
+
+    padding:
+      15px 10px 30px;
 
     background-attachment:
       scroll;
 
     background-size:
       auto 100%;
-
   }
 
 
   .modal {
-
     padding:
       12px;
-
   }
 
 
@@ -1444,9 +1535,7 @@ body {
 
     border-radius:
       17px;
-
   }
-
 }
 
 
@@ -1454,89 +1543,164 @@ body {
    CELULARES MUY PEQUEÑOS
 ========================================= */
 
-@media(max-width:480px) {
+@media (max-width:480px) {
 
   .navbar {
 
-    padding:
-      8px 8px 7px;
+    width:
+      140px;
 
+    padding:
+      8px 6px;
   }
 
 
   .brand {
 
     font-size:
-      15px;
+      13px;
 
+    gap:
+      5px;
+  }
+
+
+  .brand img {
+
+    width:
+      24px;
+
+    height:
+      24px;
+  }
+
+
+  .brand strong {
+
+    font-size:
+      15px;
+  }
+
+
+  .theme-switch {
+    gap:
+      6px;
+  }
+
+
+  .theme-icon {
+    font-size:
+      12px;
+  }
+
+
+  .switch {
+
+    width:
+      38px;
+
+    height:
+      20px;
+  }
+
+
+  .slider::before {
+
+    width:
+      14px;
+
+    height:
+      14px;
+
+    left:
+      3px;
+
+    top:
+      3px;
+  }
+
+
+  .switch input:checked + .slider::before {
+
+    transform:
+      translateX(18px);
   }
 
 
   .nav-button {
 
     padding:
-      7px 9px;
+      7px 8px;
 
     font-size:
       11px;
-
   }
 
 
   .main-area {
 
+    width:
+      calc(100% - 140px);
+
+    margin-left:
+      140px;
+
     padding:
       8px 8px 30px;
-
   }
 
 
   .session-bar {
 
     gap:
-      8px;
+      7px;
 
     padding:
-      9px;
-
+      8px;
   }
 
 
   .session-status-text {
-
     display:
       none;
-
   }
 
 
   .session-data {
-
     gap:
       8px;
-
   }
 
 
-  .session-value {
+  .session-value,
+  .session-user strong,
+  .session-time strong {
 
     max-width:
-      90px;
+      65px;
 
     font-size:
       11px;
-
   }
 
 
   .session-logout {
 
     font-size:
-      11px;
+      10px;
 
     padding:
       6px 8px;
+  }
 
+
+  #app {
+
+    padding:
+      10px 8px 25px;
+
+    background-size:
+      auto 100%;
   }
 
 
@@ -1544,7 +1708,6 @@ body {
 
     padding:
       20px;
-
   }
 
 
@@ -1552,507 +1715,5 @@ body {
 
     font-size:
       22px;
-
   }
-
-}
-```
-
-
-
-/* =========================================
-   ÁREA PRINCIPAL
-========================================= */
-
-.main-area {
-
-  width:
-    calc(100% - 230px);
-
-  min-height:
-    100vh;
-
-  margin-left:
-    230px;
-
-}
-
-
-/* =========================================
-   BARRA SUPERIOR DE SESIÓN
-========================================= */
-
-.session-bar {
-
-  position:
-    sticky;
-
-  top:
-    0;
-
-  z-index:
-    900;
-
-  min-height:
-    62px;
-
-  display:
-    flex;
-
-  align-items:
-    center;
-
-  justify-content:
-    flex-end;
-
-  gap:
-    24px;
-
-  padding:
-    10px 28px;
-
-  background:
-    rgba(255,255,255,.94);
-
-  backdrop-filter:
-    blur(14px);
-
-  border-bottom:
-    1px solid var(--border);
-
-  box-shadow:
-    0 4px 18px
-    rgba(15,23,42,.05);
-
-}
-
-
-/* =========================================
-   DATOS DE USUARIO
-========================================= */
-
-.session-user,
-.session-time {
-
-  display:
-    flex;
-
-  flex-direction:
-    column;
-
-  gap:
-    2px;
-
-  min-width:
-    90px;
-
-}
-
-
-.session-label {
-
-  color:
-    var(--muted);
-
-  font-size:
-    10px;
-
-  font-weight:
-    800;
-
-  text-transform:
-    uppercase;
-
-  letter-spacing:
-    .06em;
-
-}
-
-
-.session-user strong,
-.session-time strong {
-
-  color:
-    var(--text);
-
-  font-size:
-    13px;
-
-  font-weight:
-    750;
-
-  white-space:
-    nowrap;
-
-}
-
-
-.session-timer {
-
-  color:
-    var(--primary) !important;
-
-  font-variant-numeric:
-    tabular-nums;
-
-}
-
-
-/* =========================================
-   CERRAR SESIÓN
-========================================= */
-
-.session-logout {
-
-  min-height:
-    38px;
-
-  padding:
-    8px 15px;
-
-  border:
-    1px solid #fecdd3;
-
-  border-radius:
-    10px;
-
-  background:
-    #fff1f2;
-
-  color:
-    #dc2626;
-
-  font-family:
-    inherit;
-
-  font-size:
-    12px;
-
-  font-weight:
-    750;
-
-  cursor:
-    pointer;
-
-  transition:
-    background .15s ease,
-    border-color .15s ease,
-    transform .15s ease;
-
-}
-
-
-.session-logout:hover {
-
-  background:
-    #fee2e2;
-
-  border-color:
-    #fca5a5;
-
-  transform:
-    translateY(-1px);
-
-}
-
-
-.session-logout:disabled {
-
-  opacity:
-    .45;
-
-  cursor:
-    not-allowed;
-
-  transform:
-    none;
-
-}
-
-
-/* =========================================
-   SESIÓN INACTIVA
-========================================= */
-
-.session-bar.inactive {
-
-  opacity:
-    .75;
-
-}
-
-
-/* =========================================
-   APP
-========================================= */
-
-#app {
-
-  width:
-    100%;
-
-  min-height:
-    calc(100vh - 62px);
-
-  padding:
-    30px 30px 50px;
-
-  background-image:
-    url("../img/fondo2.jpg");
-
-  background-size:
-    50% auto;
-
-  background-position:
-    center top;
-
-  background-repeat:
-    no-repeat;
-
-  background-attachment:
-    fixed;
-
-}
-
-
-/* =========================================
-   TABLET
-========================================= */
-
-@media(max-width:1100px) and (min-width:851px) {
-
-  .main-area {
-
-    width:
-      calc(100% - 200px);
-
-    margin-left:
-      200px;
-
-  }
-
-
-  .session-bar {
-
-    padding:
-      10px 20px;
-
-    gap:
-      16px;
-
-  }
-
-
-  #app {
-
-    padding:
-      25px 20px 40px;
-
-  }
-
-}
-
-
-/* =========================================
-   CELULAR (NAVBAR VERTICAL FIJA)
-========================================= */
-
-@media (max-width: 850px) {
-
-  .navbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 180px;
-    height: 100vh;
-    min-height: 100vh;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 12px;
-    padding: 12px 8px;
-    border-right: 1px solid var(--border);
-    border-bottom: 0;
-    box-shadow: 4px 0 20px rgba(15, 23, 42, .06);
-  }
-
-  .brand {
-    padding: 4px 4px 10px;
-    border-bottom: 1px solid var(--border);
-    font-size: 15px;
-  }
-
-  .brand img {
-    width: 32px;
-    height: 32px;
-  }
-
-  .brand span {
-    font-size: 18px;
-  }
-
-  .nav {
-    width: 100%;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 5px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding-bottom: 0;
-  }
-
-  .nav-button {
-    width: 100%;
-    flex: 0 0 auto;
-    padding: 9px 10px;
-    font-size: 12px;
-    text-align: left;
-  }
-
-  .main-area {
-    width: calc(100% - 180px);
-    margin-left: 180px;
-    min-height: 100vh;
-    padding: 10px 10px 40px;
-  }
-
-  .session-bar {
-    position: sticky;
-    top: 0;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 10px;
-    margin-bottom: 15px;
-    padding: 10px 12px;
-    border-radius: 13px;
-  }
-
-  .session-status {
-    order: 1;
-  }
-
-  .session-data {
-    order: 2;
-    justify-content: flex-start;
-    gap: 10px;
-    flex: 1 1 auto;
-  }
-
-  .session-user,
-  .session-time {
-    min-width: 0;
-  }
-
-  .session-divider {
-    height: 20px;
-  }
-
-  .session-label {
-    display: none;
-  }
-
-  .session-value,
-  .session-user strong,
-  .session-time strong {
-    max-width: 90px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    font-size: 12px;
-  }
-
-  .session-logout {
-    order: 3;
-    min-height: 35px;
-    padding: 7px 10px;
-    font-size: 11px;
-  }
-
-  #app {
-    min-height: calc(100vh - 60px);
-    padding: 15px 10px 30px;
-    background-attachment: scroll;
-    background-size: auto 100%;
-  }
-
-  .modal {
-    padding: 12px;
-  }
-
-  .modal .login {
-    width: 100%;
-    padding: 22px;
-    border-radius: 17px;
-  }
-
-}
-
-
-/* =========================================
-   CELULARES MUY PEQUEÑOS
-========================================= */
-
-@media (max-width: 480px) {
-
-  .navbar {
-    width: 140px;
-    padding: 8px 6px;
-  }
-
-  .brand {
-    font-size: 13px;
-    gap: 5px;
-  }
-
-  .brand img {
-    width: 24px;
-    height: 24px;
-  }
-
-  .brand span {
-    font-size: 15px;
-  }
-
-  .nav-button {
-    padding: 7px 8px;
-    font-size: 11px;
-  }
-
-  .main-area {
-    width: calc(100% - 140px);
-    margin-left: 140px;
-    padding: 8px 8px 30px;
-  }
-
-  .session-bar {
-    gap: 7px;
-    padding: 8px;
-  }
-
-  .session-status-text {
-    display: none;
-  }
-
-  .session-data {
-    gap: 8px;
-  }
-
-  .session-value,
-  .session-user strong,
-  .session-time strong {
-    max-width: 65px;
-    font-size: 11px;
-  }
-
-  .session-logout {
-    font-size: 10px;
-    padding: 6px 8px;
-  }
-
-  .modal .login {
-    padding: 20px;
-  }
-
-  .modal .login h2 {
-    font-size: 22px;
-  }
-
 }

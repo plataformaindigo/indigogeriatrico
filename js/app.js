@@ -358,3 +358,24 @@ function loadScript(
 
 }
 
+const darkModeToggle =
+  document.getElementById(
+    'darkModeToggle'
+  );
+
+if (darkModeToggle) {
+
+  darkModeToggle.addEventListener(
+    'change',
+    () => {
+
+      document.body.classList.toggle(
+        'dark-mode',
+        darkModeToggle.checked
+      );
+
+    }
+  );
+
+}
+
