@@ -1717,3 +1717,22 @@ body.dark-mode .modal .field input:focus {
       22px;
   }
 }
+
+/* =========================================
+   FONDO OSCURO - CELULAR
+========================================= */
+
+@media (max-width:850px) {
+
+  body.dark-mode #app {
+    background-image: url("../img/fondo3.jpg");
+
+    background-size: auto 100%;
+
+    background-position: center top;
+
+    background-repeat: no-repeat;
+
+    background-attachment: scroll;
+  }
+}
