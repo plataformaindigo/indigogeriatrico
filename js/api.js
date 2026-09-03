@@ -1,9 +1,24 @@
 async function api(data) {
 
-  console.log('========== API REQUEST ==========');
-  console.log('URL:', APP_CONFIG.API_URL);
-  console.log('Action:', data.action);
-  console.log('Usuario:', data.usuario || '');
+  console.log(
+    '========== API REQUEST =========='
+  );
+
+  console.log(
+    'URL:',
+    APP_CONFIG.API_URL
+  );
+
+  console.log(
+    'Action:',
+    data.action
+  );
+
+  console.log(
+    'Usuario:',
+    data.usuario || ''
+  );
+
 
   try {
 
@@ -40,6 +55,27 @@ async function api(data) {
     );
 
 
+    /*
+     * =========================================
+     * VALIDAR RESPUESTA HTTP
+     * =========================================
+     */
+
+    if (!response.ok) {
+
+      throw new Error(
+        `Error HTTP ${response.status}`
+      );
+
+    }
+
+
+    /*
+     * =========================================
+     * LEER RESPUESTA
+     * =========================================
+     */
+
     const raw =
       await response.text();
 
@@ -52,6 +88,27 @@ async function api(data) {
       raw
     );
 
+
+    /*
+     * =========================================
+     * VALIDAR RESPUESTA VACÍA
+     * =========================================
+     */
+
+    if (!raw) {
+
+      throw new Error(
+        'El servidor devolvió una respuesta vacía.'
+      );
+
+    }
+
+
+    /*
+     * =========================================
+     * PARSEAR JSON
+     * =========================================
+     */
 
     let result;
 
@@ -66,7 +123,12 @@ async function api(data) {
     catch (error) {
 
       console.error(
-        'ERROR: la respuesta no es JSON válido'
+        'ERROR: la respuesta no es JSON válido.'
+      );
+
+      console.error(
+        'Respuesta recibida:',
+        raw
       );
 
       console.error(
@@ -80,11 +142,16 @@ async function api(data) {
     }
 
 
+    /*
+     * =========================================
+     * LOG FINAL
+     * =========================================
+     */
+
     console.log(
       'JSON recibido:',
       result
     );
-
 
     console.log(
       '========== API FIN =========='
@@ -95,20 +162,54 @@ async function api(data) {
 
   }
 
+
   catch (error) {
 
     console.error(
       '========== API ERROR =========='
     );
 
+
     console.error(
       error
     );
+
 
     console.error(
       'Mensaje:',
       error.message
     );
+
+
+    /*
+     * =========================================
+     * MENSAJE ESPECÍFICO PARA CORS
+     * =========================================
+     *
+     * Failed to fetch normalmente significa
+     * que el navegador bloqueó la comunicación,
+     * por ejemplo por CORS.
+     */
+
+    if (
+      error instanceof TypeError &&
+      error.message === 'Failed to fetch'
+    ) {
+
+      console.error(
+        'POSIBLE ERROR CORS:'
+      );
+
+      console.error(
+        'El navegador no permite leer la respuesta del backend.'
+      );
+
+      console.error(
+        'Verificar configuración del Web App de Google Apps Script.'
+      );
+
+    }
+
 
     console.error(
       '========== API FIN ERROR =========='
