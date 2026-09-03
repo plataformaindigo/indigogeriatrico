@@ -18,7 +18,7 @@
 
         // true = utiliza datos locales de prueba
         // false = intenta consultar la API
-        MODO_PRUEBA: true
+        MODO_PRUEBA: false
 
     };
 
