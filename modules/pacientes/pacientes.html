@@ -1,621 +1,227 @@
-<section class="pacientes-module">
-
-  <!-- =========================================
-       ENCABEZADO
-  ========================================== -->
-
-  <div class="pacientes-header">
-
-    <div>
-      <h1>👥 Pacientes</h1>
-
-      <p class="pacientes-subtitle">
-        Padrón y gestión de residentes
-      </p>
-    </div>
-
-    <button
-      id="btnNuevoPaciente"
-      class="btn-primary"
-      type="button"
-    >
-      ＋ Nuevo paciente
-    </button>
-
-  </div>
-
-
-  <!-- =========================================
-       PANEL DE BÚSQUEDA Y FILTROS
-  ========================================== -->
-
-  <div class="pacientes-filters">
-
-    <div class="filter-search">
-
-      <label for="pacienteBusqueda">
-        Buscar
-      </label>
-
-      <input
-        id="pacienteBusqueda"
-        type="search"
-        placeholder="Apellido, nombre, DNI o legajo..."
-        autocomplete="off"
-      >
-
-    </div>
-
-
-    <div class="filter-field">
-
-      <label for="pacienteEstado">
-        Estado
-      </label>
-
-      <select id="pacienteEstado">
-
-        <option value="">
-          Todos
-        </option>
-
-        <option value="ACTIVO">
-          Activos
-        </option>
-
-        <option value="EGRESADO">
-          Egresados
-        </option>
-
-      </select>
-
-    </div>
-
-
-    <div class="filter-field">
-
-      <label for="pacienteIngreso">
-        Tipo de ingreso
-      </label>
-
-      <select id="pacienteIngreso">
-
-        <option value="">
-          Todos
-        </option>
-
-        <option value="PERMANENTE">
-          Permanente
-        </option>
-
-        <option value="TEMPORARIO">
-          Temporario
-        </option>
-
-      </select>
-
-    </div>
-
-
-    <button
-      id="btnLimpiarFiltros"
-      class="btn-secondary"
-      type="button"
-    >
-      Limpiar
-    </button>
-
-  </div>
-
-
-  <!-- =========================================
-       RESUMEN
-  ========================================== -->
-
-  <div class="pacientes-summary">
-
-    <div class="summary-card">
-
-      <span class="summary-label">
-        Total
-      </span>
-
-      <strong id="totalPacientes">
-        0
-      </strong>
-
-    </div>
-
-
-    <div class="summary-card">
-
-      <span class="summary-label">
-        Activos
-      </span>
-
-      <strong id="totalActivos">
-        0
-      </strong>
-
-    </div>
-
-
-    <div class="summary-card">
-
-      <span class="summary-label">
-        Temporarios
-      </span>
-
-      <strong id="totalTemporarios">
-        0
-      </strong>
-
-    </div>
-
-
-    <div class="summary-card">
-
-      <span class="summary-label">
-        Egresados
-      </span>
-
-      <strong id="totalEgresados">
-        0
-      </strong>
-
-    </div>
-
-  </div>
-
-
-  <!-- =========================================
-       TABLA
-  ========================================== -->
-
-  <div class="pacientes-table-container">
-
-    <table class="pacientes-table">
-
-      <thead>
-
-        <tr>
-
-          <th>Legajo</th>
-
-          <th>Paciente</th>
-
-          <th>DNI</th>
-
-          <th>Ingreso</th>
-
-          <th>Cama</th>
-
-          <th>Tipo</th>
-
-          <th>Estado</th>
-
-          <th></th>
-
-        </tr>
-
-      </thead>
-
-      <tbody id="pacientesTableBody">
-
-        <tr>
-
-          <td
-            colspan="8"
-            class="table-loading"
-          >
-            Cargando pacientes...
-          </td>
-
-        </tr>
-
-      </tbody>
-
-    </table>
-
-  </div>
-
-
-  <!-- =========================================
-       FICHA DEL PACIENTE
-  ========================================== -->
-
-  <section
-    id="pacienteFicha"
-    class="paciente-ficha hidden"
-  >
-
-    <div class="ficha-header">
-
-      <button
-        id="btnVolverPacientes"
-        class="btn-secondary"
-        type="button"
-      >
-        ← Volver
-      </button>
-
-
-      <div class="ficha-title">
-
-        <h2 id="fichaNombre">
-          —
-        </h2>
-
-        <span
-          id="fichaEstado"
-          class="status-badge"
-        >
-          —
-        </span>
-
-      </div>
-
-    </div>
-
-
-    <div class="ficha-grid">
-
-      <div class="ficha-card">
-
-        <h3>
-          Datos personales
-        </h3>
-
-        <div class="ficha-data-grid">
-
-          <div>
-            <span>Legajo</span>
-            <strong id="fichaLegajo">—</strong>
-          </div>
-
-          <div>
-            <span>DNI</span>
-            <strong id="fichaDni">—</strong>
-          </div>
-
-          <div>
-            <span>Fecha de nacimiento</span>
-            <strong id="fichaNacimiento">—</strong>
-          </div>
-
-          <div>
-            <span>Sexo</span>
-            <strong id="fichaSexo">—</strong>
-          </div>
-
-          <div>
-            <span>Nacionalidad</span>
-            <strong id="fichaNacionalidad">—</strong>
-          </div>
-
-          <div>
-            <span>Estado civil</span>
-            <strong id="fichaEstadoCivil">—</strong>
-          </div>
+<div class="pacientes-container">
+
+    <!-- =========================================
+         ENCABEZADO DEL MÓDULO
+    ========================================== -->
+    <header class="pacientes-header">
+
+        <div class="pacientes-header-info">
+
+            <div class="pacientes-header-icon">
+                👥
+            </div>
+
+            <div>
+                <h1>Pacientes</h1>
+                <p>Gestión y consulta de residentes</p>
+            </div>
 
         </div>
 
-      </div>
+        <div class="pacientes-header-actions">
+            <button
+                type="button"
+                id="btnNuevoPaciente"
+                class="btn btn-primary">
+                <span>＋</span>
+                Nuevo paciente
+            </button>
+        </div>
+
+    </header>
 
 
-      <div class="ficha-card">
+    <!-- =========================================
+         BARRA DE HERRAMIENTAS
+    ========================================== -->
+    <section class="pacientes-toolbar">
 
-        <h3>
-          Internación
-        </h3>
+        <div class="pacientes-search">
 
-        <div class="ficha-data-grid">
+            <span class="search-icon">⌕</span>
 
-          <div>
-            <span>Fecha de ingreso</span>
-            <strong id="fichaIngreso">—</strong>
-          </div>
-
-          <div>
-            <span>Tipo de ingreso</span>
-            <strong id="fichaTipoIngreso">—</strong>
-          </div>
-
-          <div>
-            <span>Cama actual</span>
-            <strong id="fichaCama">—</strong>
-          </div>
-
-          <div>
-            <span>Fecha de egreso</span>
-            <strong id="fichaEgreso">—</strong>
-          </div>
+            <input
+                type="text"
+                id="pacientesSearch"
+                placeholder="Buscar por apellido, nombre, DNI o legajo..."
+                autocomplete="off">
 
         </div>
 
-      </div>
 
+        <div class="pacientes-filters">
 
-      <div class="ficha-card ficha-card-full">
-
-        <h3>
-          Observaciones
-        </h3>
-
-        <p id="fichaObservaciones">
-          —
-        </p>
-
-      </div>
-
-    </div>
-
-
-    <!-- =====================================
-         RELACIONES
-    ====================================== -->
-
-    <div class="ficha-related">
-
-      <button
-        class="ficha-tab active"
-        data-tab="contactos"
-        type="button"
-      >
-        Contactos
-      </button>
-
-      <button
-        class="ficha-tab"
-        data-tab="documentacion"
-        type="button"
-      >
-        Documentación
-      </button>
-
-      <button
-        class="ficha-tab"
-        data-tab="movimientos"
-        type="button"
-      >
-        Movimientos
-      </button>
-
-    </div>
-
-
-    <div
-      id="fichaRelatedContent"
-      class="ficha-related-content"
-    >
-
-      Seleccione una sección.
-
-    </div>
-
-  </section>
-
-
-  <!-- =========================================
-       MODAL NUEVO / EDITAR
-  ========================================== -->
-
-  <div
-    id="pacienteModal"
-    class="paciente-modal hidden"
-  >
-
-    <div class="paciente-modal-overlay"></div>
-
-    <div class="paciente-modal-content">
-
-      <div class="modal-header">
-
-        <h2 id="pacienteModalTitle">
-          Nuevo paciente
-        </h2>
-
-        <button
-          id="btnCerrarPacienteModal"
-          class="modal-close"
-          type="button"
-        >
-          ×
-        </button>
-
-      </div>
-
-
-      <form id="pacienteForm">
-
-        <input
-          type="hidden"
-          id="formResidenteId"
-        >
-
-
-        <div class="form-grid">
-
-          <div class="form-field">
-
-            <label for="formApellido">
-              Apellido
-            </label>
-
-            <input
-              id="formApellido"
-              type="text"
-              required
-            >
-
-          </div>
-
-
-          <div class="form-field">
-
-            <label for="formNombres">
-              Nombres
-            </label>
-
-            <input
-              id="formNombres"
-              type="text"
-              required
-            >
-
-          </div>
-
-
-          <div class="form-field">
-
-            <label for="formDni">
-              DNI
-            </label>
-
-            <input
-              id="formDni"
-              type="text"
-              required
-            >
-
-          </div>
-
-
-          <div class="form-field">
-
-            <label for="formNacimiento">
-              Fecha de nacimiento
-            </label>
-
-            <input
-              id="formNacimiento"
-              type="date"
-            >
-
-          </div>
-
-
-          <div class="form-field">
-
-            <label for="formSexo">
-              Sexo
-            </label>
-
-            <select id="formSexo">
-
-              <option value="">
-                Seleccionar
-              </option>
-
-              <option value="F">
-                Femenino
-              </option>
-
-              <option value="M">
-                Masculino
-              </option>
-
+            <select id="pacientesEstadoFilter">
+                <option value="TODOS">Todos los estados</option>
+                <option value="ACTIVO">Activos</option>
+                <option value="EGRESADO">Egresados</option>
             </select>
 
-          </div>
+
+            <button
+                type="button"
+                id="btnActualizarPacientes"
+                class="btn btn-secondary">
+
+                <span class="refresh-icon">↻</span>
+                Actualizar
+
+            </button>
+
+        </div>
+
+    </section>
 
 
-          <div class="form-field">
+    <!-- =========================================
+         RESUMEN
+    ========================================== -->
+    <section class="pacientes-summary">
 
-            <label for="formEstadoCivil">
-              Estado civil
-            </label>
+        <article class="summary-card">
 
-            <select id="formEstadoCivil">
+            <div class="summary-icon">
+                👥
+            </div>
 
-              <option value="">
-                Seleccionar
-              </option>
+            <div class="summary-content">
+                <span class="summary-label">Total</span>
+                <strong id="pacientesTotal">0</strong>
+            </div>
 
-              <option value="SOLTERA">
-                Soltero/a
-              </option>
-
-              <option value="CASADA">
-                Casado/a
-              </option>
-
-              <option value="VIUDA">
-                Viudo/a
-              </option>
-
-              <option value="DIVORCIADA">
-                Divorciado/a
-              </option>
-
-            </select>
-
-          </div>
+        </article>
 
 
-          <div class="form-field">
+        <article class="summary-card">
 
-            <label for="formTipoIngreso">
-              Tipo de ingreso
-            </label>
+            <div class="summary-icon">
+                ✓
+            </div>
 
-            <select
-              id="formTipoIngreso"
-              required
-            >
+            <div class="summary-content">
+                <span class="summary-label">Activos</span>
+                <strong id="pacientesActivos">0</strong>
+            </div>
 
-              <option value="PERMANENTE">
-                Permanente
-              </option>
-
-              <option value="TEMPORARIO">
-                Temporario
-              </option>
-
-            </select>
-
-          </div>
+        </article>
 
 
-          <div class="form-field form-field-full">
+        <article class="summary-card">
 
-            <label for="formObservaciones">
-              Observaciones
-            </label>
+            <div class="summary-icon">
+                ↗
+            </div>
 
-            <textarea
-              id="formObservaciones"
-              rows="3"
-            ></textarea>
+            <div class="summary-content">
+                <span class="summary-label">Egresados</span>
+                <strong id="pacientesEgresados">0</strong>
+            </div>
 
-          </div>
+        </article>
+
+    </section>
+
+
+    <!-- =========================================
+         TABLA
+    ========================================== -->
+    <section class="pacientes-table-section">
+
+        <div class="table-header">
+
+            <div>
+                <h2>Listado de residentes</h2>
+                <span id="pacientesResultadoInfo">
+                    0 registros
+                </span>
+            </div>
 
         </div>
 
 
-        <div class="modal-actions">
+        <div class="table-wrapper">
 
-          <button
-            type="button"
-            id="btnCancelarPaciente"
-            class="btn-secondary"
-          >
-            Cancelar
-          </button>
+            <table class="pacientes-table">
 
-          <button
-            type="submit"
-            class="btn-primary"
-          >
-            Guardar paciente
-          </button>
+                <thead>
+
+                    <tr>
+
+                        <th>Legajo</th>
+
+                        <th>Apellido y nombre</th>
+
+                        <th>DNI</th>
+
+                        <th>Fecha nacimiento</th>
+
+                        <th>Ingreso</th>
+
+                        <th>Cama</th>
+
+                        <th>Estado</th>
+
+                        <th class="column-actions">
+                            Acciones
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="pacientesTableBody">
+
+                    <!--
+                        Las filas serán generadas
+                        dinámicamente por pacientes.js
+                    -->
+
+                </tbody>
+
+            </table>
+
+
+            <!-- =====================================
+                 ESTADO VACÍO
+            ====================================== -->
+            <div
+                id="pacientesEmptyState"
+                class="pacientes-empty"
+                hidden>
+
+                <div class="empty-icon">
+                    👥
+                </div>
+
+                <h3>No se encontraron pacientes</h3>
+
+                <p>
+                    No hay residentes que coincidan
+                    con los criterios de búsqueda.
+                </p>
+
+            </div>
+
+
+            <!-- =====================================
+                 ESTADO DE CARGA
+            ====================================== -->
+            <div
+                id="pacientesLoading"
+                class="pacientes-loading"
+                hidden>
+
+                <div class="loading-spinner"></div>
+
+                <span>
+                    Cargando pacientes...
+                </span>
+
+            </div>
 
         </div>
 
-      </form>
+    </section>
 
-    </div>
-
-  </div>
-
-</section>
+</div>
