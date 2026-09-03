@@ -1,1791 +1,1328 @@
-/* =========================================
-   INDIGO GERIÁTRICO
+/* =========================================================
    MÓDULO PACIENTES
-========================================= */
+   ========================================================= */
 
 (function () {
 
-  'use strict';
+    'use strict';
 
 
-  /* =========================================
-     ESTADO DEL MÓDULO
-  ========================================== */
+    /* =====================================================
+       CONFIGURACIÓN
+    ===================================================== */
 
-  let pacientes = [];
+    const CONFIG = {
 
-  let pacienteSeleccionado = null;
+        // Acción que utilizaremos cuando conectemos GAS
+        API_ACTION: 'listar_residentes',
 
-  let filtroActual = {
-    busqueda: '',
-    estado: '',
-    tipoIngreso: ''
-  };
-
-
-  /* =========================================
-     DATOS DE PRUEBA
-     
-     TEMPORAL:
-     Se utilizan mientras no exista la acción
-     correspondiente en GAS.
-  ========================================== */
-
-  const PACIENTES_DEMO = [
-
-    {
-      residente_id: 'RES-0001',
-      nro_legajo: 'LEG-00001',
-      apellido: 'González',
-      nombres: 'Elena Beatriz',
-      dni: '28456789',
-      fecha_nacimiento: '1942-03-15',
-      sexo: 'F',
-      nacionalidad: 'Argentina',
-      estado_civil: 'VIUDA',
-      fecha_ingreso: '2024-05-12',
-      fecha_egreso: '',
-      estado: 'ACTIVO',
-      cama_id: 'CAMA-101',
-      tipo_ingreso: 'PERMANENTE',
-      observaciones:
-        'Ingreso por necesidad de cuidados integrales.'
-    },
-
-    {
-      residente_id: 'RES-0002',
-      nro_legajo: 'LEG-00002',
-      apellido: 'Fernández',
-      nombres: 'Roberto Carlos',
-      dni: '26789456',
-      fecha_nacimiento: '1938-07-22',
-      sexo: 'M',
-      nacionalidad: 'Argentina',
-      estado_civil: 'CASADO',
-      fecha_ingreso: '2023-08-21',
-      fecha_egreso: '',
-      estado: 'ACTIVO',
-      cama_id: 'CAMA-102',
-      tipo_ingreso: 'PERMANENTE',
-      observaciones:
-        'Requiere asistencia parcial para actividades diarias.'
-    },
-
-    {
-      residente_id: 'RES-0003',
-      nro_legajo: 'LEG-00003',
-      apellido: 'Martínez',
-      nombres: 'Norma Alicia',
-      dni: '30124567',
-      fecha_nacimiento: '1945-11-08',
-      sexo: 'F',
-      nacionalidad: 'Argentina',
-      estado_civil: 'DIVORCIADA',
-      fecha_ingreso: '2025-01-15',
-      fecha_egreso: '',
-      estado: 'ACTIVO',
-      cama_id: 'CAMA-103',
-      tipo_ingreso: 'PERMANENTE',
-      observaciones:
-        'Adaptación satisfactoria al establecimiento.'
-    },
-
-    {
-      residente_id: 'RES-0004',
-      nro_legajo: 'LEG-00004',
-      apellido: 'Rodríguez',
-      nombres: 'Héctor Alberto',
-      dni: '25678901',
-      fecha_nacimiento: '1936-05-19',
-      sexo: 'M',
-      nacionalidad: 'Argentina',
-      estado_civil: 'VIUDO',
-      fecha_ingreso: '2022-11-03',
-      fecha_egreso: '',
-      estado: 'ACTIVO',
-      cama_id: 'CAMA-104',
-      tipo_ingreso: 'PERMANENTE',
-      observaciones:
-        'Antecedente de traslado interno por adaptación de habitación.'
-    },
-
-    {
-      residente_id: 'RES-0005',
-      nro_legajo: 'LEG-00005',
-      apellido: 'López',
-      nombres: 'María Cristina',
-      dni: '29345678',
-      fecha_nacimiento: '1941-09-27',
-      sexo: 'F',
-      nacionalidad: 'Argentina',
-      estado_civil: 'CASADA',
-      fecha_ingreso: '2024-09-07',
-      fecha_egreso: '',
-      estado: 'ACTIVO',
-      cama_id: 'CAMA-105',
-      tipo_ingreso: 'PERMANENTE',
-      observaciones:
-        'Requiere supervisión durante comidas.'
-    },
-
-    {
-      residente_id: 'RES-0006',
-      nro_legajo: 'LEG-00006',
-      apellido: 'Romero',
-      nombres: 'Juan José',
-      dni: '24890123',
-      fecha_nacimiento: '1935-02-11',
-      sexo: 'M',
-      nacionalidad: 'Argentina',
-      estado_civil: 'VIUDO',
-      fecha_ingreso: '2021-06-18',
-      fecha_egreso: '',
-      estado: 'ACTIVO',
-      cama_id: 'CAMA-106',
-      tipo_ingreso: 'PERMANENTE',
-      observaciones:
-        'Realiza controles médicos externos periódicos.'
-    },
-
-    {
-      residente_id: 'RES-0007',
-      nro_legajo: 'LEG-00007',
-      apellido: 'Sosa',
-      nombres: 'Teresa Mabel',
-      dni: '31567890',
-      fecha_nacimiento: '1948-12-03',
-      sexo: 'F',
-      nacionalidad: 'Argentina',
-      estado_civil: 'SOLTERA',
-      fecha_ingreso: '2025-03-22',
-      fecha_egreso: '',
-      estado: 'ACTIVO',
-      cama_id: 'CAMA-107',
-      tipo_ingreso: 'PERMANENTE',
-      observaciones:
-        'Realiza salidas temporarias con familiares.'
-    },
-
-    {
-      residente_id: 'RES-0008',
-      nro_legajo: 'LEG-00008',
-      apellido: 'Álvarez',
-      nombres: 'Carlos Alberto',
-      dni: '23987654',
-      fecha_nacimiento: '1933-06-28',
-      sexo: 'M',
-      nacionalidad: 'Argentina',
-      estado_civil: 'CASADO',
-      fecha_ingreso: '2020-10-11',
-      fecha_egreso: '',
-      estado: 'ACTIVO',
-      cama_id: 'CAMA-122',
-      tipo_ingreso: 'PERMANENTE',
-      observaciones:
-        'Trasladado a habitación accesible.'
-    },
-
-    {
-      residente_id: 'RES-0009',
-      nro_legajo: 'LEG-00009',
-      apellido: 'Torres',
-      nombres: 'Beatriz Susana',
-      dni: '32789012',
-      fecha_nacimiento: '1950-04-16',
-      sexo: 'F',
-      nacionalidad: 'Argentina',
-      estado_civil: 'DIVORCIADA',
-      fecha_ingreso: '2025-07-04',
-      fecha_egreso: '2025-10-02',
-      estado: 'EGRESADO',
-      cama_id: 'CAMA-109',
-      tipo_ingreso: 'TEMPORARIO',
-      observaciones:
-        'Estadía temporal finalizada.'
-    },
-
-    {
-      residente_id: 'RES-0010',
-      nro_legajo: 'LEG-00010',
-      apellido: 'Ramírez',
-      nombres: 'Miguel Ángel',
-      dni: '26123456',
-      fecha_nacimiento: '1939-10-21',
-      sexo: 'M',
-      nacionalidad: 'Argentina',
-      estado_civil: 'CASADO',
-      fecha_ingreso: '2024-02-26',
-      fecha_egreso: '',
-      estado: 'ACTIVO',
-      cama_id: 'CAMA-110',
-      tipo_ingreso: 'PERMANENTE',
-      observaciones:
-        'Asiste periódicamente a consultas externas.'
-    },
-
-    {
-      residente_id: 'RES-0011',
-      nro_legajo: 'LEG-00011',
-      apellido: 'Acosta',
-      nombres: 'Silvia Beatriz',
-      dni: '30456789',
-      fecha_nacimiento: '1946-01-30',
-      sexo: 'F',
-      nacionalidad: 'Argentina',
-      estado_civil: 'VIUDA',
-      fecha_ingreso: '2023-04-17',
-      fecha_egreso: '',
-      estado: 'ACTIVO',
-      cama_id: 'CAMA-111',
-      tipo_ingreso: 'PERMANENTE',
-      observaciones:
-        'Requiere asistencia para movilidad.'
-    },
-
-    {
-      residente_id: 'RES-0012',
-      nro_legajo: 'LEG-00012',
-      apellido: 'Benítez',
-      nombres: 'Oscar Raúl',
-      dni: '25109876',
-      fecha_nacimiento: '1937-08-14',
-      sexo: 'M',
-      nacionalidad: 'Argentina',
-      estado_civil: 'VIUDO',
-      fecha_ingreso: '2022-04-09',
-      fecha_egreso: '',
-      estado: 'ACTIVO',
-      cama_id: 'CAMA-123',
-      tipo_ingreso: 'PERMANENTE',
-      observaciones:
-        'Trasladado por adaptación de movilidad.'
-    },
-
-    {
-      residente_id: 'RES-0013',
-      nro_legajo: 'LEG-00013',
-      apellido: 'Molina',
-      nombres: 'Alicia Esther',
-      dni: '31876543',
-      fecha_nacimiento: '1949-03-07',
-      sexo: 'F',
-      nacionalidad: 'Argentina',
-      estado_civil: 'CASADA',
-      fecha_ingreso: '2025-02-10',
-      fecha_egreso: '',
-      estado: 'ACTIVO',
-      cama_id: 'CAMA-113',
-      tipo_ingreso: 'PERMANENTE',
-      observaciones:
-        'Buena adaptación al establecimiento.'
-    },
-
-    {
-      residente_id: 'RES-0014',
-      nro_legajo: 'LEG-00014',
-      apellido: 'Suárez',
-      nombres: 'Eduardo Daniel',
-      dni: '27345678',
-      fecha_nacimiento: '1940-11-25',
-      sexo: 'M',
-      nacionalidad: 'Argentina',
-      estado_civil: 'DIVORCIADO',
-      fecha_ingreso: '2023-12-01',
-      fecha_egreso: '',
-      estado: 'ACTIVO',
-      cama_id: 'CAMA-114',
-      tipo_ingreso: 'PERMANENTE',
-      observaciones:
-        'Requiere supervisión en desplazamientos.'
-    },
-
-    {
-      residente_id: 'RES-0015',
-      nro_legajo: 'LEG-00015',
-      apellido: 'Castro',
-      nombres: 'Mirta Graciela',
-      dni: '32901234',
-      fecha_nacimiento: '1952-06-18',
-      sexo: 'F',
-      nacionalidad: 'Argentina',
-      estado_civil: 'SOLTERA',
-      fecha_ingreso: '2026-01-20',
-      fecha_egreso: '',
-      estado: 'ACTIVO',
-      cama_id: 'CAMA-115',
-      tipo_ingreso: 'TEMPORARIO',
-      observaciones:
-        'Ingreso reciente en período de adaptación.'
-    },
-
-    {
-      residente_id: 'RES-0016',
-      nro_legajo: 'LEG-00016',
-      apellido: 'Ortiz',
-      nombres: 'Ricardo Antonio',
-      dni: '24567890',
-      fecha_nacimiento: '1934-09-02',
-      sexo: 'M',
-      nacionalidad: 'Argentina',
-      estado_civil: 'CASADO',
-      fecha_ingreso: '2019-08-14',
-      fecha_egreso: '',
-      estado: 'ACTIVO',
-      cama_id: 'CAMA-124',
-      tipo_ingreso: 'PERMANENTE',
-      observaciones:
-        'Trasladado de sector por necesidades de atención.'
-    },
-
-    {
-      residente_id: 'RES-0017',
-      nro_legajo: 'LEG-00017',
-      apellido: 'Ríos',
-      nombres: 'Carmen Luisa',
-      dni: '31234567',
-      fecha_nacimiento: '1947-12-29',
-      sexo: 'F',
-      nacionalidad: 'Argentina',
-      estado_civil: 'VIUDA',
-      fecha_ingreso: '2024-11-18',
-      fecha_egreso: '',
-      estado: 'ACTIVO',
-      cama_id: 'CAMA-117',
-      tipo_ingreso: 'PERMANENTE',
-      observaciones:
-        'Requiere acompañamiento para actividades recreativas.'
-    },
-
-    {
-      residente_id: 'RES-0018',
-      nro_legajo: 'LEG-00018',
-      apellido: 'Núñez',
-      nombres: 'Jorge Omar',
-      dni: '25890123',
-      fecha_nacimiento: '1936-04-12',
-      sexo: 'M',
-      nacionalidad: 'Argentina',
-      estado_civil: 'VIUDO',
-      fecha_ingreso: '2022-09-30',
-      fecha_egreso: '',
-      estado: 'ACTIVO',
-      cama_id: 'CAMA-118',
-      tipo_ingreso: 'PERMANENTE',
-      observaciones:
-        'Requiere asistencia parcial.'
-    },
-
-    {
-      residente_id: 'RES-0019',
-      nro_legajo: 'LEG-00019',
-      apellido: 'Vera',
-      nombres: 'Margarita Elena',
-      dni: '29678901',
-      fecha_nacimiento: '1943-08-05',
-      sexo: 'F',
-      nacionalidad: 'Argentina',
-      estado_civil: 'CASADA',
-      fecha_ingreso: '2025-05-06',
-      fecha_egreso: '2026-07-18',
-      estado: 'EGRESADO',
-      cama_id: 'CAMA-119',
-      tipo_ingreso: 'PERMANENTE',
-      observaciones:
-        'Egreso por indicación médica.'
-    },
-
-    {
-      residente_id: 'RES-0020',
-      nro_legajo: 'LEG-00020',
-      apellido: 'Cabrera',
-      nombres: 'Antonio José',
-      dni: '23123456',
-      fecha_nacimiento: '1932-10-17',
-      sexo: 'M',
-      nacionalidad: 'Argentina',
-      estado_civil: 'CASADO',
-      fecha_ingreso: '2021-11-22',
-      fecha_egreso: '2026-03-14',
-      estado: 'EGRESADO',
-      cama_id: 'CAMA-120',
-      tipo_ingreso: 'PERMANENTE',
-      observaciones:
-        'Egreso por traslado a domicilio familiar.'
-    }
-
-  ];
-
-
-  /* =========================================
-     MOUNT
-  ========================================== */
-
-  window.mount_pacientes =
-    async function () {
-
-      console.log(
-        '[PACIENTES] Montando módulo'
-      );
-
-      inicializarEventos();
-
-      await cargarPacientes();
+        // true = utiliza datos locales de prueba
+        // false = intenta consultar la API
+        MODO_PRUEBA: true
 
     };
 
 
-  /* =========================================
-     EVENTOS
-  ========================================== */
+    /* =====================================================
+       ESTADO DEL MÓDULO
+    ===================================================== */
 
-  function inicializarEventos() {
+    let pacientes = [];
 
-    const busqueda =
-      document.getElementById(
-        'pacienteBusqueda'
-      );
+    let pacientesFiltrados = [];
 
-    const estado =
-      document.getElementById(
-        'pacienteEstado'
-      );
+    let filtroBusqueda = '';
 
-    const ingreso =
-      document.getElementById(
-        'pacienteIngreso'
-      );
-
-    const limpiar =
-      document.getElementById(
-        'btnLimpiarFiltros'
-      );
-
-    const nuevo =
-      document.getElementById(
-        'btnNuevoPaciente'
-      );
-
-    const volver =
-      document.getElementById(
-        'btnVolverPacientes'
-      );
-
-    const cerrar =
-      document.getElementById(
-        'btnCerrarPacienteModal'
-      );
-
-    const cancelar =
-      document.getElementById(
-        'btnCancelarPaciente'
-      );
-
-    const form =
-      document.getElementById(
-        'pacienteForm'
-      );
+    let filtroEstado = 'TODOS';
 
 
-    if (busqueda) {
+    /* =====================================================
+       MOUNT
+       ===================================================== */
 
-      busqueda.addEventListener(
-        'input',
-        aplicarFiltros
-      );
+    window.mount_pacientes = function () {
 
-    }
+        console.log('================================');
+        console.log('Módulo PACIENTES iniciado');
+        console.log('================================');
 
+        inicializarEventos();
 
-    if (estado) {
+        cargarPacientes();
 
-      estado.addEventListener(
-        'change',
-        aplicarFiltros
-      );
-
-    }
+    };
 
 
-    if (ingreso) {
+    /* =====================================================
+       INICIALIZACIÓN DE EVENTOS
+    ===================================================== */
 
-      ingreso.addEventListener(
-        'change',
-        aplicarFiltros
-      );
+    function inicializarEventos() {
 
-    }
+        const search =
+            document.getElementById('pacientesSearch');
 
+        const estado =
+            document.getElementById('pacientesEstadoFilter');
 
-    if (limpiar) {
+        const actualizar =
+            document.getElementById('btnActualizarPacientes');
 
-      limpiar.addEventListener(
-        'click',
-        limpiarFiltros
-      );
+        const nuevo =
+            document.getElementById('btnNuevoPaciente');
 
-    }
-
-
-    if (nuevo) {
-
-      nuevo.addEventListener(
-        'click',
-        abrirNuevoPaciente
-      );
-
-    }
+        const tabla =
+            document.getElementById('pacientesTableBody');
 
 
-    if (volver) {
+        /* -----------------------------------------------
+           BUSCADOR
+        ------------------------------------------------ */
 
-      volver.addEventListener(
-        'click',
-        volverListado
-      );
+        if (search) {
 
-    }
+            search.addEventListener(
+                'input',
+                function (event) {
 
+                    filtroBusqueda =
+                        event.target.value
+                            .trim()
+                            .toLowerCase();
 
-    if (cerrar) {
+                    aplicarFiltros();
 
-      cerrar.addEventListener(
-        'click',
-        cerrarModal
-      );
-
-    }
-
-
-    if (cancelar) {
-
-      cancelar.addEventListener(
-        'click',
-        cerrarModal
-      );
-
-    }
-
-
-    if (form) {
-
-      form.addEventListener(
-        'submit',
-        guardarPaciente
-      );
-
-    }
-
-
-    document
-      .querySelectorAll(
-        '.ficha-tab'
-      )
-      .forEach(
-        tab => {
-
-          tab.addEventListener(
-            'click',
-            () => {
-
-              cambiarFichaTab(
-                tab.dataset.tab
-              );
-
-            }
-          );
+                }
+            );
 
         }
-      );
-
-  }
 
 
-  /* =========================================
-     CARGAR PACIENTES
-  ========================================== */
+        /* -----------------------------------------------
+           FILTRO DE ESTADO
+        ------------------------------------------------ */
 
-  async function cargarPacientes() {
+        if (estado) {
 
-    mostrarCarga();
+            estado.addEventListener(
+                'change',
+                function (event) {
 
-    try {
+                    filtroEstado =
+                        event.target.value;
 
-      /*
-       * =======================================
-       * BACKEND
-       *
-       * Cuando implementemos GAS:
-       *
-       * const result = await api({
-       *   action: 'obtenerPacientes'
-       * });
-       *
-       * pacientes = result.data || [];
-       *
-       * =======================================
-       */
+                    aplicarFiltros();
 
-      /*
-       * Por ahora usamos datos demo.
-       */
+                }
+            );
 
-      await new Promise(
-        resolve =>
-          setTimeout(
-            resolve,
-            250
-          )
-      );
+        }
 
 
-      pacientes =
-        [...PACIENTES_DEMO];
+        /* -----------------------------------------------
+           ACTUALIZAR
+        ------------------------------------------------ */
+
+        if (actualizar) {
+
+            actualizar.addEventListener(
+                'click',
+                function () {
+
+                    cargarPacientes();
+
+                }
+            );
+
+        }
 
 
-      actualizarResumen();
+        /* -----------------------------------------------
+           NUEVO PACIENTE
+        ------------------------------------------------ */
 
-      aplicarFiltros();
+        if (nuevo) {
+
+            nuevo.addEventListener(
+                'click',
+                function () {
+
+                    nuevoPaciente();
+
+                }
+            );
+
+        }
+
+
+        /* -----------------------------------------------
+           ACCIONES DE TABLA
+        ------------------------------------------------ */
+
+        if (tabla) {
+
+            tabla.addEventListener(
+                'click',
+                manejarAccionTabla
+            );
+
+        }
 
     }
 
-    catch (error) {
 
-      console.error(
-        '[PACIENTES]',
-        error
-      );
+    /* =====================================================
+       CARGAR PACIENTES
+    ===================================================== */
 
-      mostrarError(
-        'No se pudieron cargar los pacientes.'
-      );
+    async function cargarPacientes() {
 
-    }
+        mostrarLoading(true);
 
-  }
+        ocultarEmpty();
 
+        try {
 
-  /* =========================================
-     FILTROS
-  ========================================== */
+            pacientes =
+                await obtenerPacientes();
 
-  function aplicarFiltros() {
+            if (!Array.isArray(pacientes)) {
 
-    const busqueda =
-      document
-        .getElementById(
-          'pacienteBusqueda'
-        )
-        ?.value
-        .trim()
-        .toLowerCase() || '';
+                throw new Error(
+                    'La respuesta de pacientes no es válida.'
+                );
+
+            }
 
 
-    const estado =
-      document
-        .getElementById(
-          'pacienteEstado'
-        )
-        ?.value || '';
-
-
-    const tipoIngreso =
-      document
-        .getElementById(
-          'pacienteIngreso'
-        )
-        ?.value || '';
-
-
-    filtroActual = {
-      busqueda,
-      estado,
-      tipoIngreso
-    };
-
-
-    const filtrados =
-      pacientes.filter(
-        paciente => {
-
-          const texto =
-            [
-              paciente.apellido,
-              paciente.nombres,
-              paciente.dni,
-              paciente.nro_legajo
-            ]
-              .join(' ')
-              .toLowerCase();
-
-
-          const coincideBusqueda =
-            !busqueda ||
-            texto.includes(
-              busqueda
+            console.log(
+                'Pacientes cargados:',
+                pacientes
             );
 
 
-          const coincideEstado =
-            !estado ||
-            paciente.estado === estado;
-
-
-          const coincideIngreso =
-            !tipoIngreso ||
-            paciente.tipo_ingreso ===
-            tipoIngreso;
-
-
-          return (
-            coincideBusqueda &&
-            coincideEstado &&
-            coincideIngreso
-          );
+            aplicarFiltros();
 
         }
-      );
+        catch (error) {
 
+            console.error(
+                'Error cargando pacientes:',
+                error
+            );
 
-    renderTabla(
-      filtrados
-    );
+            pacientes = [];
 
-  }
+            pacientesFiltrados = [];
 
+            renderizarTabla();
 
-  function limpiarFiltros() {
+            actualizarResumen();
 
-    const busqueda =
-      document.getElementById(
-        'pacienteBusqueda'
-      );
+            mostrarError(
+                'No fue posible cargar los pacientes.'
+            );
 
-    const estado =
-      document.getElementById(
-        'pacienteEstado'
-      );
+        }
+        finally {
 
-    const ingreso =
-      document.getElementById(
-        'pacienteIngreso'
-      );
+            mostrarLoading(false);
 
-
-    if (busqueda) {
-
-      busqueda.value = '';
-
-    }
-
-    if (estado) {
-
-      estado.value = '';
-
-    }
-
-    if (ingreso) {
-
-      ingreso.value = '';
+        }
 
     }
 
 
-    aplicarFiltros();
+    /* =====================================================
+       OBTENER PACIENTES
+       
+       Esta función es el punto de conexión con GAS.
+    ===================================================== */
 
-  }
-
-
-  /* =========================================
-     TABLA
-  ========================================== */
-
-  function renderTabla(
-    lista
-  ) {
-
-    const tbody =
-      document.getElementById(
-        'pacientesTableBody'
-      );
+    async function obtenerPacientes() {
 
 
-    if (!tbody) {
+        /* -----------------------------------------------
+           MODO PRUEBA
+        ------------------------------------------------ */
 
-      return;
+        if (CONFIG.MODO_PRUEBA) {
+
+            return obtenerPacientesDemo();
+
+        }
+
+
+        /* -----------------------------------------------
+           API REAL
+        ------------------------------------------------ */
+
+        if (typeof window.api !== 'function') {
+
+            throw new Error(
+                'La función api() no está disponible.'
+            );
+
+        }
+
+
+        const respuesta = await window.api({
+
+            action: CONFIG.API_ACTION
+
+        });
+
+
+        console.log(
+            'Respuesta listar_residentes:',
+            respuesta
+        );
+
+
+        if (!respuesta) {
+
+            throw new Error(
+                'El servidor no devolvió respuesta.'
+            );
+
+        }
+
+
+        if (respuesta.ok === false) {
+
+            throw new Error(
+                respuesta.error ||
+                'Error devuelto por el servidor.'
+            );
+
+        }
+
+
+        /*
+         * Permitimos distintas estructuras
+         * de respuesta para facilitar la integración
+         * con GAS.
+         */
+
+        if (Array.isArray(respuesta)) {
+
+            return respuesta;
+
+        }
+
+
+        if (Array.isArray(respuesta.data)) {
+
+            return respuesta.data;
+
+        }
+
+
+        if (Array.isArray(respuesta.pacientes)) {
+
+            return respuesta.pacientes;
+
+        }
+
+
+        if (Array.isArray(respuesta.residentes)) {
+
+            return respuesta.residentes;
+
+        }
+
+
+        return [];
 
     }
 
 
-    if (!lista.length) {
+    /* =====================================================
+       DATOS DE PRUEBA
+       
+       TEMPORAL
+       
+       Se eliminan cuando conectemos GAS.
+    ===================================================== */
 
-      tbody.innerHTML = `
+    function obtenerPacientesDemo() {
 
-        <tr>
+        return [
 
-          <td
-            colspan="8"
-            class="table-loading"
-          >
-            No se encontraron pacientes.
-          </td>
+            {
+                residente_id: 'RES-0001',
+                nro_legajo: 'LEG-00001',
+                apellido: 'González',
+                nombres: 'Elena Beatriz',
+                dni: '28.456.721',
+                fecha_nacimiento: '1947-03-18',
+                fecha_ingreso: '2024-05-12',
+                cama_id: 'CAMA-101',
+                estado: 'ACTIVO'
+            },
 
-        </tr>
+            {
+                residente_id: 'RES-0002',
+                nro_legajo: 'LEG-00002',
+                apellido: 'Fernández',
+                nombres: 'Roberto Carlos',
+                dni: '25.873.412',
+                fecha_nacimiento: '1942-11-07',
+                fecha_ingreso: '2023-08-21',
+                cama_id: 'CAMA-102',
+                estado: 'ACTIVO'
+            },
 
-      `;
+            {
+                residente_id: 'RES-0003',
+                nro_legajo: 'LEG-00003',
+                apellido: 'Martínez',
+                nombres: 'Norma Alicia',
+                dni: '30.124.598',
+                fecha_nacimiento: '1950-06-25',
+                fecha_ingreso: '2025-01-15',
+                cama_id: 'CAMA-103',
+                estado: 'ACTIVO'
+            },
 
-      return;
+            {
+                residente_id: 'RES-0004',
+                nro_legajo: 'LEG-00004',
+                apellido: 'Rodríguez',
+                nombres: 'Héctor Alberto',
+                dni: '24.781.963',
+                fecha_nacimiento: '1940-09-12',
+                fecha_ingreso: '2022-11-03',
+                cama_id: 'CAMA-104',
+                estado: 'ACTIVO'
+            },
+
+            {
+                residente_id: 'RES-0005',
+                nro_legajo: 'LEG-00005',
+                apellido: 'López',
+                nombres: 'María Cristina',
+                dni: '29.634.817',
+                fecha_nacimiento: '1948-01-30',
+                fecha_ingreso: '2024-09-07',
+                cama_id: 'CAMA-105',
+                estado: 'ACTIVO'
+            },
+
+            {
+                residente_id: 'RES-0006',
+                nro_legajo: 'LEG-00006',
+                apellido: 'Romero',
+                nombres: 'Juan José',
+                dni: '23.987.541',
+                fecha_nacimiento: '1939-12-05',
+                fecha_ingreso: '2021-06-18',
+                cama_id: 'CAMA-106',
+                estado: 'ACTIVO'
+            },
+
+            {
+                residente_id: 'RES-0007',
+                nro_legajo: 'LEG-00007',
+                apellido: 'Sosa',
+                nombres: 'Teresa Mabel',
+                dni: '31.245.789',
+                fecha_nacimiento: '1952-04-16',
+                fecha_ingreso: '2025-03-22',
+                cama_id: 'CAMA-107',
+                estado: 'ACTIVO'
+            },
+
+            {
+                residente_id: 'RES-0008',
+                nro_legajo: 'LEG-00008',
+                apellido: 'Álvarez',
+                nombres: 'Carlos Alberto',
+                dni: '22.654.398',
+                fecha_nacimiento: '1938-08-21',
+                fecha_ingreso: '2020-10-11',
+                cama_id: 'CAMA-122',
+                estado: 'ACTIVO'
+            },
+
+            {
+                residente_id: 'RES-0009',
+                nro_legajo: 'LEG-00009',
+                apellido: 'Torres',
+                nombres: 'Beatriz Susana',
+                dni: '32.187.654',
+                fecha_nacimiento: '1954-02-11',
+                fecha_ingreso: '2025-07-04',
+                cama_id: 'CAMA-109',
+                estado: 'ACTIVO'
+            },
+
+            {
+                residente_id: 'RES-0010',
+                nro_legajo: 'LEG-00010',
+                apellido: 'Ramírez',
+                nombres: 'Miguel Ángel',
+                dni: '26.541.932',
+                fecha_nacimiento: '1944-10-28',
+                fecha_ingreso: '2024-02-26',
+                cama_id: 'CAMA-110',
+                estado: 'ACTIVO'
+            },
+
+            {
+                residente_id: 'RES-0011',
+                nro_legajo: 'LEG-00011',
+                apellido: 'Acosta',
+                nombres: 'Silvia Beatriz',
+                dni: '29.876.345',
+                fecha_nacimiento: '1949-07-19',
+                fecha_ingreso: '2023-04-17',
+                cama_id: 'CAMA-111',
+                estado: 'ACTIVO'
+            },
+
+            {
+                residente_id: 'RES-0012',
+                nro_legajo: 'LEG-00012',
+                apellido: 'Benítez',
+                nombres: 'Oscar Raúl',
+                dni: '21.543.876',
+                fecha_nacimiento: '1937-05-03',
+                fecha_ingreso: '2022-04-09',
+                cama_id: 'CAMA-123',
+                estado: 'ACTIVO'
+            },
+
+            {
+                residente_id: 'RES-0013',
+                nro_legajo: 'LEG-00013',
+                apellido: 'Molina',
+                nombres: 'Alicia Esther',
+                dni: '30.765.432',
+                fecha_nacimiento: '1951-09-14',
+                fecha_ingreso: '2025-02-10',
+                cama_id: 'CAMA-113',
+                estado: 'ACTIVO'
+            },
+
+            {
+                residente_id: 'RES-0014',
+                nro_legajo: 'LEG-00014',
+                apellido: 'Suárez',
+                nombres: 'Eduardo Daniel',
+                dni: '27.432.198',
+                fecha_nacimiento: '1946-12-22',
+                fecha_ingreso: '2023-12-01',
+                cama_id: 'CAMA-114',
+                estado: 'ACTIVO'
+            },
+
+            {
+                residente_id: 'RES-0015',
+                nro_legajo: 'LEG-00015',
+                apellido: 'Castro',
+                nombres: 'Mirta Graciela',
+                dni: '33.219.876',
+                fecha_nacimiento: '1956-03-09',
+                fecha_ingreso: '2026-01-20',
+                cama_id: 'CAMA-115',
+                estado: 'ACTIVO'
+            },
+
+            {
+                residente_id: 'RES-0016',
+                nro_legajo: 'LEG-00016',
+                apellido: 'Ortiz',
+                nombres: 'Ricardo Antonio',
+                dni: '20.876.543',
+                fecha_nacimiento: '1936-06-17',
+                fecha_ingreso: '2019-08-14',
+                cama_id: 'CAMA-124',
+                estado: 'ACTIVO'
+            },
+
+            {
+                residente_id: 'RES-0017',
+                nro_legajo: 'LEG-00017',
+                apellido: 'Ríos',
+                nombres: 'Carmen Luisa',
+                dni: '28.345.671',
+                fecha_nacimiento: '1947-11-26',
+                fecha_ingreso: '2024-11-18',
+                cama_id: 'CAMA-117',
+                estado: 'ACTIVO'
+            },
+
+            {
+                residente_id: 'RES-0018',
+                nro_legajo: 'LEG-00018',
+                apellido: 'Núñez',
+                nombres: 'Jorge Omar',
+                dni: '24.678.912',
+                fecha_nacimiento: '1941-01-15',
+                fecha_ingreso: '2022-09-30',
+                cama_id: 'CAMA-118',
+                estado: 'ACTIVO'
+            },
+
+            {
+                residente_id: 'RES-0019',
+                nro_legajo: 'LEG-00019',
+                apellido: 'Vera',
+                nombres: 'Margarita Elena',
+                dni: '27.891.234',
+                fecha_nacimiento: '1945-04-08',
+                fecha_ingreso: '2025-05-06',
+                cama_id: 'CAMA-119',
+                estado: 'EGRESADO'
+            },
+
+            {
+                residente_id: 'RES-0020',
+                nro_legajo: 'LEG-00020',
+                apellido: 'Cabrera',
+                nombres: 'Antonio José',
+                dni: '23.456.789',
+                fecha_nacimiento: '1939-10-13',
+                fecha_ingreso: '2021-11-22',
+                cama_id: 'CAMA-120',
+                estado: 'EGRESADO'
+            }
+
+        ];
 
     }
 
 
-    tbody.innerHTML =
-      lista
-        .map(
-          paciente =>
-            `
+    /* =====================================================
+       FILTROS
+    ===================================================== */
 
-              <tr>
+    function aplicarFiltros() {
 
-                <td>
-                  <span class="paciente-legajo">
-                    ${escapeHtml(
-                      paciente.nro_legajo
-                    )}
-                  </span>
-                </td>
+        pacientesFiltrados =
+            pacientes.filter(function (paciente) {
+
+                const texto =
+                    construirTextoBusqueda(paciente);
 
 
-                <td>
-
-                  <div class="paciente-name">
-                    ${escapeHtml(
-                      paciente.apellido
-                    )},
-                    ${escapeHtml(
-                      paciente.nombres
-                    )}
-                  </div>
-
-                </td>
+                const coincideBusqueda =
+                    !filtroBusqueda ||
+                    texto.includes(filtroBusqueda);
 
 
-                <td>
-                  ${escapeHtml(
-                    paciente.dni
-                  )}
-                </td>
+                const estadoPaciente =
+                    normalizarEstado(
+                        paciente.estado
+                    );
 
 
-                <td>
-                  ${formatearFecha(
-                    paciente.fecha_ingreso
-                  )}
-                </td>
+                const coincideEstado =
+                    filtroEstado === 'TODOS' ||
+                    estadoPaciente === filtroEstado;
 
 
-                <td>
-                  ${escapeHtml(
-                    paciente.cama_id || '—'
-                  )}
-                </td>
+                return (
+                    coincideBusqueda &&
+                    coincideEstado
+                );
+
+            });
 
 
-                <td>
-                  ${escapeHtml(
-                    paciente.tipo_ingreso
-                  )}
-                </td>
+        /*
+         * Orden alfabético:
+         * apellido → nombre
+         */
 
+        pacientesFiltrados.sort(
+            function (a, b) {
 
-                <td>
-                  ${renderEstado(
-                    paciente
-                  )}
-                </td>
+                const nombreA =
+                    `${a.apellido || ''} ${a.nombres || ''}`
+                        .toLowerCase();
 
+                const nombreB =
+                    `${b.apellido || ''} ${b.nombres || ''}`
+                        .toLowerCase();
 
-                <td>
-
-                  <button
-                    class="btn-ver-paciente"
-                    type="button"
-                    data-residente-id="${escapeHtml(
-                      paciente.residente_id
-                    )}"
-                  >
-                    Ver
-                  </button>
-
-                </td>
-
-              </tr>
-
-            `
-        )
-        .join('');
-
-
-    tbody
-      .querySelectorAll(
-        '.btn-ver-paciente'
-      )
-      .forEach(
-        button => {
-
-          button.addEventListener(
-            'click',
-            () => {
-
-              abrirFicha(
-                button.dataset.residenteId
-              );
+                return nombreA.localeCompare(
+                    nombreB,
+                    'es'
+                );
 
             }
-          );
-
-        }
-      );
-
-  }
+        );
 
 
-  function renderEstado(
-    paciente
-  ) {
+        renderizarTabla();
 
-    const clase =
-      paciente.estado ===
-      'ACTIVO'
-        ? 'status-activo'
-        : 'status-egresado';
+        actualizarResumen();
 
-
-    return `
-
-      <span
-        class="status-badge ${clase}"
-      >
-        ${escapeHtml(
-          paciente.estado
-        )}
-      </span>
-
-    `;
-
-  }
-
-
-  /* =========================================
-     RESUMEN
-  ========================================== */
-
-  function actualizarResumen() {
-
-    const total =
-      pacientes.length;
-
-
-    const activos =
-      pacientes.filter(
-        p =>
-          p.estado === 'ACTIVO'
-      ).length;
-
-
-    const temporarios =
-      pacientes.filter(
-        p =>
-          p.tipo_ingreso ===
-          'TEMPORARIO' &&
-          p.estado === 'ACTIVO'
-      ).length;
-
-
-    const egresados =
-      pacientes.filter(
-        p =>
-          p.estado === 'EGRESADO'
-      ).length;
-
-
-    setText(
-      'totalPacientes',
-      total
-    );
-
-    setText(
-      'totalActivos',
-      activos
-    );
-
-    setText(
-      'totalTemporarios',
-      temporarios
-    );
-
-    setText(
-      'totalEgresados',
-      egresados
-    );
-
-  }
-
-
-  /* =========================================
-     FICHA
-  ========================================== */
-
-  function abrirFicha(
-    residenteId
-  ) {
-
-    const paciente =
-      pacientes.find(
-        p =>
-          p.residente_id ===
-          residenteId
-      );
-
-
-    if (!paciente) {
-
-      return;
+        actualizarResultadoInfo();
 
     }
 
 
-    pacienteSeleccionado =
-      paciente;
+    /* =====================================================
+       TEXTO DE BÚSQUEDA
+    ===================================================== */
+
+    function construirTextoBusqueda(paciente) {
+
+        return [
+
+            paciente.residente_id,
+
+            paciente.nro_legajo,
+
+            paciente.apellido,
+
+            paciente.nombres,
+
+            paciente.dni
+
+        ]
+            .filter(Boolean)
+            .join(' ')
+            .toLowerCase();
+
+    }
 
 
-    setText(
-      'fichaNombre',
-      `${paciente.apellido}, ${paciente.nombres}`
-    );
+    /* =====================================================
+       RENDER TABLA
+    ===================================================== */
 
-    setText(
-      'fichaLegajo',
-      paciente.nro_legajo
-    );
+    function renderizarTabla() {
 
-    setText(
-      'fichaDni',
-      paciente.dni
-    );
-
-    setText(
-      'fichaNacimiento',
-      formatearFecha(
-        paciente.fecha_nacimiento
-      )
-    );
-
-    setText(
-      'fichaSexo',
-      paciente.sexo
-    );
-
-    setText(
-      'fichaNacionalidad',
-      paciente.nacionalidad
-    );
-
-    setText(
-      'fichaEstadoCivil',
-      paciente.estado_civil
-    );
-
-    setText(
-      'fichaIngreso',
-      formatearFecha(
-        paciente.fecha_ingreso
-      )
-    );
-
-    setText(
-      'fichaTipoIngreso',
-      paciente.tipo_ingreso
-    );
-
-    setText(
-      'fichaCama',
-      paciente.cama_id || '—'
-    );
-
-    setText(
-      'fichaEgreso',
-      paciente.fecha_egreso
-        ? formatearFecha(
-            paciente.fecha_egreso
-          )
-        : '—'
-    );
-
-    setText(
-      'fichaObservaciones',
-      paciente.observaciones ||
-      'Sin observaciones.'
-    );
+        const tbody =
+            document.getElementById(
+                'pacientesTableBody'
+            );
 
 
-    const estado =
-      document.getElementById(
-        'fichaEstado'
-      );
+        if (!tbody) {
+            return;
+        }
 
 
-    if (estado) {
-
-      estado.textContent =
-        paciente.estado;
+        tbody.innerHTML = '';
 
 
-      estado.className =
-        'status-badge ' +
-        (
-          paciente.estado ===
-          'ACTIVO'
-            ? 'status-activo'
-            : 'status-egresado'
+        if (
+            pacientesFiltrados.length === 0
+        ) {
+
+            mostrarEmpty(true);
+
+            return;
+
+        }
+
+
+        mostrarEmpty(false);
+
+
+        pacientesFiltrados.forEach(
+            function (paciente) {
+
+                const tr =
+                    document.createElement('tr');
+
+
+                const estado =
+                    normalizarEstado(
+                        paciente.estado
+                    );
+
+
+                tr.innerHTML = `
+
+                    <td>
+                        <span class="paciente-legajo">
+                            ${escapeHTML(
+                                paciente.nro_legajo || '-'
+                            )}
+                        </span>
+                    </td>
+
+                    <td>
+                        <span class="paciente-nombre">
+                            ${escapeHTML(
+                                construirNombre(paciente)
+                            )}
+                        </span>
+                    </td>
+
+                    <td>
+                        <span class="paciente-dni">
+                            ${escapeHTML(
+                                paciente.dni || '-'
+                            )}
+                        </span>
+                    </td>
+
+                    <td>
+                        <span class="paciente-fecha">
+                            ${formatearFecha(
+                                paciente.fecha_nacimiento
+                            )}
+                        </span>
+                    </td>
+
+                    <td>
+                        <span class="paciente-fecha">
+                            ${formatearFecha(
+                                paciente.fecha_ingreso
+                            )}
+                        </span>
+                    </td>
+
+                    <td>
+                        <span class="paciente-cama">
+                            ${escapeHTML(
+                                paciente.cama_id || '-'
+                            )}
+                        </span>
+                    </td>
+
+                    <td>
+                        ${crearBadgeEstado(estado)}
+                    </td>
+
+                    <td>
+
+                        <div class="paciente-actions">
+
+                            <button
+                                type="button"
+                                class="paciente-action-btn"
+                                data-action="ver"
+                                data-id="${escapeHTML(
+                                    paciente.residente_id
+                                )}"
+                                title="Ver paciente"
+                                aria-label="Ver paciente">
+
+                                👁
+
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="paciente-action-btn"
+                                data-action="editar"
+                                data-id="${escapeHTML(
+                                    paciente.residente_id
+                                )}"
+                                title="Editar paciente"
+                                aria-label="Editar paciente">
+
+                                ✎
+
+                            </button>
+
+                        </div>
+
+                    </td>
+
+                `;
+
+
+                tbody.appendChild(tr);
+
+            }
         );
 
     }
 
 
-    const listado =
-      document.querySelector(
-        '.pacientes-table-container'
-      );
+    /* =====================================================
+       BADGE DE ESTADO
+    ===================================================== */
+
+    function crearBadgeEstado(estado) {
+
+        const clase =
+            estado === 'ACTIVO'
+                ? 'activo'
+                : 'egresado';
 
 
-    const filters =
-      document.querySelector(
-        '.pacientes-filters'
-      );
+        const texto =
+            estado === 'ACTIVO'
+                ? 'Activo'
+                : 'Egresado';
 
 
-    const summary =
-      document.querySelector(
-        '.pacientes-summary'
-      );
-
-
-    const header =
-      document.querySelector(
-        '.pacientes-header'
-      );
-
-
-    if (listado) {
-
-      listado.classList.add(
-        'hidden'
-      );
-
-    }
-
-    if (filters) {
-
-      filters.classList.add(
-        'hidden'
-      );
-
-    }
-
-    if (summary) {
-
-      summary.classList.add(
-        'hidden'
-      );
-
-    }
-
-    if (header) {
-
-      header.classList.add(
-        'hidden'
-      );
+        return `
+            <span class="estado-badge ${clase}">
+                ${texto}
+            </span>
+        `;
 
     }
 
 
-    const ficha =
-      document.getElementById(
-        'pacienteFicha'
-      );
+    /* =====================================================
+       RESUMEN
+    ===================================================== */
+
+    function actualizarResumen() {
+
+        const total =
+            pacientes.length;
 
 
-    if (ficha) {
+        const activos =
+            pacientes.filter(
+                function (paciente) {
 
-      ficha.classList.remove(
-        'hidden'
-      );
+                    return (
+                        normalizarEstado(
+                            paciente.estado
+                        ) === 'ACTIVO'
+                    );
+
+                }
+            ).length;
+
+
+        const egresados =
+            pacientes.filter(
+                function (paciente) {
+
+                    return (
+                        normalizarEstado(
+                            paciente.estado
+                        ) === 'EGRESADO'
+                    );
+
+                }
+            ).length;
+
+
+        establecerTexto(
+            'pacientesTotal',
+            total
+        );
+
+
+        establecerTexto(
+            'pacientesActivos',
+            activos
+        );
+
+
+        establecerTexto(
+            'pacientesEgresados',
+            egresados
+        );
 
     }
 
 
-    cambiarFichaTab(
-      'contactos'
-    );
+    /* =====================================================
+       RESULTADO DE BÚSQUEDA
+    ===================================================== */
 
-  }
+    function actualizarResultadoInfo() {
 
-
-  function volverListado() {
-
-    pacienteSeleccionado =
-      null;
-
-
-    const ficha =
-      document.getElementById(
-        'pacienteFicha'
-      );
+        const elemento =
+            document.getElementById(
+                'pacientesResultadoInfo'
+            );
 
 
-    if (ficha) {
+        if (!elemento) {
+            return;
+        }
 
-      ficha.classList.add(
-        'hidden'
-      );
+
+        const cantidad =
+            pacientesFiltrados.length;
+
+
+        const texto =
+            cantidad === 1
+                ? '1 registro'
+                : `${cantidad} registros`;
+
+
+        elemento.textContent = texto;
 
     }
 
 
-    document
-      .querySelectorAll(
-        '.pacientes-header, .pacientes-filters, .pacientes-summary, .pacientes-table-container'
-      )
-      .forEach(
-        element => {
+    /* =====================================================
+       ACCIONES DE TABLA
+    ===================================================== */
 
-          element.classList.remove(
-            'hidden'
-          );
+    function manejarAccionTabla(event) {
+
+        const button =
+            event.target.closest(
+                '[data-action]'
+            );
+
+
+        if (!button) {
+            return;
+        }
+
+
+        const action =
+            button.dataset.action;
+
+
+        const id =
+            button.dataset.id;
+
+
+        const paciente =
+            pacientes.find(
+                function (item) {
+
+                    return (
+                        String(item.residente_id) ===
+                        String(id)
+                    );
+
+                }
+            );
+
+
+        if (!paciente) {
+
+            console.warn(
+                'Paciente no encontrado:',
+                id
+            );
+
+            return;
 
         }
-      );
-
-  }
 
 
-  /* =========================================
-     FICHA — RELACIONES
-  ========================================== */
+        switch (action) {
 
-  function cambiarFichaTab(
-    tab
-  ) {
+            case 'ver':
 
-    document
-      .querySelectorAll(
-        '.ficha-tab'
-      )
-      .forEach(
-        button => {
+                verPaciente(paciente);
 
-          button.classList.toggle(
-            'active',
-            button.dataset.tab === tab
-          );
+                break;
+
+
+            case 'editar':
+
+                editarPaciente(paciente);
+
+                break;
+
+
+            default:
+
+                console.warn(
+                    'Acción desconocida:',
+                    action
+                );
 
         }
-      );
-
-
-    const container =
-      document.getElementById(
-        'fichaRelatedContent'
-      );
-
-
-    if (!container) {
-
-      return;
 
     }
 
 
-    if (!pacienteSeleccionado) {
+    /* =====================================================
+       VER PACIENTE
+    ===================================================== */
 
-      container.textContent =
-        'No hay paciente seleccionado.';
+    function verPaciente(paciente) {
 
-      return;
+        console.log(
+            'Ver paciente:',
+            paciente
+        );
+
+
+        /*
+         * Por ahora mostramos la información.
+         *
+         * Posteriormente esto debería abrir
+         * una ficha completa del residente.
+         */
+
+        const nombre =
+            construirNombre(paciente);
+
+
+        alert(
+            `Paciente\n\n` +
+
+            `Legajo: ${
+                paciente.nro_legajo || '-'
+            }\n` +
+
+            `Nombre: ${
+                nombre
+            }\n` +
+
+            `DNI: ${
+                paciente.dni || '-'
+            }\n` +
+
+            `Nacimiento: ${
+                formatearFecha(
+                    paciente.fecha_nacimiento
+                )
+            }\n` +
+
+            `Ingreso: ${
+                formatearFecha(
+                    paciente.fecha_ingreso
+                )
+            }\n` +
+
+            `Cama: ${
+                paciente.cama_id || '-'
+            }\n` +
+
+            `Estado: ${
+                paciente.estado || '-'
+            }`
+        );
 
     }
 
 
-    if (tab === 'contactos') {
+    /* =====================================================
+       EDITAR PACIENTE
+    ===================================================== */
 
-      cargarContactos(
-        pacienteSeleccionado
-      );
+    function editarPaciente(paciente) {
 
-      return;
+        console.log(
+            'Editar paciente:',
+            paciente
+        );
+
+
+        /*
+         * Próximo paso:
+         *
+         * abrir formulario de edición.
+         */
+
+        alert(
+            `Editar paciente:\n\n` +
+            `${construirNombre(paciente)}\n\n` +
+            `ID: ${paciente.residente_id}`
+        );
+
+    }
+
+
+    /* =====================================================
+       NUEVO PACIENTE
+    ===================================================== */
+
+    function nuevoPaciente() {
+
+        console.log(
+            'Nuevo paciente'
+        );
+
+
+        /*
+         * Próximo paso:
+         *
+         * abrir formulario de alta.
+         */
+
+        alert(
+            'Formulario de nuevo paciente'
+        );
 
     }
 
 
-    if (
-      tab === 'documentacion'
-    ) {
+    /* =====================================================
+       ESTADO DE CARGA
+    ===================================================== */
 
-      cargarDocumentacion(
-        pacienteSeleccionado
-      );
+    function mostrarLoading(mostrar) {
 
-      return;
+        const loading =
+            document.getElementById(
+                'pacientesLoading'
+            );
+
+
+        if (!loading) {
+            return;
+        }
+
+
+        loading.hidden = !mostrar;
+
+    }
+
+
+    /* =====================================================
+       ESTADO VACÍO
+    ===================================================== */
+
+    function mostrarEmpty(mostrar) {
+
+        const empty =
+            document.getElementById(
+                'pacientesEmptyState'
+            );
+
+
+        if (!empty) {
+            return;
+        }
+
+
+        empty.hidden = !mostrar;
 
     }
 
 
-    if (
-      tab === 'movimientos'
-    ) {
+    function ocultarEmpty() {
 
-      cargarMovimientos(
-        pacienteSeleccionado
-      );
-
-      return;
+        mostrarEmpty(false);
 
     }
 
-  }
+
+    /* =====================================================
+       ERROR
+    ===================================================== */
+
+    function mostrarError(mensaje) {
+
+        const empty =
+            document.getElementById(
+                'pacientesEmptyState'
+            );
 
 
-  function cargarContactos(
-    paciente
-  ) {
-
-    const container =
-      document.getElementById(
-        'fichaRelatedContent'
-      );
+        if (!empty) {
+            return;
+        }
 
 
-    container.innerHTML = `
+        empty.hidden = false;
 
-      <p>
-        Contactos del paciente
-        <strong>
-          ${escapeHtml(
-            paciente.apellido
-          )},
-          ${escapeHtml(
+
+        empty.innerHTML = `
+
+            <div class="empty-icon">
+                ⚠️
+            </div>
+
+            <h3>
+                No fue posible cargar los pacientes
+            </h3>
+
+            <p>
+                ${escapeHTML(mensaje)}
+            </p>
+
+        `;
+
+    }
+
+
+    /* =====================================================
+       UTILIDADES
+    ===================================================== */
+
+    function construirNombre(paciente) {
+
+        return [
+
+            paciente.apellido,
+
             paciente.nombres
-          )}
-        </strong>
-      </p>
 
-      <p class="muted">
-        Aquí se cargarán los registros
-        de CONTACTOS mediante GAS.
-      </p>
-
-    `;
-
-  }
-
-
-  function cargarDocumentacion(
-    paciente
-  ) {
-
-    const container =
-      document.getElementById(
-        'fichaRelatedContent'
-      );
-
-
-    container.innerHTML = `
-
-      <p>
-        Documentación del paciente
-        <strong>
-          ${escapeHtml(
-            paciente.apellido
-          )},
-          ${escapeHtml(
-            paciente.nombres
-          )}
-        </strong>
-      </p>
-
-      <p class="muted">
-        Aquí se cargarán los registros
-        de DOCUMENTACIÓN mediante GAS.
-      </p>
-
-    `;
-
-  }
-
-
-  function cargarMovimientos(
-    paciente
-  ) {
-
-    const container =
-      document.getElementById(
-        'fichaRelatedContent'
-      );
-
-
-    container.innerHTML = `
-
-      <p>
-        Movimientos del paciente
-        <strong>
-          ${escapeHtml(
-            paciente.apellido
-          )},
-          ${escapeHtml(
-            paciente.nombres
-          )}
-        </strong>
-      </p>
-
-      <p class="muted">
-        Aquí se cargarán los registros
-        de MOVIMIENTOS mediante GAS.
-      </p>
-
-    `;
-
-  }
-
-
-  /* =========================================
-     NUEVO PACIENTE
-  ========================================== */
-
-  function abrirNuevoPaciente() {
-
-    const form =
-      document.getElementById(
-        'pacienteForm'
-      );
-
-
-    if (form) {
-
-      form.reset();
+        ]
+            .filter(Boolean)
+            .join(', ');
 
     }
 
 
-    setText(
-      'pacienteModalTitle',
-      'Nuevo paciente'
-    );
+    function normalizarEstado(estado) {
 
-
-    const id =
-      document.getElementById(
-        'formResidenteId'
-      );
-
-
-    if (id) {
-
-      id.value = '';
+        return String(
+            estado || ''
+        )
+            .trim()
+            .toUpperCase();
 
     }
 
 
-    abrirModal();
+    function formatearFecha(fecha) {
 
-  }
-
-
-  function abrirModal() {
-
-    const modal =
-      document.getElementById(
-        'pacienteModal'
-      );
+        if (!fecha) {
+            return '-';
+        }
 
 
-    if (modal) {
-
-      modal.classList.remove(
-        'hidden'
-      );
-
-    }
-
-  }
+        const partes =
+            String(fecha)
+                .split('T')[0]
+                .split('-');
 
 
-  function cerrarModal() {
-
-    const modal =
-      document.getElementById(
-        'pacienteModal'
-      );
+        if (partes.length !== 3) {
+            return fecha;
+        }
 
 
-    if (modal) {
-
-      modal.classList.add(
-        'hidden'
-      );
+        return `${partes[2]}/${partes[1]}/${partes[0]}`;
 
     }
 
-  }
+
+    function establecerTexto(id, valor) {
+
+        const elemento =
+            document.getElementById(id);
 
 
-  async function guardarPaciente(
-    event
-  ) {
+        if (elemento) {
 
-    event.preventDefault();
+            elemento.textContent =
+                String(valor);
 
-
-    const paciente = {
-
-      residente_id:
-        document.getElementById(
-          'formResidenteId'
-        )?.value || '',
-
-      apellido:
-        document.getElementById(
-          'formApellido'
-        )?.value.trim() || '',
-
-      nombres:
-        document.getElementById(
-          'formNombres'
-        )?.value.trim() || '',
-
-      dni:
-        document.getElementById(
-          'formDni'
-        )?.value.trim() || '',
-
-      fecha_nacimiento:
-        document.getElementById(
-          'formNacimiento'
-        )?.value || '',
-
-      sexo:
-        document.getElementById(
-          'formSexo'
-        )?.value || '',
-
-      estado_civil:
-        document.getElementById(
-          'formEstadoCivil'
-        )?.value || '',
-
-      tipo_ingreso:
-        document.getElementById(
-          'formTipoIngreso'
-        )?.value || 'PERMANENTE',
-
-      observaciones:
-        document.getElementById(
-          'formObservaciones'
-        )?.value.trim() || ''
-
-    };
-
-
-    /*
-     * =======================================
-     * BACKEND
-     *
-     * Más adelante:
-     *
-     * const result = await api({
-     *
-     *   action:
-     *     paciente.residente_id
-     *       ? 'actualizarPaciente'
-     *       : 'crearPaciente',
-     *
-     *   paciente
-     *
-     * });
-     *
-     * =======================================
-     */
-
-
-    console.log(
-      '[PACIENTES] Guardar:',
-      paciente
-    );
-
-
-    alert(
-      'La interfaz está preparada. Falta conectar la acción de guardado con GAS.'
-    );
-
-
-    cerrarModal();
-
-  }
-
-
-  /* =========================================
-     HELPERS
-  ========================================== */
-
-  function mostrarCarga() {
-
-    const tbody =
-      document.getElementById(
-        'pacientesTableBody'
-      );
-
-
-    if (tbody) {
-
-      tbody.innerHTML = `
-
-        <tr>
-
-          <td
-            colspan="8"
-            class="table-loading"
-          >
-            Cargando pacientes...
-          </td>
-
-        </tr>
-
-      `;
-
-    }
-
-  }
-
-
-  function mostrarError(
-    mensaje
-  ) {
-
-    const tbody =
-      document.getElementById(
-        'pacientesTableBody'
-      );
-
-
-    if (tbody) {
-
-      tbody.innerHTML = `
-
-        <tr>
-
-          <td
-            colspan="8"
-            class="table-loading"
-          >
-            ${escapeHtml(
-              mensaje
-            )}
-          </td>
-
-        </tr>
-
-      `;
-
-    }
-
-  }
-
-
-  function formatearFecha(
-    fecha
-  ) {
-
-    if (!fecha) {
-
-      return '—';
+        }
 
     }
 
 
-    const partes =
-      String(
-        fecha
-      ).split('-');
+    /* =====================================================
+       ESCAPE HTML
+       
+       Importante cuando los datos vienen de Sheets/API.
+    ===================================================== */
 
+    function escapeHTML(valor) {
 
-    if (
-      partes.length !== 3
-    ) {
-
-      return fecha;
-
-    }
-
-
-    return (
-      partes[2] +
-      '/' +
-      partes[1] +
-      '/' +
-      partes[0]
-    );
-
-  }
-
-
-  function setText(
-    id,
-    value
-  ) {
-
-    const element =
-      document.getElementById(
-        id
-      );
-
-
-    if (element) {
-
-      element.textContent =
-        value ?? '—';
+        return String(valor ?? '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
 
     }
 
-  }
-
-
-  function escapeHtml(
-    value
-  ) {
-
-    return String(
-      value ?? ''
-    )
-      .replace(
-        /&/g,
-        '&amp;'
-      )
-      .replace(
-        /</g,
-        '&lt;'
-      )
-      .replace(
-        />/g,
-        '&gt;'
-      )
-      .replace(
-        /"/g,
-        '&quot;'
-      )
-      .replace(
-        /'/g,
-        '&#039;'
-      );
-
-  }
 
 })();
