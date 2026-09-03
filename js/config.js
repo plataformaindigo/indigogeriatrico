@@ -1,7 +1,7 @@
 window.APP_CONFIG = {
 
   API_URL:
-    'https://script.google.com/macros/s/AKfycbz94gSSQOYZmc8W5FdkW1CzUi8jKHM7MndiKnmjYrv6en9fC1GNWnybNit6gr-o7sABKg/exec',
+    'https://script.google.com/macros/s/AKfycbyOTotRjiICP0e_9W7fhmvhIcvCSPev-LdOnGhpXyN9-4bDnvYXEaBtWAuiWvZFmg4aaw/exec',
 
   SESSION_DURATION_MS:
     10 * 60 * 1000
