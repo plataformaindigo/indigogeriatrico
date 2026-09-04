@@ -1,9 +1,26 @@
 <!-- =========================================
      LOADING MODAL
      
+Para que funcione, se debe incluir el paquete include.js y llamarlo de la siguiente manera:
+<script src="js/include.js"></script>
+
+Una vez con el include. js invocado, se debe incluir el modal portable llamándolo así:
+  <div include="components/loginModal.html"></div>
+
+
      Uso:
-       loadingModalON("Procesando...");
+       loadingModalON("acá va cualquier texto para mostrar...");
        loadingModalOFF();
+
+
+
+<!-- =========================================
+     COMPONENTES GOBALES
+========================================= -->
+
+<div include="components/loadingModal.html"></div>
+
+
 ========================================= -->
 
 <div id="loadingModal" class="loading-modal">
